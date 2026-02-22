@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UniverseCardResponse } from '../interfaces/universe-card.interface';
 import { UniverseDetailResponse } from '../interfaces/universe-detail.interface';
+import { UniverseStyleResponse } from '../interfaces/universe-style.interface';
 import { CharacterCardResponse } from '../interfaces/character-card.interface';
 import { CharacterDetailResponse } from '../interfaces/character-detail.interface';
 
@@ -22,6 +23,10 @@ export class ApiService {
 
   getUniverse(id: string): Observable<UniverseDetailResponse> {
     return this.http.get<UniverseDetailResponse>(`${this.baseUrl}/universes/${id}`);
+  }
+
+  getUniverseStyle(slug: string): Observable<UniverseStyleResponse> {
+    return this.http.get<UniverseStyleResponse>(`${this.baseUrl}/universes/style/${slug}`);
   }
 
   addUniverse(universe: any): Observable<any> {

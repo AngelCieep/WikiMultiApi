@@ -5,6 +5,7 @@ const router = express.Router();
 
 //Rutas
 router.get('/', universCtrl.getUniverses);
+router.get('/style/:slug', universCtrl.getUniverseStyle);
 router.get('/:id', universCtrl.getUniverse);
 router.post('/', universCtrl.addUniverse);
 router.post('/bulk', universCtrl.addUniverses);

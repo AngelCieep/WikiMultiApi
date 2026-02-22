@@ -1,21 +1,21 @@
-import { Component, computed, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, effect, inject } from '@angular/core';
+import { CommonModule, KeyValuePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { ApiService } from '../../services/api.service';
-import { UniverseCard } from '../../interfaces/universe-card.interface';
+import { UniverseStyle } from '../../interfaces/universe-style.interface';
 import { CharacterDetail as CharacterDetailModel } from '../../interfaces/character-detail.interface';
 
 interface CharacterPageData {
-  universe: UniverseCard | null;
+  universe: UniverseStyle | null;
   character: CharacterDetailModel | null;
   notFound: boolean;
 }
 
 @Component({
   selector: 'app-character-detail',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, KeyValuePipe],
   templateUrl: './character-detail.html',
   styleUrl: './character-detail.css',
 })
@@ -33,21 +33,12 @@ export class CharacterDetail {
         if (!slug || !id) {
           return of({ universe: null, character: null, notFound: true });
         }
-        return this.api.getUniverses().pipe(
-          map((res) => res.status.find((u) => u.slug === slug) ?? null),
-          switchMap((universeCard) => {
-            if (!universeCard) {
-              return of({ universe: null, character: null, notFound: true });
-            }
-            return this.api.getCharacter(id).pipe(
-              map((res) => ({
-                universe: universeCard,
-                character: res.status,
-                notFound: false,
-              })),
-              catchError(() => of({ universe: universeCard, character: null, notFound: true }))
-            );
-          })
+        return forkJoin({
+          universe: this.api.getUniverseStyle(slug).pipe(map((r) => r.status)),
+          character: this.api.getCharacter(id).pipe(map((r) => r.status)),
+        }).pipe(
+          map(({ universe, character }) => ({ universe, character, notFound: false })),
+          catchError(() => of({ universe: null, character: null, notFound: true }))
         );
       }),
       catchError(() => of({ universe: null, character: null, notFound: true }))
@@ -59,4 +50,20 @@ export class CharacterDetail {
   readonly character = computed(() => this.pageData()?.character ?? null);
   readonly notFound = computed(() => this.pageData()?.notFound ?? false);
   readonly isLoading = computed(() => this.pageData() === undefined);
+
+  constructor() {
+    effect(() => {
+      const fontFamily = this.universe()?.fontFamily;
+      if (fontFamily) {
+        const id = `font-${fontFamily.replace(/\s+/g, '-')}`;
+        if (!document.getElementById(id)) {
+          const link = document.createElement('link');
+          link.id = id;
+          link.rel = 'stylesheet';
+          link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily)}&display=swap`;
+          document.head.appendChild(link);
+        }
+      }
+    });
+  }
 }

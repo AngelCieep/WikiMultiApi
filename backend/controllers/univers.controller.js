@@ -20,6 +20,18 @@ universCtrl.getUniverse = async (req, res) => {
     .catch((err) => res.status(400).json({status: err}));
 };
 
+//Obtener solo campos visuales de un universo por slug
+universCtrl.getUniverseStyle = async (req, res) => {
+    await Universe.findOne({ slug: req.params.slug }, '_id name slug logo backgroundImage fontFamily primaryColor secondaryColor tertiaryColor textColor')
+    .then((data) => {
+        if (data != null)
+            res.status(200).json({ status: data });
+        else
+            res.status(404).json({ status: 'Universo no encontrado' });
+    })
+    .catch((err) => res.status(400).json({ status: err }));
+};
+
 //Añadir un universo
 universCtrl.addUniverse = async (req, res) => {
     const newUniverse = new Universe(req.body);

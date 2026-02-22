@@ -11,82 +11,162 @@
 		<a class="btn btn-dark" [routerLink]="['/universes', universe()?.slug]">Volver al universo</a>
 	</div>
 } @else {
-	<section
-		class="character-hero"
-		[ngStyle]="{
-			'--universe-primary': universe()?.primaryColor || '#0b0b12',
-			'--universe-secondary': universe()?.secondaryColor || '#ffffff'
-		}">
-		<div class="container py-5">
-			<a class="btn btn-outline-light mb-4" [routerLink]="['/universes', universe()?.slug]">Volver</a>
-			<div class="row g-4 align-items-center">
-				<div class="col-12 col-md-5">
-					@if (character()?.image) {
-						<img class="character-portrait" [src]="character()?.image" [alt]="character()?.name">
-					} @else {
-						<div class="character-portrait placeholder">Sin imagen</div>
-					}
-				</div>
-				<div class="col-12 col-md-7 text-light">
-					<h1 class="display-5 fw-bold mb-2">{{ character()?.name }}</h1>
-					@if (character()?.title) {
-						<p class="lead mb-3">{{ character()?.title }}</p>
-					}
-					@if (character()?.description) {
-						<p class="mb-4">{{ character()?.description }}</p>
-					}
-					<div class="d-flex flex-wrap gap-2">
-						@if (character()?.location) {
-							<span class="badge text-bg-dark">{{ character()?.location }}</span>
-						}
-						@if (character()?.affiliation) {
-							<span class="badge text-bg-dark">{{ character()?.affiliation }}</span>
-						}
-						@if (character()?.type) {
-							<span class="badge text-bg-dark">{{ character()?.type }}</span>
+	<div
+		[style.font-family]="universe()?.fontFamily || 'inherit'"
+		[style.background-color]="universe()?.primaryColor || '#12121a'"
+		[style.color]="universe()?.textColor || universe()?.secondaryColor || '#ffffff'"
+		style="min-height: 100vh;">
+
+		<!-- Hero con imagen de fondo del universo -->
+		<section
+			class="char-hero"
+			[style.background-image]="universe()?.backgroundImage ? 'url(' + universe()?.backgroundImage + ')' : 'none'"
+			[style.background-color]="universe()?.primaryColor || '#12121a'">
+			<div class="char-hero-overlay"></div>
+			<div class="container py-5 char-hero-content">
+				<a
+					class="btn btn-sm mb-4 back-btn"
+					[style.border-color]="universe()?.secondaryColor || '#fff'"
+					[style.color]="universe()?.secondaryColor || '#fff'"
+					[routerLink]="['/universes', universe()?.slug]">
+					&larr; {{ universe()?.name }}
+				</a>
+				<div class="row g-4 align-items-center">
+					<div class="col-12 col-md-4">
+						@if (character()?.image) {
+							<img class="char-portrait" [src]="character()?.image" [alt]="character()?.name">
+						} @else {
+							<div class="char-portrait char-placeholder">Sin imagen</div>
 						}
 					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section class="container py-5">
-		<div class="row g-4">
-			<div class="col-12 col-lg-8">
-				@if (character()?.descriptionSections?.length) {
-					<div class="detail-card">
-						<h3 class="fw-bold mb-3">Historia</h3>
-						@for (section of character()?.descriptionSections; track section._id) {
-							<h5 class="fw-semibold mb-2">{{ section.sectionTitle }}</h5>
-							<p class="text-muted">{{ section.content }}</p>
+					<div class="col-12 col-md-8">
+						<h1
+							class="display-5 fw-bold mb-2"
+							[style.color]="universe()?.secondaryColor || '#ffffff'"
+							[style.font-family]="universe()?.fontFamily || 'inherit'">
+							{{ character()?.name }}
+						</h1>
+						@if (character()?.title) {
+							<p class="lead mb-3" style="color: rgba(255,255,255,0.8);">{{ character()?.title }}</p>
 						}
-					</div>
-				}
-			</div>
-
-			<div class="col-12 col-lg-4">
-				@if (character()?.abilities?.length) {
-					<div class="detail-card mb-4">
-						<h3 class="fw-bold mb-3">Habilidades</h3>
-						<ul class="list-unstyled mb-0">
-							@for (ability of character()?.abilities; track ability) {
-								<li class="mb-2">{{ ability }}</li>
+						@if (character()?.description) {
+							<p class="mb-4" style="color: rgba(255,255,255,0.75);">{{ character()?.description }}</p>
+						}
+						<div class="d-flex flex-wrap gap-2">
+							@if (character()?.location) {
+								<span
+									class="char-badge"
+									[style.border-color]="universe()?.secondaryColor || '#fff'"
+									[style.color]="universe()?.secondaryColor || '#fff'">
+									{{ character()?.location }}
+								</span>
 							}
-						</ul>
-					</div>
-				}
-
-				@if (character()?.stats) {
-					<div class="detail-card">
-						<h3 class="fw-bold mb-3">Estadisticas</h3>
-						<div class="stat-row" *ngFor="let stat of (character()?.stats | keyvalue)">
-							<span class="text-muted">{{ stat.key }}</span>
-							<span class="fw-semibold">{{ stat.value }}</span>
+							@if (character()?.affiliation) {
+								<span
+									class="char-badge"
+									[style.border-color]="universe()?.secondaryColor || '#fff'"
+									[style.color]="universe()?.secondaryColor || '#fff'">
+									{{ character()?.affiliation }}
+								</span>
+							}
+							@if (character()?.type) {
+								<span
+									class="char-badge"
+									[style.background-color]="universe()?.secondaryColor || '#fff'"
+									[style.color]="universe()?.primaryColor || '#000'">
+									{{ character()?.type }}
+								</span>
+							}
 						</div>
 					</div>
-				}
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+
+		<!-- Linea separadora acento -->
+		<div style="height: 4px; width: 100%;" [style.background-color]="universe()?.secondaryColor || '#ffffff'"></div>
+
+		<!-- Contenido -->
+		<section class="container py-5">
+			<div class="row g-4">
+				<div class="col-12 col-lg-8">
+					@if (character()?.descriptionSections?.length) {
+						<div
+							class="detail-card"
+							[style.background-color]="universe()?.tertiaryColor || universe()?.primaryColor"
+							[style.border-color]="universe()?.secondaryColor || 'transparent'">
+							<h3
+								class="fw-bold mb-4"
+								[style.color]="universe()?.secondaryColor || '#fff'">
+								Historia
+							</h3>
+							@for (section of character()?.descriptionSections; track section._id) {
+								<h5
+									class="fw-semibold mb-2"
+									[style.color]="universe()?.secondaryColor || '#fff'">
+									{{ section.sectionTitle }}
+								</h5>
+								<p
+									class="mb-4"
+									[style.color]="universe()?.textColor || universe()?.secondaryColor || '#fff'"
+									style="opacity: 0.85;">
+									{{ section.content }}
+								</p>
+							}
+						</div>
+					}
+				</div>
+
+				<div class="col-12 col-lg-4">
+					@if (character()?.abilities?.length) {
+						<div
+							class="detail-card mb-4"
+							[style.background-color]="universe()?.tertiaryColor || universe()?.primaryColor"
+							[style.border-color]="universe()?.secondaryColor || 'transparent'">
+							<h3
+								class="fw-bold mb-3"
+								[style.color]="universe()?.secondaryColor || '#fff'">
+								Habilidades
+							</h3>
+							<ul class="list-unstyled mb-0">
+								@for (ability of character()?.abilities; track ability) {
+									<li
+										class="mb-2 ability-item"
+										[style.color]="universe()?.textColor || universe()?.secondaryColor || '#fff'"
+										[style.border-left-color]="universe()?.secondaryColor || '#fff'">
+										{{ ability }}
+									</li>
+								}
+							</ul>
+						</div>
+					}
+
+					@if (character()?.stats) {
+						<div
+							class="detail-card"
+							[style.background-color]="universe()?.tertiaryColor || universe()?.primaryColor"
+							[style.border-color]="universe()?.secondaryColor || 'transparent'">
+							<h3
+								class="fw-bold mb-3"
+								[style.color]="universe()?.secondaryColor || '#fff'">
+								Estadísticas
+							</h3>
+							@for (stat of character()?.stats | keyvalue; track stat.key) {
+								<div
+									class="stat-row"
+									[style.border-bottom-color]="universe()?.secondaryColor ? universe()!.secondaryColor + '33' : 'rgba(255,255,255,0.15)'">
+									<span
+										[style.color]="universe()?.textColor || universe()?.secondaryColor || '#fff'"
+										style="opacity: 0.75;">{{ stat.key }}</span>
+									<span
+										class="fw-bold"
+										[style.color]="universe()?.secondaryColor || '#fff'">{{ stat.value }}</span>
+								</div>
+							}
+						</div>
+					}
+				</div>
+			</div>
+		</section>
+	</div>
 }
