@@ -1,1 +1,84 @@
-<p>universe-detail works!</p>
+@if (isLoading()) {
+	<div class="container py-5 text-center">
+		<div class="spinner-border" role="status">
+			<span class="visually-hidden">Cargando...</span>
+		</div>
+	</div>
+} @else if (notFound()) {
+	<div class="container py-5 text-center">
+		<h2 class="fw-bold mb-3">Universo no encontrado</h2>
+		<p class="text-muted">Revisa el enlace o vuelve a la lista de universos.</p>
+		<a class="btn btn-dark" routerLink="/universes">Ver universos</a>
+	</div>
+} @else {
+	<section
+		class="hero"
+		[style.background-image]="universe()?.backgroundImage ? 'url(' + universe()?.backgroundImage + ')' : 'none'"
+		[style.background-color]="universe()?.primaryColor || '#12121a'"
+		[ngStyle]="{
+			'--universe-primary': universe()?.primaryColor || '#12121a',
+			'--universe-secondary': universe()?.secondaryColor || '#ffffff'
+		}">
+		<div class="hero-overlay"></div>
+		<div class="container py-5 hero-content">
+			<div class="d-flex align-items-center gap-3 mb-3">
+				@if (universe()?.logo) {
+					<img
+						class="hero-logo"
+						[src]="universe()?.logo"
+						[alt]="universe()?.name">
+				}
+				<h1
+					class="display-5 fw-bold mb-0"
+					[style.font-family]="universe()?.fontFamily || 'inherit'"
+					[style.color]="universe()?.secondaryColor || '#ffffff'">
+					{{ universe()?.name }}
+				</h1>
+			</div>
+
+			@if (universe()?.description) {
+				<p class="lead hero-text">{{ universe()?.description }}</p>
+			}
+
+			<div class="hero-meta">
+				<span class="badge text-bg-dark">Popularidad {{ universe()?.popularityScore }}</span>
+				<span class="badge text-bg-dark">Activo {{ universe()?.isActive ? 'Si' : 'No' }}</span>
+			</div>
+		</div>
+	</section>
+
+	<section class="container py-5">
+		<h2 class="fw-bold mb-4">Personajes</h2>
+
+		@if (characters().length === 0) {
+			<p class="text-muted">No hay personajes para este universo.</p>
+		} @else {
+			<div class="row g-4">
+				@for (character of characters(); track character._id) {
+					<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+						<a
+							class="text-decoration-none d-block h-100"
+							[routerLink]="['/universes', universe()?.slug, 'characters', character._id]">
+							<div class="card character-card h-100">
+								@if (character.image) {
+									<img
+										class="card-img-top character-img"
+										[src]="character.image"
+										[alt]="character.name">
+								} @else {
+									<div class="character-placeholder">Sin imagen</div>
+								}
+								<div class="card-body">
+									<h5 class="card-title mb-1">{{ character.name }}</h5>
+									@if (character.title) {
+										<p class="card-text text-muted mb-0">{{ character.title }}</p>
+									}
+								</div>
+							</div>
+						</a>
+					</div>
+				}
+			</div>
+		}
+	</section>
+}

@@ -1,0 +1,24 @@
+.character-card {
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.character-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.character-img {
+	height: 220px;
+	object-fit: cover;
+}
+
+.character-placeholder {
+	height: 220px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #f1f1f1;
+	color: #666666;
+	font-weight: 600;
+}

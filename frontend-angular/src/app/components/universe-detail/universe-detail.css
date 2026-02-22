@@ -1,0 +1,66 @@
+.hero {
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	color: #ffffff;
+	min-height: 280px;
+}
+
+.hero-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(120deg, rgba(8, 8, 16, 0.85), rgba(8, 8, 16, 0.4));
+	mix-blend-mode: multiply;
+}
+
+.hero-content {
+	position: relative;
+	z-index: 1;
+}
+
+.hero-logo {
+	width: 72px;
+	height: 72px;
+	object-fit: contain;
+	filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55));
+}
+
+.hero-text {
+	max-width: 720px;
+}
+
+.hero-meta {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
+.hero-meta .badge {
+	background-color: var(--universe-primary, #12121a) !important;
+	color: var(--universe-secondary, #ffffff) !important;
+}
+
+.character-card {
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.character-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.character-img {
+	height: 220px;
+	object-fit: cover;
+}
+
+.character-placeholder {
+	height: 220px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #f1f1f1;
+	color: #666666;
+	font-weight: 600;
+}
