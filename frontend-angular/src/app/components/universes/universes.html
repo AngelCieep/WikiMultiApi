@@ -1,1 +1,80 @@
-<p>universes works!</p>
+<div class="container py-4">
+  <h2 class="fw-bold mb-4">Universos</h2>
+
+  @if (isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  } @else if (pagedUniverses().length === 0) {
+    <p class="text-muted">No hay universos disponibles.</p>
+  } @else {
+    <div class="row g-3">
+      @for (universe of pagedUniverses(); track universe._id) {
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <a
+            [routerLink]="['/universes', universe.slug]"
+            class="text-decoration-none d-block h-100">
+            <div
+              class="h-100 position-relative d-flex align-items-center justify-content-center universe-card"
+              style="border-radius: 8px; border: none; min-height: 220px; overflow: hidden;"
+              [ngStyle]="{ 'background-color': universe.primaryColor || '#1a1a2e' }">
+
+              @if (universe.logo) {
+                <img
+                  #logoImg
+                  [src]="universe.logo"
+                  [alt]="universe.name"
+                  (error)="logoImg.style.display='none'; fallback.style.display='flex'"
+                  style="width: 100%; height: 100%; object-fit: cover;
+                         filter: drop-shadow(0 2px 10px rgba(0,0,0,0.6));">
+
+                <div
+                  #fallback
+                  class="position-absolute bottom-0 start-0 end-0 d-none align-items-end justify-content-center"
+                  style="padding: 0 1rem 1rem;">
+                  <h3
+                    class="mb-0 text-center fw-bold w-100"
+                    [style.font-family]="universe.fontFamily || 'inherit'"
+                    [style.color]="universe.secondaryColor || '#ffffff'"
+                    style="font-size: 1.5rem; text-shadow: 0 1px 6px rgba(0,0,0,0.8);">
+                    {{ universe.name }}
+                  </h3>
+                </div>
+              } @else {
+                <h3
+                  class="mb-0 text-center fw-bold position-absolute bottom-0 start-0 end-0"
+                  [style.font-family]="universe.fontFamily || 'inherit'"
+                  [style.color]="universe.secondaryColor || '#ffffff'"
+                  style="font-size: 1.5rem; padding: 0 1rem 1rem;
+                         text-shadow: 0 1px 6px rgba(0,0,0,0.8);">
+                  {{ universe.name }}
+                </h3>
+              }
+
+            </div>
+          </a>
+        </div>
+      }
+    </div>
+
+    @if (totalPages() > 1) {
+      <nav class="mt-5 d-flex justify-content-center">
+        <ul class="pagination" style="border-radius: 0;">
+          <li class="page-item" [class.disabled]="currentPage() === 1">
+            <button class="page-link" style="border-radius:0" (click)="changePage(currentPage() - 1)">&laquo;</button>
+          </li>
+          @for (page of pages(); track page) {
+            <li class="page-item" [class.active]="page === currentPage()">
+              <button class="page-link" style="border-radius:0" (click)="changePage(page)">{{ page }}</button>
+            </li>
+          }
+          <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+            <button class="page-link" style="border-radius:0" (click)="changePage(currentPage() + 1)">&raquo;</button>
+          </li>
+        </ul>
+      </nav>
+    }
+  }
+</div>

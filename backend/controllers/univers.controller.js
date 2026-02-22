@@ -3,7 +3,7 @@ const universCtrl = {};
 
 //Obtener todos los universos
 universCtrl.getUniverses = async (req, res) => {
-    await Universe.find({}, '_id name slug logo primaryColor secondaryColor isActive')
+    await Universe.find({}, '_id name slug logo primaryColor secondaryColor fontFamily isActive popularityScore releaseDate')
     .then((data) => res.status(200).json({status: data}))
     .catch((err) => res.status(400).json({status: err}));
 };
