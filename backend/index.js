@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 //rutas
+app.use('/api/v1/characters', require('./routes/characters.route'));
 app.use('/', (req, res) => res.send('Api funcina en  api/v1'));
 
 // settings
