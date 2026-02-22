@@ -1,1 +1,112 @@
-<p>documentation works!</p>
+<div class="documentation-container">
+  <div class="container py-5">
+    <div class="doc-header text-center mb-5">
+      <h1 class="display-4 fw-bold">API Documentation</h1>
+      <p class="lead">WikiMultiApi REST API v1</p>
+      <div class="base-url">
+        <span class="label">Base URL:</span>
+        <code>{{ baseUrl }}</code>
+      </div>
+    </div>
+
+    <!-- Universes Section -->
+    <section class="api-section mb-5">
+      <h2 class="section-title">
+        <span class="icon">🌌</span>
+        Universos
+      </h2>
+      
+      @for (endpoint of universeEndpoints; track endpoint.path) {
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method" [class]="'method-' + endpoint.method.toLowerCase()">
+              {{ endpoint.method }}
+            </span>
+            <code class="path">{{ endpoint.path }}</code>
+          </div>
+          
+          <p class="description">{{ endpoint.description }}</p>
+          
+          @if (endpoint.params) {
+            <div class="params-section">
+              <h6>Parámetros:</h6>
+              <ul>
+                @for (param of endpoint.params; track param.name) {
+                  <li>
+                    <code>{{ param.name }}</code> 
+                    <span class="type">({{ param.type }})</span>
+                    - {{ param.description }}
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+          
+          @if (endpoint.body) {
+            <div class="code-block">
+              <div class="code-header">Request Body:</div>
+              <pre><code>{{ endpoint.body }}</code></pre>
+            </div>
+          }
+          
+          @if (endpoint.response) {
+            <div class="code-block">
+              <div class="code-header">Response:</div>
+              <pre><code>{{ endpoint.response }}</code></pre>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Characters Section -->
+    <section class="api-section">
+      <h2 class="section-title">
+        <span class="icon">👤</span>
+        Personajes
+      </h2>
+      
+      @for (endpoint of characterEndpoints; track endpoint.path) {
+        <div class="endpoint-card">
+          <div class="endpoint-header">
+            <span class="method" [class]="'method-' + endpoint.method.toLowerCase()">
+              {{ endpoint.method }}
+            </span>
+            <code class="path">{{ endpoint.path }}</code>
+          </div>
+          
+          <p class="description">{{ endpoint.description }}</p>
+          
+          @if (endpoint.params) {
+            <div class="params-section">
+              <h6>Parámetros:</h6>
+              <ul>
+                @for (param of endpoint.params; track param.name) {
+                  <li>
+                    <code>{{ param.name }}</code> 
+                    <span class="type">({{ param.type }})</span>
+                    - {{ param.description }}
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+          
+          @if (endpoint.body) {
+            <div class="code-block">
+              <div class="code-header">Request Body:</div>
+              <pre><code>{{ endpoint.body }}</code></pre>
+            </div>
+          }
+          
+          @if (endpoint.response) {
+            <div class="code-block">
+              <div class="code-header">Response:</div>
+              <pre><code>{{ endpoint.response }}</code></pre>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>
