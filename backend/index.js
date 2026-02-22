@@ -9,7 +9,7 @@ const {json} = require ('express');
 // middlewares
 app.use(morgan('dev'));
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 //rutas
 app.use('/api/v1/characters', require('./routes/characters.route'));
