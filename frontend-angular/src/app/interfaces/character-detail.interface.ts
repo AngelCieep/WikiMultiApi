@@ -18,6 +18,7 @@ export interface CharacterDetail {
   numericField: number;
   dateField: string;
   booleanField: boolean;
+  views: number;
   createdAt: string;
   updatedAt: string;
   __v: number;

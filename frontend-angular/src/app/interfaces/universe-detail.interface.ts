@@ -10,12 +10,12 @@ export interface UniverseDetail {
   description: string;
   logo: string;
   backgroundImage: string;
-  imagenBoton: string;
-  fontFamily: string;
+  imagenBoton?: string;
+  fontFamily?: string;
   primaryColor: string;
   secondaryColor: string;
-  tertiaryColor: string;
-  textColor: string;
+  tertiaryColor?: string;
+  textColor?: string;
   popularityScore: number;
   releaseDate: string;
   isActive: boolean;

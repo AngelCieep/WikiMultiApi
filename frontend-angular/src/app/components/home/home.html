@@ -47,9 +47,9 @@
             <div
               class="netflix-poster"
               [ngStyle]="{ 'background-color': universe.primaryColor || '#1a1a2e' }">
-              @if (universe.logo) {
+              @if (universe.imagenBoton || universe.logo) {
                 <img
-                  [src]="universe.logo"
+                  [src]="universe.imagenBoton || universe.logo"
                   [alt]="universe.name"
                   class="netflix-logo">
               } @else {

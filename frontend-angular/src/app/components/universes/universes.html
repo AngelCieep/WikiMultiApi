@@ -21,10 +21,10 @@
               style="border-radius: 8px; border: none; min-height: 220px; overflow: hidden;"
               [ngStyle]="{ 'background-color': universe.primaryColor || '#1a1a2e' }">
 
-              @if (universe.logo) {
+              @if (universe.imagenBoton || universe.logo) {
                 <img
                   #logoImg
-                  [src]="universe.logo"
+                  [src]="universe.imagenBoton || universe.logo"
                   [alt]="universe.name"
                   (error)="logoImg.style.display='none'; fallback.style.display='flex'"
                   style="width: 100%; height: 100%; object-fit: cover;
