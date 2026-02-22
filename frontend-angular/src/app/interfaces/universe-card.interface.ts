@@ -5,6 +5,9 @@ export interface UniverseCard {
   logo: string;
   primaryColor: string;
   secondaryColor: string;
+  tertiaryColor?: string;
+  textColor?: string;
+  imagenBoton?: string;
   fontFamily: string;
   isActive: boolean;
   popularityScore: number;

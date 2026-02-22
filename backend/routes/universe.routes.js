@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', universCtrl.getUniverses);
 router.get('/:id', universCtrl.getUniverse);
 router.post('/', universCtrl.addUniverse);
+router.post('/bulk', universCtrl.addUniverses);
 router.put('/:id', universCtrl.updateUniverse);
 router.delete('/:id', universCtrl.deleteUniverse);
 

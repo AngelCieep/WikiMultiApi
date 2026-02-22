@@ -5,6 +5,7 @@ export interface CharacterCard {
   universeId: string;
   image: string;
   booleanField: boolean;
+  views: number;
 }
 
 export interface CharacterCardResponse {
