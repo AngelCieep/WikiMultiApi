@@ -1,5 +1,58 @@
-<div class="container py-5 text-center">
-    <h1 class="display-4 fw-bold mb-3">Bienvenido a WikiMultiApi</h1>
-    <p class="lead mb-4">Explora universos de series, peliculas y videojuegos y descubre sus personajes.</p>
-    <a routerLink="/universes" class="btn btn-dark btn-lg">Ver Universos</a>
-</div>
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  
+  <div class="hero-content">
+    <h1 class="animated-title">WikiMultiApi</h1>
+    
+    <form class="search-box" (ngSubmit)="onSearch()" (submit)="$event.preventDefault()">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Busca tu universo favorito..."
+        [(ngModel)]="searchQuery"
+        name="searchQuery"
+        autocomplete="off"
+      />
+      <button type="submit" class="search-btn">Buscar</button>
+    </form>
+  </div>
+</section>
+
+<section class="popular-section">
+  <div class="container">
+    <h2 class="section-title">Universos mas populares</h2>
+    
+    @if (popularUniverses().length === 0) {
+      <p class="text-muted">Cargando universos...</p>
+    } @else {
+      <div class="universes-grid">
+        @for (universe of popularUniverses(); track universe._id) {
+          <a
+            [routerLink]="['/universes', universe.slug]"
+            class="universe-card"
+            [ngStyle]="{
+              'background-color': universe.primaryColor || '#1a1a2e'
+            }">
+            
+            @if (universe.logo) {
+              <img
+                class="universe-logo"
+                [src]="universe.logo"
+                [alt]="universe.name"
+                (error)="$event.target.style.display='none'">
+            }
+            
+            <div class="universe-info">
+              <h3 class="universe-name"
+                [style.font-family]="universe.fontFamily || 'inherit'"
+                [style.color]="universe.secondaryColor || '#ffffff'">
+                {{ universe.name }}
+              </h3>
+              <p class="universe-score">Popularidad: {{ universe.popularityScore }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    }
+  </div>
+</section>
