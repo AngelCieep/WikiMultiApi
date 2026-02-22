@@ -3,7 +3,7 @@
 	background-size: cover;
 	background-position: center;
 	color: #ffffff;
-	min-height: 280px;
+	min-height: 320px;
 }
 
 .hero-overlay {
@@ -25,8 +25,16 @@
 	filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55));
 }
 
+.hero-logo-large {
+	max-width: 260px;
+	max-height: 260px;
+	width: 100%;
+	object-fit: contain;
+	filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.7));
+}
+
 .hero-text {
-	max-width: 720px;
+	max-width: 680px;
 }
 
 .hero-meta {

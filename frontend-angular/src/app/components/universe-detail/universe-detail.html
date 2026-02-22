@@ -27,24 +27,27 @@
 		}">
 		<div class="hero-overlay"></div>
 		<div class="container py-5 hero-content">
-			<div class="d-flex align-items-center gap-3 mb-3">
+			<div class="row align-items-center g-4">
+				<div class="col-12 col-md-8">
+					<h1
+						class="display-4 fw-bold mb-3"
+						[style.font-family]="universe()?.fontFamily || 'inherit'"
+						[style.color]="universe()?.secondaryColor || '#ffffff'">
+						{{ universe()?.name }}
+					</h1>
+					@if (universe()?.description) {
+						<p class="lead hero-text">{{ universe()?.description }}</p>
+					}
+				</div>
 				@if (universe()?.logo) {
-					<img
-						class="hero-logo"
-						[src]="universe()?.logo"
-						[alt]="universe()?.name">
+					<div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end">
+						<img
+							class="hero-logo-large"
+							[src]="universe()?.logo"
+							[alt]="universe()?.name">
+					</div>
 				}
-				<h1
-					class="display-5 fw-bold mb-0"
-					[style.font-family]="universe()?.fontFamily || 'inherit'"
-					[style.color]="universe()?.secondaryColor || '#ffffff'">
-					{{ universe()?.name }}
-				</h1>
 			</div>
-
-			@if (universe()?.description) {
-				<p class="lead hero-text">{{ universe()?.description }}</p>
-			}
 		</div>
 	</section>
 
