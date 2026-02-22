@@ -4,10 +4,12 @@ const charsCtrl = require('../controllers/characters.controller');
 const router = express.Router();
 
 //Rutas
-router.get('/', charsCtrl.getCharacters);
-router.get('/character/:id', charsCtrl.getCharacter);
-//router.post('/', charsCtrl.addCharacter);
-//router.put('/:id', charsCtrl.updateCharacter);
-router.delete('/:id', charsCtrl.deleteCharacter);    
+router.get('/all', charsCtrl.getCharacters);
+router.get('/:id', charsCtrl.getCharacter);
+router.post('/', charsCtrl.addCharacter);
+router.post('/bulk', charsCtrl.addCharacters);
+router.post('/Universe/:id', charsCtrl.getCharactersByUniverse);
+router.put('/:id', charsCtrl.updateCharacter);
+router.delete('/:id', charsCtrl.deleteCharacter);
 
 module.exports = router;
