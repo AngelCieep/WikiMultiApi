@@ -85,6 +85,27 @@ export class Documentation {
 }`
     },
     {
+      method: 'POST',
+      path: '/universes/bulk',
+      description: 'Inserción masiva de universos',
+      body: `[
+  {
+    "name": "string",
+    "slug": "string",
+    "description": "string",
+    "logo": "string",
+    "primaryColor": "string",
+    "secondaryColor": "string",
+    "popularityScore": number,
+    "releaseDate": "date",
+    "isActive": boolean
+  }
+]`,
+      response: `{
+  "status": [ /* universos creados */ ]
+}`
+    },
+    {
       method: 'PUT',
       path: '/universes/:id',
       description: 'Actualizar un universo',
@@ -128,6 +149,34 @@ export class Documentation {
       path: '/characters/character/:id',
       description: 'Obtener un personaje por ID',
       params: [{ name: 'id', type: 'string', description: 'ID del personaje' }],
+      response: `{
+  "status": {
+    "_id": "string",
+    "name": "string",
+    "title": "string",
+    "description": "string",
+    "descriptionSections": [],
+    "image": "string",
+    "universeId": "string",
+    "location": "string",
+    "affiliation": "string",
+    "type": "string",
+    "abilities": [],
+    "stats": {},
+    "numericField": number,
+    "dateField": "date",
+    "booleanField": boolean
+  }
+}`
+    },
+    {
+      method: 'GET',
+      path: '/characters/universe/:iduniverse/character/:idcharacter',
+      description: 'Obtener un personaje específico de un universo',
+      params: [
+        { name: 'iduniverse', type: 'string', description: 'ID del universo' },
+        { name: 'idcharacter', type: 'string', description: 'ID del personaje' }
+      ],
       response: `{
   "status": {
     "_id": "string",
