@@ -11,6 +11,12 @@
 		<a class="btn btn-dark" routerLink="/universes">Ver universos</a>
 	</div>
 } @else {
+	<div
+		[style.font-family]="universe()?.fontFamily || 'inherit'"
+		[style.background-color]="universe()?.primaryColor || '#12121a'"
+		[style.color]="universe()?.secondaryColor || '#ffffff'"
+		style="min-height: 100vh;">
+
 	<section
 		class="hero"
 		[style.background-image]="universe()?.backgroundImage ? 'url(' + universe()?.backgroundImage + ')' : 'none'"
@@ -39,16 +45,21 @@
 			@if (universe()?.description) {
 				<p class="lead hero-text">{{ universe()?.description }}</p>
 			}
-
-			<div class="hero-meta">
-				<span class="badge text-bg-dark">Popularidad {{ universe()?.popularityScore }}</span>
-				<span class="badge text-bg-dark">Activo {{ universe()?.isActive ? 'Si' : 'No' }}</span>
-			</div>
 		</div>
 	</section>
 
+	<div
+		style="height: 4px; width: 100%;"
+		[style.background-color]="universe()?.secondaryColor || '#ffffff'">
+	</div>
+
 	<section class="container py-5">
-		<h2 class="fw-bold mb-4">Personajes</h2>
+		<h2
+			class="fw-bold mb-4"
+			[style.font-family]="universe()?.fontFamily || 'inherit'"
+			[style.color]="universe()?.secondaryColor || '#ffffff'">
+			Personajes
+		</h2>
 
 		@if (characters().length === 0) {
 			<p class="text-muted">No hay personajes para este universo.</p>
@@ -81,4 +92,5 @@
 			</div>
 		}
 	</section>
+	</div>
 }

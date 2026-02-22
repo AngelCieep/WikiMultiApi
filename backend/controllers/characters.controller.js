@@ -12,15 +12,18 @@ charsCtrl.getCharacters = async (req, res) => {
 //Obtener un personaje por ID
 charsCtrl.getCharacter = async (req, res) => {
     const id = req.params.id || req.params.idcharacter;
-    const character = await chars.findById(id)
-    .then((data) =>{
-        if(data!=null)
-        res.status(200).json({status: data});
+    await chars.findByIdAndUpdate(
+        id,
+        { $inc: { views: 1 } },
+        { new: true }
+    )
+    .then((data) => {
+        if (data != null)
+            res.status(200).json({ status: data });
         else
-        res.status(404).json({status: "Personaje no encontrado"});
+            res.status(404).json({ status: "Personaje no encontrado" });
     })
-    .catch((err) => res.status(400).json({status: err}));
-    
+    .catch((err) => res.status(400).json({ status: err }));
 }
 //Añadir un personaje
 charsCtrl.addCharacter = async (req, res) => {

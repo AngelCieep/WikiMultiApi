@@ -30,14 +30,7 @@
 }
 
 .hero-meta {
-	display: flex;
-	gap: 0.5rem;
-	flex-wrap: wrap;
-}
-
-.hero-meta .badge {
-	background-color: var(--universe-primary, #12121a) !important;
-	color: var(--universe-secondary, #ffffff) !important;
+	display: none;
 }
 
 .character-card {

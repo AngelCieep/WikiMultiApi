@@ -1,9 +1,21 @@
 <section class="hero-section">
+  <!-- Imagen actual (siempre visible) -->
+  <div
+    class="hero-bg"
+    [style.background-image]="'url(' + currentBg() + ')'">
+  </div>
+  <!-- Imagen siguiente (aparece encima con fade) -->
+  <div
+    class="hero-bg hero-bg-next"
+    [class.visible]="transitioning()"
+    [style.background-image]="'url(' + nextBg() + ')'">
+  </div>
+
   <div class="hero-overlay"></div>
-  
+
   <div class="hero-content">
     <h1 class="animated-title">WikiMultiApi</h1>
-    
+
     <form class="search-box" (ngSubmit)="onSearch()" (submit)="$event.preventDefault()">
       <input
         type="text"
@@ -19,37 +31,40 @@
 </section>
 
 <section class="popular-section">
-  <div class="container">
-    <h2 class="section-title">Universos mas populares</h2>
-    
+  <div class="popular-container">
+    <h2 class="section-title">Los más populares</h2>
+
     @if (popularUniverses().length === 0) {
-      <p class="text-muted">Cargando universos...</p>
+      <p class="text-muted ps-3">Cargando universos...</p>
     } @else {
-      <div class="universes-grid">
-        @for (universe of popularUniverses(); track universe._id) {
+      <div class="netflix-row">
+        @for (universe of popularUniverses(); track universe._id; let i = $index) {
           <a
             [routerLink]="['/universes', universe.slug]"
-            class="universe-card"
-            [ngStyle]="{
-              'background-color': universe.primaryColor || '#1a1a2e'
-            }">
-            
-            @if (universe.logo) {
-              <img
-                class="universe-logo"
-                [src]="universe.logo"
-                [alt]="universe.name"
-                (error)="$event.target.style.display='none'">
-            }
-            
-            <div class="universe-info">
-              <h3 class="universe-name"
-                [style.font-family]="universe.fontFamily || 'inherit'"
-                [style.color]="universe.secondaryColor || '#ffffff'">
-                {{ universe.name }}
-              </h3>
-              <p class="universe-score">Popularidad: {{ universe.popularityScore }}</p>
+            class="netflix-item">
+
+            <!-- Poster / Logo -->
+            <div
+              class="netflix-poster"
+              [ngStyle]="{ 'background-color': universe.primaryColor || '#1a1a2e' }">
+              @if (universe.logo) {
+                <img
+                  [src]="universe.logo"
+                  [alt]="universe.name"
+                  class="netflix-logo">
+              } @else {
+                <span
+                  class="netflix-fallback-name"
+                  [style.font-family]="universe.fontFamily || 'inherit'"
+                  [style.color]="universe.secondaryColor || '#fff'">
+                  {{ universe.name }}
+                </span>
+              }
             </div>
+
+            <!-- Número de ranking -->
+            <div class="netflix-rank">{{ i + 1 }}</div>
+
           </a>
         }
       </div>

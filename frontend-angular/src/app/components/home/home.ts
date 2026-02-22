@@ -1,10 +1,9 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal, OnDestroy } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiService } from '../../services/api.service';
-import { UniverseCard } from '../../interfaces/universe-card.interface';
 import { map } from 'rxjs';
 
 @Component({
@@ -13,25 +12,55 @@ import { map } from 'rxjs';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {
+export class Home implements OnDestroy {
   private readonly api = inject(ApiService);
   private readonly router = inject(Router);
 
   searchQuery: string = '';
 
+  // ── Slideshow ──────────────────────────────────────────────
+  readonly bgImages: string[] = [
+    'img/bg1.webp',
+    'img/bg2.webp',
+    'img/bg3.webp',
+    'img/bg4.webp',
+    'img/bg5.webp',
+  ];
+
+  readonly currentIndex = signal(0);
+  readonly nextIndex = signal(1);
+  readonly transitioning = signal(false);
+
+  readonly currentBg = computed(() => this.bgImages[this.currentIndex()]);
+  readonly nextBg    = computed(() => this.bgImages[this.nextIndex()]);
+
+  private readonly interval = setInterval(() => this.advance(), 25000);
+
+  private advance(): void {
+    const len = this.bgImages.length;
+    this.nextIndex.set((this.currentIndex() + 1) % len);
+    this.transitioning.set(true);
+    setTimeout(() => {
+      this.currentIndex.set(this.nextIndex());
+      this.transitioning.set(false);
+    }, 2000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.interval);
+  }
+
+  // ── Universos populares ────────────────────────────────────
   private readonly universes = toSignal(
-    this.api.getUniverses().pipe(
-      map((res) => res.status)
-    ),
+    this.api.getUniverses().pipe(map((res) => res.status)),
     { initialValue: [] }
   );
 
-  readonly popularUniverses = computed(() => {
-    const all = this.universes();
-    return [...all]
+  readonly popularUniverses = computed(() =>
+    [...this.universes()]
       .sort((a, b) => (b.popularityScore || 0) - (a.popularityScore || 0))
-      .slice(0, 6);
-  });
+      .slice(0, 6)
+  );
 
   onSearch(): void {
     if (this.searchQuery.trim()) {

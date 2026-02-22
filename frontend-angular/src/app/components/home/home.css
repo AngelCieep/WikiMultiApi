@@ -7,14 +7,44 @@
 .hero-section {
   position: relative;
   height: 600px;
-  background-image: url('https://wallpapers.com/images/hd/best-disney-background-1600-x-1200-w55z603gt80y2742.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: 105%;
+  background-position: center;
+  animation: kenBurns 25s linear infinite;
+}
+
+.hero-bg-next {
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+  animation: kenBurns2 25s linear infinite;
+}
+
+.hero-bg-next.visible {
+  opacity: 1;
+}
+
+@keyframes kenBurns {
+  0%   { background-size: 105%; background-position: 50% 50%; }
+  25%  { background-size: 106%; background-position: 52% 48%; }
+  50%  { background-size: 107%; background-position: 50% 52%; }
+  75%  { background-size: 106%; background-position: 48% 50%; }
+  100% { background-size: 105%; background-position: 50% 50%; }
+}
+
+@keyframes kenBurns2 {
+  0%   { background-size: 106%; background-position: 51% 51%; }
+  25%  { background-size: 105%; background-position: 49% 51%; }
+  50%  { background-size: 107%; background-position: 51% 49%; }
+  75%  { background-size: 106%; background-position: 53% 51%; }
+  100% { background-size: 106%; background-position: 51% 51%; }
 }
 
 .hero-overlay {
@@ -106,78 +136,95 @@
 }
 
 .popular-section {
-  background: #f8f9fa;
-  padding: 4rem 0;
+  background: #141414;
+  padding: 2.5rem 0 3rem;
+  overflow: hidden;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
+.popular-container {
+  max-width: 100%;
+  padding: 0;
 }
 
 .section-title {
   font-family: 'Poppins', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 3rem;
-  color: #1a1a2e;
-}
-
-.universes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.universe-card {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.universe-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
-}
-
-.universe-logo {
-  width: 120px;
-  height: 120px;
-  object-fit: contain;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
-}
-
-.universe-info {
-  text-align: center;
-  padding: 1rem;
-}
-
-.universe-name {
-  font-family: 'Poppins', sans-serif;
   font-size: 1.4rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: #e5e5e5;
+  margin-bottom: 1rem;
+  padding-left: 2rem;
 }
 
-.universe-score {
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem;
-  opacity: 0.9;
-  margin-bottom: 0;
+/* Fila horizontal sin scroll */
+.netflix-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.5rem 2rem 1.5rem;
+  justify-content: flex-start;
+}
+
+/* Cada item */
+.netflix-item {
+  flex-shrink: 0;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Poster */
+.netflix-poster {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1;
+}
+
+.netflix-item:hover .netflix-poster {
+  transform: scale(1.05);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+  z-index: 10;
+}
+
+.netflix-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.netflix-fallback-name {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+/* Número de ranking estilo Netflix */
+.netflix-rank {
+  font-family: 'Arial Black', 'Impact', sans-serif;
+  font-size: 9rem;
+  font-weight: 900;
+  line-height: 0.85;
+  color: transparent;
+  -webkit-text-stroke: 3px #555;
+  text-stroke: 3px #555;
+  align-self: flex-end;
+  margin-right: -8px;
+  user-select: none;
+  pointer-events: none;
+  transition: -webkit-text-stroke 0.3s ease;
+}
+
+.netflix-item:hover .netflix-rank {
+  -webkit-text-stroke: 3px #e5e5e5;
 }
 
 @media (max-width: 768px) {

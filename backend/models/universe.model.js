@@ -9,9 +9,12 @@ const universeSchema = new Schema(
 
         logo:             { type: String, trim: true },
         backgroundImage:  { type: String, trim: true },
+        imagenBoton:      { type: String, trim: true },
         fontFamily:       { type: String, trim: true },
         primaryColor:     { type: String, trim: true },
         secondaryColor:   { type: String, trim: true },
+        tertiaryColor:    { type: String, trim: true },
+        textColor:        { type: String, trim: true },
 
         popularityScore:  { type: Number, required: true },
         releaseDate:      { type: Date,   required: true },
