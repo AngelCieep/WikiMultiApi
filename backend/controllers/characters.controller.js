@@ -11,7 +11,8 @@ charsCtrl.getCharacters = async (req, res) => {
 };
 //Obtener un personaje por ID
 charsCtrl.getCharacter = async (req, res) => {
-    const character = await chars.findById(req.params.id)
+    const id = req.params.id || req.params.idcharacter;
+    const character = await chars.findById(id)
     .then((data) =>{
         if(data!=null)
         res.status(200).json({status: data});
