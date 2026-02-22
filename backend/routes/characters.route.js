@@ -8,6 +8,6 @@ router.get('/', charsCtrl.getCharacters);
 router.get('/character/:id', charsCtrl.getCharacter);
 //router.post('/', charsCtrl.addCharacter);
 //router.put('/:id', charsCtrl.updateCharacter);
-router.delete('/:id', charsCtrl.deleteCharacter);   
+router.delete('/:id', charsCtrl.deleteCharacter);    
 
 module.exports = router;
