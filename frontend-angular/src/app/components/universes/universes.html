@@ -1,5 +1,10 @@
 <div class="container py-4">
-  <h2 class="fw-bold mb-4">Universos</h2>
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h2 class="fw-bold mb-0">Universos</h2>
+    <a routerLink="/universes/new" class="btn btn-add-universe">
+      <span class="me-1">＋</span> Añadir universo
+    </a>
+  </div>
 
   @if (isLoading()) {
     <div class="text-center py-5">

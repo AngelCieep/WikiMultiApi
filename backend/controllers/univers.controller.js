@@ -1,4 +1,5 @@
 const Universe = require('../models/universe.model');
+const Characters = require('../models/characters.model');
 const universCtrl = {};
 
 //Obtener todos los universos
@@ -59,14 +60,41 @@ universCtrl.addUniverses = async (req, res) => {
     .catch((err) => res.status(400).json({status: err}));
 };
 
-//Eliminar un universo por ID
+//Eliminar un universo por ID (y todos sus personajes)
 universCtrl.deleteUniverse = async (req, res) => {
-    await Universe.findByIdAndDelete(req.params.id)
-    .then((data) => {
-        if(data) res.status(200).json({status: "Universo eliminado"});
-        else res.status(404).json({status: "Universo no encontrado"});
-    })
-    .catch((err) => res.status(400).json({status: err}));
+    try {
+        // 1. Comprobar personajes huérfanos con ese universeId (siempre, exista o no el universo)
+        const charactersCount = await Characters.countDocuments({ universeId: req.params.id });
+        if (charactersCount > 0) {
+            console.warn(`[DELETE] Se encontraron ${charactersCount} personaje(s) con universeId: ${req.params.id}. Eliminándolos...`);
+            await Characters.deleteMany({ universeId: req.params.id });
+            console.log(`[DELETE] ${charactersCount} personaje(s) eliminados.`);
+        } else {
+            console.log(`[DELETE] No hay personajes asociados al id: ${req.params.id}`);
+        }
+
+        // 2. Comprobar si existe el universo
+        const universe = await Universe.findById(req.params.id);
+        if (!universe) {
+            console.warn(`[DELETE] No existe ningún universo con id: ${req.params.id}`);
+            return res.status(404).json({
+                status: `No existe ningún universo con id: ${req.params.id}`,
+                personajesEliminados: charactersCount
+            });
+        }
+
+        // 3. Eliminar el universo
+        await Universe.findByIdAndDelete(req.params.id);
+        console.log(`[DELETE] Universo "${universe.name}" (${req.params.id}) eliminado.`);
+
+        res.status(200).json({
+            status: "Universo eliminado",
+            universoEliminado: universe.name,
+            personajesEliminados: charactersCount
+        });
+    } catch (err) {
+        res.status(400).json({ status: err });
+    }
 };
 
 module.exports = universCtrl;
