@@ -1,0 +1,50 @@
+{
+  "name": "Pokémon",
+  "slug": "pokemon",
+  "description": "Pokémon es una franquicia multimedia de Nintendo/Game Freak creada en 1996 por Satoshi Tajiri. En este universo, los entrenadores capturan y entrenan criaturas llamadas Pokémon para competir en batallas. Con más de 1000 especies, es una de las franquicias de entretenimiento más exitosas del mundo.",
+  "logo": "https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg",
+  "backgroundImage": "https://wallpaperaccess.com/full/1397770.jpg",
+  "imagenBoton": "https://assets.nintendo.eu/image/upload/f_auto,c_limit,w_992,q_auto:low/MNS/NOE/70010000000446/SQ_NSwitch_PokemonLetsGoPikachu_enGB",
+  "fontFamily": "'Press Start 2P', cursive",
+  "primaryColor": "#FFCB05",
+  "secondaryColor": "#3D7DCA",
+  "tertiaryColor": "#CC0000",
+  "textColor": "#1A1A2E",
+  "popularityScore": 99,
+  "releaseDate": "1996-02-27T00:00:00.000Z",
+  "isActive": true,
+  "labels": {
+    "type": "Tipo",
+    "abilities": "Habilidades",
+    "stats": "Estadísticas Base"
+  },
+  "typeLabels": {
+    "normal": "Normal",
+    "fire": "Fuego",
+    "water": "Agua",
+    "electric": "Eléctrico",
+    "grass": "Planta",
+    "ice": "Hielo",
+    "fighting": "Lucha",
+    "poison": "Veneno",
+    "ground": "Tierra",
+    "flying": "Volador",
+    "psychic": "Psíquico",
+    "bug": "Bicho",
+    "rock": "Roca",
+    "ghost": "Fantasma",
+    "dragon": "Dragón",
+    "dark": "Siniestro",
+    "steel": "Acero",
+    "fairy": "Hada"
+  },
+  "statLabels": {
+    "hp": "PS",
+    "attack": "Ataque",
+    "defense": "Defensa",
+    "special-attack": "Ataque Esp.",
+    "special-defense": "Defensa Esp.",
+    "speed": "Velocidad"
+  },
+  "abilityLabels": {}
+}
