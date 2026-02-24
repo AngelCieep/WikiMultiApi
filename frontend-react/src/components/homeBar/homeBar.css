@@ -113,11 +113,20 @@
 }
 
 .time-display {
-  font-size: 48px;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: -8px;
   margin-bottom: -5px;
+  min-height: 72px;
+}
+
+.time-digit {
+  height: 72px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(1px 1px 2px rgba(255, 255, 255, 0.8));
+  margin: 0 -8px;
 }
 
 .date-display {
@@ -209,7 +218,12 @@
   }
 
   .time-display {
-    font-size: 36px;
+    min-height: 54px;
+  }
+
+  .time-digit {
+    height: 54px;
+    margin: 0 -6px;
   }
 
   .date-display {

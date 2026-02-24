@@ -51,24 +51,6 @@ export const WiiGame = () => {
     }
   };
 
-  const getChannelColor = (index: number): string => {
-    const colors = [
-      '#0094FF', // Azul Forecast
-      '#00A651', // Verde News
-      '#FF6B00', // Naranja Photo
-      '#00D4FF', // Cyan
-      '#FF1744', // Rojo
-      '#9C27B0', // Púrpura
-      '#FFB300', // Amarillo
-      '#795548', // Marrón
-      '#4CAF50', // Verde claro
-      '#FF9800', // Naranja oscuro
-      '#E91E63', // Rosa
-      '#3F51B5', // Índigo
-    ];
-    return colors[index % colors.length];
-  };
-
   // Crear un array de 12 espacios para los canales (3 filas x 4 columnas)
   const channelSlots = Array.from({ length: 12 }, (_, index) => {
     // La primera casilla siempre es el disco de la Wii
@@ -110,7 +92,7 @@ export const WiiGame = () => {
               key={slot.type === 'universe' ? slot.data._id : `${slot.type}-${slot.index}`}
               className={`wii-channel ${slot.type === 'empty' ? 'wii-channel-empty' : ''} ${slot.type === 'disc' ? 'wii-channel-disc' : ''}`}
               style={slot.type === 'universe' ? {
-                backgroundColor: slot.data.primaryColor || getChannelColor(slot.index),
+                backgroundColor: slot.data.primaryColor,
                 backgroundImage: slot.data.backgroundImage ? `url(${slot.data.backgroundImage})` : undefined,
               } : undefined}
               onClick={slot.type === 'universe' ? () => setSelectedUniverse(slot.data) : undefined}

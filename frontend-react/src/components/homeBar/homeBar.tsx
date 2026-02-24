@@ -12,14 +12,20 @@ export const HomeBar = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const getImagePath = (char: string): string => {
+    if (char === ':') {
+      return '/src/assets/background/dosPuntos.png';
+    }
+    return `/src/assets/background/${char}.png`;
+  };
+
   const formatTime = () => {
     let hours = currentTime.getHours();
     const minutes = currentTime.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    const minutesStr = minutes < 10 ? '0' + minutes : minutes;
-    return `${hours}:${minutesStr} ${ampm}`;
+    hours = hours % 24;
+    const hoursStr = String(hours).padStart(2, '0');
+    const minutesStr = String(minutes).padStart(2, '0');
+    return `${hoursStr}:${minutesStr}`;
   };
 
   const formatDate = () => {
@@ -32,6 +38,8 @@ export const HomeBar = () => {
     
     return `${dayName} ${month}/${day}`;
   };
+
+  const timeString = formatTime();
 
   return (
     <div className="home-bar">
@@ -46,7 +54,16 @@ export const HomeBar = () => {
         </div>
 
         <div className="home-bar-center">
-          <div className="time-display">{formatTime()}</div>
+          <div className="time-display">
+            {timeString.split('').map((char, index) => (
+              <img
+                key={index}
+                src={getImagePath(char)}
+                alt={char}
+                className="time-digit"
+              />
+            ))}
+          </div>
           <div className="date-display">{formatDate()}</div>
         </div>
 
