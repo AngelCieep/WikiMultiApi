@@ -2,9 +2,15 @@ export interface Universe {
   _id: string;
   name: string;
   slug: string;
-  description: string;
-  image?: string;
-  color?: string;
+  logo?: string;
+  backgroundImage?: string;
+  imagenBoton?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  fontFamily?: string;
+  isActive?: boolean;
+  popularityScore?: number;
+  releaseDate?: string;
 }
 
 export interface UniverseStyle {

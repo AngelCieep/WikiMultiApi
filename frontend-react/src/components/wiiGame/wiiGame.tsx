@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
 import { apiService } from '../../services/api.service';
 import type { Universe } from '../../interfaces/universe.interface';
+import type { Character } from '../../interfaces/character.interface';
 import './wiiGame.css';
 
+type UniverseWithCharacters = Universe & {
+  characters: Character[];
+};
+
 export const WiiGame = () => {
-  const [universes, setUniverses] = useState<Universe[]>([]);
+  const [universes, setUniverses] = useState<UniverseWithCharacters[]>([]);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [selectedUniverse, setSelectedUniverse] = useState<UniverseWithCharacters | null>(null);
 
   useEffect(() => {
     loadUniverses();
@@ -15,7 +21,16 @@ export const WiiGame = () => {
   const loadUniverses = async () => {
     setLoading(true);
     const data = await apiService.getUniverses();
-    setUniverses(data);
+    const universesWithCharacters = await Promise.all(
+      data.map(async (universe) => {
+        const characters = await apiService.getCharactersByUniverse(universe._id);
+        return {
+          ...universe,
+          characters
+        };
+      })
+    );
+    setUniverses(universesWithCharacters);
     setLoading(false);
   };
 
@@ -71,6 +86,10 @@ export const WiiGame = () => {
     );
   }
 
+  const closeDetails = () => {
+    setSelectedUniverse(null);
+  };
+
   return (
     <div className="wii-game-container">
       <button 
@@ -86,9 +105,13 @@ export const WiiGame = () => {
             <div 
               key={slot.type === 'universe' ? slot.data._id : `${slot.type}-${slot.index}`}
               className={`wii-channel ${slot.type === 'empty' ? 'wii-channel-empty' : ''} ${slot.type === 'disc' ? 'wii-channel-disc' : ''}`}
-              style={slot.type === 'universe' ? { 
-                backgroundColor: slot.data.color || getChannelColor(slot.index),
+              style={slot.type === 'universe' ? {
+                backgroundImage: slot.data.backgroundImage ? `url(${slot.data.backgroundImage})` : undefined,
+                backgroundColor: slot.data.backgroundImage
+                  ? undefined
+                  : slot.data.primaryColor || getChannelColor(slot.index),
               } : undefined}
+              onClick={slot.type === 'universe' ? () => setSelectedUniverse(slot.data) : undefined}
             >
               {slot.type === 'disc' ? (
                 <div className="wii-channel-disc-content">
@@ -100,10 +123,9 @@ export const WiiGame = () => {
                 </div>
               ) : slot.type === 'universe' ? (
                 <div className="wii-channel-content">
-                  <div className="wii-channel-title">{slot.data.name}</div>
-                  {slot.data.image && (
-                    <div className="wii-channel-image">
-                      <img src={slot.data.image} alt={slot.data.name} />
+                  {slot.data.logo && (
+                    <div className="wii-channel-logo">
+                      <img src={slot.data.logo} alt={slot.data.name} />
                     </div>
                   )}
                 </div>
@@ -123,6 +145,48 @@ export const WiiGame = () => {
       >
         ▶
       </button>
+
+      {selectedUniverse && (
+        <div className="wii-modal-overlay" onClick={closeDetails}>
+          <div className="wii-modal" onClick={(event) => event.stopPropagation()}>
+            <div className="wii-modal-header">
+              <div className="wii-modal-title">{selectedUniverse.name}</div>
+              <button className="wii-modal-close" onClick={closeDetails}>✕</button>
+            </div>
+            <div className="wii-modal-body">
+              {(selectedUniverse.imagenBoton || selectedUniverse.logo) && (
+                <div className="wii-modal-logo">
+                  <img
+                    src={selectedUniverse.imagenBoton || selectedUniverse.logo}
+                    alt={selectedUniverse.name}
+                  />
+                </div>
+              )}
+              <div className="wii-modal-characters">
+                {selectedUniverse.characters.length === 0 ? (
+                  <div className="wii-modal-empty">No hay personajes para este universo.</div>
+                ) : (
+                  selectedUniverse.characters.map((character) => (
+                    <div key={character._id} className="wii-modal-character">
+                      <div className="wii-modal-avatar">
+                        {character.image ? (
+                          <img src={character.image} alt={character.name} />
+                        ) : (
+                          <span>{character.name.slice(0, 1)}</span>
+                        )}
+                      </div>
+                      <div className="wii-modal-name">{character.name}</div>
+                      {character.title && (
+                        <div className="wii-modal-title-small">{character.title}</div>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
