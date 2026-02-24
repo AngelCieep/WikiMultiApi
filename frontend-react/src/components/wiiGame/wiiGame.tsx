@@ -5,6 +5,8 @@ import type { Character } from '../../interfaces/character.interface';
 import { StartPage } from '../startPage/startPage';
 import { CharactersPage } from '../charactersPage/charactersPage';
 import { CharacterDetail } from '../characterDetail/characterDetail';
+import arrowLeft from '../../assets/background/izquierda.png';
+import arrowRight from '../../assets/background/derecha.png';
 import './wiiGame.css';
 
 type UniverseWithCharacters = Universe & {
@@ -115,7 +117,7 @@ export const WiiGame = () => {
         onClick={() => handleScroll('left')}
         disabled={safePage === 0}
       >
-        <img src="/src/assets/background/izquierda.png" alt="izquierda" />
+        <img src={arrowLeft} alt="izquierda" />
       </button>
       
       <div className="wii-channels-wrapper">
@@ -164,7 +166,7 @@ export const WiiGame = () => {
         onClick={() => handleScroll('right')}
         disabled={safePage === totalPages - 1}
       >
-        <img src="/src/assets/background/derecha.png" alt="derecha" />
+        <img src={arrowRight} alt="derecha" />
       </button>
 
       {totalPages > 1 && (
