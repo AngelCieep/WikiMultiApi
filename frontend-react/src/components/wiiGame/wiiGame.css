@@ -1,0 +1,212 @@
+.wii-game-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 20px 80px;
+}
+
+.wii-loading {
+  color: #666;
+  font-size: 24px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.wii-channels-wrapper {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.wii-channels-container {
+  display: grid;
+  grid-template-columns: repeat(4, 280px);
+  grid-template-rows: repeat(3, 160px);
+  gap: 20px;
+  padding: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  width: 100%;
+  height: 100%;
+  align-content: center;
+  justify-content: center;
+}
+
+.wii-channels-container::-webkit-scrollbar {
+  display: none;
+}
+
+.wii-channel {
+  width: 280px;
+  height: 160px;
+  border-radius: 18px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.wii-channel:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.wii-channel-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  color: white;
+  text-align: center;
+}
+
+.wii-channel-title {
+  font-size: 22px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 10px;
+}
+
+.wii-channel-image {
+  max-width: 80%;
+  max-height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wii-channel-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.wii-channel-empty {
+  background: linear-gradient(145deg, #ffffff, #e8e8e8) !important;
+  border: 3px dashed rgba(0, 0, 0, 0.2);
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.wii-channel-empty:hover {
+  opacity: 0.8;
+  border-color: rgba(0, 160, 233, 0.5);
+  border-style: dashed;
+}
+
+.wii-channel-empty-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wii-channel-empty-icon {
+  font-size: 64px;
+  color: #999;
+  font-weight: 300;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.wii-channel-disc {
+  background: linear-gradient(145deg, #f5f5f5, #e0e0e0) !important;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+.wii-channel-disc:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.wii-channel-disc-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.wii-disc-gif {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.wii-nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: 3px solid #00A0E9;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  color: #00A0E9;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.wii-nav-button:hover {
+  background: #00A0E9;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.wii-nav-left {
+  left: 10px;
+}
+
+.wii-nav-right {
+  right: 10px;
+}
+
+@media (max-width: 768px) {
+  .wii-game-container {
+    padding: 20px 40px;
+  }
+
+  .wii-channels-container {
+    grid-template-columns: repeat(auto-fill, 220px);
+    grid-template-rows: repeat(2, 130px);
+    gap: 15px;
+  }
+
+  .wii-channel {
+    width: 220px;
+    height: 130px;
+  }
+
+  .wii-channel-title {
+    font-size: 18px;
+  }
+
+  .wii-nav-button {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
