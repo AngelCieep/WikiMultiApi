@@ -1,0 +1,109 @@
+@if (isLoading()) {
+  <div class="container py-5 text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+} @else {
+  <div class="all-characters-page">
+    <div class="all-characters-container">
+      <!-- Header -->
+      <div class="all-characters-header">
+        <h1 class="all-characters-title">Todos los Personajes</h1>
+        <p class="all-characters-count">{{ characters().length }} personajes en total</p>
+      </div>
+
+      <!-- Search bar -->
+      <div class="all-characters-search">
+        <input
+          type="search"
+          class="all-characters-search-input"
+          placeholder="Buscar personaje..."
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event); currentPage.set(1)"
+          autocomplete="off"
+        />
+        @if (searchQuery()) {
+          <small>{{ characters().length }} resultado(s) para "{{ searchQuery() }}"</small>
+        }
+      </div>
+
+      <!-- Characters Grid -->
+      @if (paginatedCharacters().length === 0) {
+        <div class="all-characters-empty">
+          <p>No hay personajes disponibles.</p>
+        </div>
+      } @else {
+        <div class="all-characters-grid">
+          @for (character of paginatedCharacters(); track character._id) {
+            <a
+              [routerLink]="['/character', character._id]"
+              class="character-card">
+              <div class="character-card-image">
+                @if (character.image) {
+                  <img [src]="character.image" [alt]="character.name" />
+                } @else {
+                  <div class="character-card-placeholder">
+                    {{ character.name.charAt(0) }}
+                  </div>
+                }
+              </div>
+              <div class="character-card-content">
+                <h3 class="character-card-name">{{ character.name }}</h3>
+                @if (character.title) {
+                  <p class="character-card-title">{{ character.title }}</p>
+                }
+              </div>
+            </a>
+          }
+        </div>
+
+        <!-- Pagination -->
+        @if (totalPages() > 1) {
+          <div class="pagination-container">
+            <button
+              class="pagination-btn"
+              [disabled]="currentPage() === 1"
+              (click)="previousPage()">
+              ← Anterior
+            </button>
+
+            <div class="pagination-numbers">
+              @if (pageNumbers()[0] > 1) {
+                <button class="pagination-number" (click)="goToPage(1)">1</button>
+                @if (pageNumbers()[0] > 2) {
+                  <span class="pagination-ellipsis">...</span>
+                }
+              }
+
+              @for (page of pageNumbers(); track page) {
+                <button
+                  class="pagination-number"
+                  [class.active]="page === currentPage()"
+                  (click)="goToPage(page)">
+                  {{ page }}
+                </button>
+              }
+
+              @if (pageNumbers()[pageNumbers().length - 1] < totalPages()) {
+                @if (pageNumbers()[pageNumbers().length - 1] < totalPages() - 1) {
+                  <span class="pagination-ellipsis">...</span>
+                }
+                <button class="pagination-number" (click)="goToPage(totalPages())">
+                  {{ totalPages() }}
+                </button>
+              }
+            </div>
+
+            <button
+              class="pagination-btn"
+              [disabled]="currentPage() === totalPages()"
+              (click)="nextPage()">
+              Siguiente →
+            </button>
+          </div>
+        }
+      }
+    </div>
+  </div>
+}

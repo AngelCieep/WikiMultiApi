@@ -1,41 +1,33 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+    <div class="container navbar-container">
         <a class="navbar-brand fw-bold" routerLink="/">WikiMultiApi</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <!-- Barra de búsqueda centrada -->
-            <form class="d-flex mx-auto position-relative" style="width: 340px" (submit)="submitSearch(); $event.preventDefault()">
+            <!-- Barra de búsqueda centrada absolutamente -->
+            <form class="navbar-search-form" (submit)="submitSearch(); $event.preventDefault()">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle navbar-search-type-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ searchTypeLabel }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><button class="dropdown-item" type="button" (click)="setSearchType('universes', 'Universos')">Universos</button></li>
+                        <li><button class="dropdown-item" type="button" (click)="setSearchType('characters', 'Personajes')">Personajes</button></li>
+                    </ul>
+                </div>
                 <input
-                    class="form-control me-2"
+                    class="navbar-search-input"
                     type="search"
-                    placeholder="Buscar universo..."
+                    [placeholder]="searchType === 'characters' ? 'Buscar personaje...' : 'Buscar universo...'"
                     [(ngModel)]="searchQuery"
                     name="searchQuery"
-                    (ngModelChange)="onSearch()"
-                    (blur)="clearSearch()"
                     autocomplete="off"
                 />
-                <button class="btn btn-outline-light" type="submit">
-                    <i class="bi bi-search"></i> Buscar
+                <button class="navbar-search-submit" type="submit">
+                    <i class="bi bi-search"></i>
                 </button>
-                <!-- Dropdown resultados AJAX -->
-                @if (searchResults.length > 0) {
-                    <ul class="list-group position-absolute top-100 start-0 w-100 shadow z-3 mt-1">
-                        @for (universe of searchResults; track universe._id) {
-                            <li
-                                class="list-group-item list-group-item-action d-flex align-items-center gap-2"
-                                (mousedown)="goToUniverse(universe.slug)">
-                                @if (universe.logo) {
-                                    <img [src]="universe.logo" width="24" height="24" style="object-fit:contain">
-                                }
-                                <span>{{ universe.name }}</span>
-                            </li>
-                        }
-                    </ul>
-                }
             </form>
 
             <ul class="navbar-nav ms-auto">
@@ -44,6 +36,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/universes" routerLinkActive="active">Universos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/characters" routerLinkActive="active">Personajes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/documentation" routerLinkActive="active">API</a>

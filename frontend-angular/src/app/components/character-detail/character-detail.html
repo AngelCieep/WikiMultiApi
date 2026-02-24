@@ -29,88 +29,83 @@
 				</a>
 			</div>
 
-			<!-- Character Header Section -->
-			<div class="wiki-header-section">
-				<div class="wiki-header-top" [style.border-bottom-color]="universe()?.secondaryColor ? universe()!.secondaryColor + '33' : 'rgba(0,0,0,0.1)'">
-					<div class="wiki-title-container">
-						<h1
-							class="wiki-character-title"
-							[style.color]="universe()?.secondaryColor || '#000'"
-							[style.font-family]="universe()?.fontFamily || 'inherit'">
-							{{ character()?.name }}
-						</h1>
-					</div>
-					@if (character()?.image) {
-						<div class="wiki-infobox">
-							<img class="wiki-portrait" [src]="character()?.image" [alt]="character()?.name">
-						</div>
-					}
-				</div>
-
-				<div class="wiki-header-info">
-					@if (character()?.title) {
-						<p class="wiki-subtitle" [style.color]="universe()?.textColor || '#333'">{{ character()?.title }}</p>
-					}
-					@if (character()?.description) {
-						<p class="wiki-description" [style.color]="universe()?.textColor || '#333'">{{ character()?.description }}</p>
-					}
-					<div class="wiki-badges">
-						@if (character()?.location) {
-							<span
-								class="wiki-badge"
-								[style.border-color]="universe()?.textColor || '#000'"
-								[style.color]="universe()?.textColor || '#000'">
-								<strong>Ubicación:</strong> {{ character()?.location }}
-							</span>
-						}
-						@if (character()?.affiliation) {
-							<span
-								class="wiki-badge"
-								[style.border-color]="universe()?.textColor || '#000'"
-								[style.color]="universe()?.textColor || '#000'">
-								<strong>Afiliación:</strong> {{ character()?.affiliation }}
-							</span>
-						}
-						@if (character()?.type) {
-							<span
-								class="wiki-badge"
-								[style.background-color]="universe()?.textColor || '#000'"
-								[style.color]="universe()?.primaryColor || '#fff'">
-								<strong>Tipo:</strong> {{ character()?.type }}
-							</span>
-						}
-					</div>
-				</div>
-			</div>
-
-			<!-- Content Body -->
+			<!-- Two Column Layout -->
 			<div class="wiki-content-body">
-				@if (character()?.descriptionSections?.length) {
-					<section class="wiki-section" [style.border-top-color]="universe()?.secondaryColor ? universe()!.secondaryColor + '33' : 'rgba(0,0,0,0.1)'">
-						<h2
-							class="wiki-section-title"
-							[style.color]="universe()?.secondaryColor || '#000'"
-							[style.border-bottom-color]="universe()?.secondaryColor || '#000'">
-							Historia
-						</h2>
-						@for (section of character()?.descriptionSections; track section._id) {
-							<article class="wiki-article">
-								<h3
-									class="wiki-article-title"
-									[style.color]="universe()?.secondaryColor || '#000'">
-									{{ section.sectionTitle }}
-								</h3>
-								<p
-									class="wiki-article-text"
-									[style.color]="universe()?.textColor || '#333'">
-									{{ section.content }}
-								</p>
-							</article>
-						}
-					</section>
-				}
+				<!-- Main Content Column -->
+				<div class="wiki-main-content">
+					<!-- Character Header Section -->
+					<div class="wiki-header-section">
+						<div class="wiki-header-top" [style.border-bottom-color]="universe()?.secondaryColor ? universe()!.secondaryColor + '33' : 'rgba(0,0,0,0.1)'">
+							<div class="wiki-title-container">
+								<h1
+									class="wiki-character-title"
+									[style.color]="universe()?.secondaryColor || '#000'"
+									[style.font-family]="universe()?.fontFamily || 'inherit'">
+									{{ character()?.name }}
+								</h1>
+							</div>
+						</div>
 
-				<div class="wiki-stats-abilities">
+						<div class="wiki-header-info">
+							@if (character()?.title) {
+								<p class="wiki-subtitle" [style.color]="universe()?.textColor || '#333'">{{ character()?.title }}</p>
+							}
+							@if (character()?.description) {
+								<p class="wiki-description" [style.color]="universe()?.textColor || '#333'">{{ character()?.description }}</p>
+							}
+							<div class="wiki-badges">
+								@if (character()?.location) {
+									<span
+										class="wiki-badge"
+										[style.border-color]="universe()?.textColor || '#000'"
+										[style.color]="universe()?.textColor || '#000'">
+										<strong>Ubicación:</strong> {{ character()?.location }}
+									</span>
+								}
+								@if (character()?.affiliation) {
+									<span
+										class="wiki-badge"
+										[style.border-color]="universe()?.textColor || '#000'"
+										[style.color]="universe()?.textColor || '#000'">
+										<strong>Afiliación:</strong> {{ character()?.affiliation }}
+									</span>
+								}
+								@if (character()?.type) {
+									<span
+										class="wiki-badge"
+										[style.background-color]="universe()?.textColor || '#000'"
+										[style.color]="universe()?.primaryColor || '#fff'">
+										<strong>Tipo:</strong> {{ character()?.type }}
+									</span>
+								}
+							</div>
+						</div>
+					</div>
+					@if (character()?.descriptionSections?.length) {
+						<section class="wiki-section" [style.border-top-color]="universe()?.secondaryColor ? universe()!.secondaryColor + '33' : 'rgba(0,0,0,0.1)'">
+							<h2
+								class="wiki-section-title"
+								[style.color]="universe()?.secondaryColor || '#000'"
+								[style.border-bottom-color]="universe()?.secondaryColor || '#000'">
+								Historia
+							</h2>
+							@for (section of character()?.descriptionSections; track section._id) {
+								<article class="wiki-article">
+									<h3
+										class="wiki-article-title"
+										[style.color]="universe()?.secondaryColor || '#000'">
+										{{ section.sectionTitle }}
+									</h3>
+									<p
+										class="wiki-article-text"
+										[style.color]="universe()?.textColor || '#333'">
+										{{ section.content }}
+									</p>
+								</article>
+							}
+						</section>
+					}
+
 					@if (character()?.abilities?.length) {
 						<section class="wiki-section" [style.border-top-color]="universe()?.secondaryColor ? universe()!.secondaryColor + '33' : 'rgba(0,0,0,0.1)'">
 							<h2
@@ -130,6 +125,13 @@
 								}
 							</ul>
 						</section>
+					}
+				</div>
+
+				<!-- Sidebar Column -->
+				<div class="wiki-sidebar">
+					@if (character()?.image) {
+						<img class="wiki-portrait" [src]="character()?.image" [alt]="character()?.name" [style.border-color]="universe()?.textColor || '#000'">
 					}
 
 					@if (character()?.stats) {

@@ -1,28 +1,37 @@
 import { Component, computed, signal, inject, effect } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule, NgStyle } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiService } from '../../services/api.service';
 import { UniverseCard } from '../../interfaces/universe-card.interface';
 
 @Component({
   selector: 'app-universes',
-  imports: [CommonModule, NgStyle, RouterLink],
+  imports: [CommonModule, NgStyle, RouterLink, FormsModule],
   templateUrl: './universes.html',
   styleUrl: './universes.css',
 })
 export class Universes {
   private readonly api = inject(ApiService);
+  private readonly route = inject(ActivatedRoute);
 
   private readonly universesResponse = toSignal(this.api.getUniverses());
 
-  readonly universes = computed<UniverseCard[]>(
+  readonly allUniverses = computed<UniverseCard[]>(
     () => this.universesResponse()?.status ?? []
   );
   readonly isLoading = computed(() => this.universesResponse() === undefined);
 
+  readonly searchQuery = signal('');
   readonly currentPage = signal(1);
   readonly pageSize = 30;
+
+  readonly universes = computed<UniverseCard[]>(() => {
+    const q = this.searchQuery().toLowerCase().trim();
+    if (!q) return this.allUniverses();
+    return this.allUniverses().filter(u => u.name.toLowerCase().includes(q));
+  });
 
   readonly totalPages = computed(() =>
     Math.ceil(this.universes().length / this.pageSize)
@@ -35,7 +44,18 @@ export class Universes {
     return this.universes().slice(start, start + this.pageSize);
   });
 
+  onSearchChange(): void {
+    this.currentPage.set(1);
+  }
+
   constructor() {
+    // Leer query param 'search' al entrar desde home
+    this.route.queryParamMap.subscribe(params => {
+      const q = params.get('search') ?? '';
+      this.searchQuery.set(q);
+      this.currentPage.set(1);
+    });
+
     // Carga dinámicamente las Google Fonts de cada universo
     effect(() => {
       const fonts = [...new Set(
