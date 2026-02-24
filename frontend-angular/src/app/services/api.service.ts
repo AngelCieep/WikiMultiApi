@@ -11,7 +11,7 @@ import { CharacterDetailResponse } from '../interfaces/character-detail.interfac
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:3000/api/v1';
+  private baseUrl = 'https://backend-wikiapi.vercel.app/api/v1';
 
   constructor(private http: HttpClient) {}
 
