@@ -7,6 +7,7 @@ import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { UniverseDetail as UniverseDetailModel } from '../../interfaces/universe-detail.interface';
 import { CharacterCard } from '../../interfaces/character-card.interface';
+import Swal from 'sweetalert2';
 
 interface UniversePageData {
   universe: UniverseDetailModel | null;
@@ -61,7 +62,10 @@ export class UniverseDetail {
   );
 
   readonly universe = computed(() => this.pageData()?.universe ?? null);
-  readonly allCharacters = computed(() => this.pageData()?.characters ?? []);
+  private readonly deletedIds = signal<Set<string>>(new Set());
+  readonly allCharacters = computed(() =>
+    (this.pageData()?.characters ?? []).filter(c => !this.deletedIds().has(c._id))
+  );
   readonly notFound = computed(() => this.pageData()?.notFound ?? false);
   readonly isLoading = computed(() => this.pageData() === undefined);
 
@@ -110,6 +114,29 @@ export class UniverseDetail {
 
   goToPage(page: number): void {
     this.currentPage.set(page);
+  }
+
+  async deleteCharacter(event: Event, character: CharacterCard): Promise<void> {
+    event.preventDefault();
+    event.stopPropagation();
+    const result = await Swal.fire({
+      title: '¿Eliminar personaje?',
+      html: `¿Seguro que quieres eliminar <strong>${character.name}</strong>? Esta acción no se puede deshacer.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    });
+    if (!result.isConfirmed) return;
+    this.api.deleteCharacter(character._id).subscribe({
+      next: () => {
+        this.deletedIds.update(s => new Set([...s, character._id]));
+        Swal.fire({ title: 'Eliminado', text: `${character.name} ha sido eliminado.`, icon: 'success', timer: 1800, showConfirmButton: false });
+      },
+      error: () => Swal.fire('Error', 'No se pudo eliminar el personaje.', 'error'),
+    });
   }
 
   hexToRgba(hex: string | null | undefined, alpha: number): string {

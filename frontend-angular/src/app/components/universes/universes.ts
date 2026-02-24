@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiService } from '../../services/api.service';
 import { UniverseCard } from '../../interfaces/universe-card.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-universes',
@@ -18,8 +19,10 @@ export class Universes {
 
   private readonly universesResponse = toSignal(this.api.getUniverses());
 
+  private readonly deletedIds = signal<Set<string>>(new Set());
+
   readonly allUniverses = computed<UniverseCard[]>(
-    () => this.universesResponse()?.status ?? []
+    () => (this.universesResponse()?.status ?? []).filter(u => !this.deletedIds().has(u._id))
   );
   readonly isLoading = computed(() => this.universesResponse() === undefined);
 
@@ -92,5 +95,28 @@ export class Universes {
     if (page < 1 || page > this.totalPages()) return;
     this.currentPage.set(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async deleteUniverse(event: Event, universe: UniverseCard): Promise<void> {
+    event.preventDefault();
+    event.stopPropagation();
+    const result = await Swal.fire({
+      title: '¿Eliminar universo?',
+      html: `¿Seguro que quieres eliminar <strong>${universe.name}</strong>? Esta acción no se puede deshacer.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    });
+    if (!result.isConfirmed) return;
+    this.api.deleteUniverse(universe._id).subscribe({
+      next: () => {
+        this.deletedIds.update(s => new Set([...s, universe._id]));
+        Swal.fire({ title: 'Eliminado', text: `${universe.name} ha sido eliminado.`, icon: 'success', timer: 1800, showConfirmButton: false });
+      },
+      error: () => Swal.fire('Error', 'No se pudo eliminar el universo.', 'error'),
+    });
   }
 }

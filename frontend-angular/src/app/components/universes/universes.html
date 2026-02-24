@@ -52,13 +52,14 @@
     <div class="row g-3">
       @for (universe of pagedUniverses(); track universe._id) {
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <a
-            [routerLink]="['/universes', universe.slug]"
-            class="text-decoration-none d-block">
-            <div
-              class="universe-card"
-              style="border-radius: 8px; border: none;"
-              [ngStyle]="{ 'background-color': universe.primaryColor || '#1a1a2e' }">
+          <div class="universe-card-wrapper">
+            <a
+              [routerLink]="['/universes', universe.slug]"
+              class="text-decoration-none d-block">
+              <div
+                class="universe-card"
+                style="border-radius: 8px; border: none;"
+                [ngStyle]="{ 'background-color': universe.primaryColor || '#1a1a2e' }">
 
               @if (universe.imagenBoton || universe.logo) {
                 <img
@@ -94,6 +95,10 @@
 
             </div>
           </a>
+          <button class="btn-card-delete" (click)="deleteUniverse($event, universe)" title="Eliminar universo">
+            <i class="bi bi-trash3"></i>
+          </button>
+          </div>
         </div>
       }
     </div>

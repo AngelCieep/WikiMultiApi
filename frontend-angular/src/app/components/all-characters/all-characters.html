@@ -47,6 +47,7 @@
       <div class="row g-3">
         @for (character of paginatedCharacters(); track character._id) {
           <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="character-card-wrapper">
             <a [routerLink]="['/character', character._id]" class="text-decoration-none d-block">
               <div class="character-card">
                 @if (character.image) {
@@ -63,6 +64,10 @@
                 </div>
               </div>
             </a>
+            <button class="btn-card-delete" (click)="deleteCharacter($event, character)" title="Eliminar personaje">
+              <i class="bi bi-trash3"></i>
+            </button>
+            </div>
           </div>
         }
       </div>

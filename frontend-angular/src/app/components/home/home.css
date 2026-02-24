@@ -310,7 +310,9 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: 420px;
+  width: 100%;
+  min-height: 420px;
+  height: 100%;
   border-radius: 14px;
   overflow: hidden;
   background-size: cover;

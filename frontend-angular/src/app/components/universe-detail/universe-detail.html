@@ -112,6 +112,7 @@
 			<div class="row g-4">
 				@for (character of paginatedCharacters(); track character._id) {
 					<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+						<div class="character-card-wrapper">
 						<a
 							class="text-decoration-none d-block h-100"
 							[routerLink]="['/universes', universe()?.slug, 'characters', character._id]">
@@ -132,6 +133,10 @@
 								</div>
 							</div>
 						</a>
+						<button class="btn-card-delete" (click)="deleteCharacter($event, character)" title="Eliminar personaje">
+							<i class="bi bi-trash3"></i>
+						</button>
+						</div>
 					</div>
 				}
 			</div>

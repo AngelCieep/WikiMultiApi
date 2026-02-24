@@ -51,6 +51,10 @@ export class ApiService {
     return this.http.get<CharacterDetailResponse>(`${this.baseUrl}/characters/character/${id}`);
   }
 
+  getTopCharacter(): Observable<CharacterDetailResponse> {
+    return this.http.get<CharacterDetailResponse>(`${this.baseUrl}/characters/top`);
+  }
+
   getCharactersByUniverse(slug: string): Observable<CharacterCardResponse> {
     return this.http.post<CharacterCardResponse>(`${this.baseUrl}/characters/universe/${slug}`, {});
   }

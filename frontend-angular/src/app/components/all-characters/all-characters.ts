@@ -6,6 +6,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { CharacterCard } from '../../interfaces/character-card.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-all-characters',
@@ -30,7 +31,10 @@ export class AllCharacters {
     { initialValue: { status: [] } }
   );
 
-  readonly allCharactersList = computed(() => this.allCharacters()?.status ?? []);
+  private readonly deletedIds = signal<Set<string>>(new Set());
+  readonly allCharactersList = computed(() =>
+    (this.allCharacters()?.status ?? []).filter(c => !this.deletedIds().has(c._id))
+  );
 
   readonly characters = computed(() => {
     const q = this.searchQuery().toLowerCase().trim();
@@ -112,5 +116,28 @@ export class AllCharacters {
       this.currentPage.update(p => p - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  async deleteCharacter(event: Event, character: CharacterCard): Promise<void> {
+    event.preventDefault();
+    event.stopPropagation();
+    const result = await Swal.fire({
+      title: '¿Eliminar personaje?',
+      html: `¿Seguro que quieres eliminar <strong>${character.name}</strong>? Esta acción no se puede deshacer.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    });
+    if (!result.isConfirmed) return;
+    this.api.deleteCharacter(character._id).subscribe({
+      next: () => {
+        this.deletedIds.update(s => new Set([...s, character._id]));
+        Swal.fire({ title: 'Eliminado', text: `${character.name} ha sido eliminado.`, icon: 'success', timer: 1800, showConfirmButton: false });
+      },
+      error: () => Swal.fire('Error', 'No se pudo eliminar el personaje.', 'error'),
+    });
   }
 }

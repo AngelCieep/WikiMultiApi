@@ -90,7 +90,7 @@
     <div class="row g-4">
 
       <!-- Universo más visitado -->
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6 d-flex">
         @if (topUniverseDetail()) {
           <a
             [routerLink]="['/universes', topUniverseDetail()!.slug]"
@@ -121,7 +121,7 @@
       </div>
 
       <!-- Personaje más visitado -->
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6 d-flex">
         @if (topCharacter()) {
           <a
             [routerLink]="['/character', topCharacter()!._id]"

@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiService } from '../../services/api.service';
 import { catchError, map, of, switchMap } from 'rxjs';
-import { CharacterCard } from '../../interfaces/character-card.interface';
 import { UniverseDetail } from '../../interfaces/universe-detail.interface';
 
 @Component({
@@ -80,13 +79,9 @@ export class Home implements OnDestroy {
     { initialValue: null as UniverseDetail | null }
   );
 
-  private readonly allCharacters = toSignal(
-    this.api.getCharacters().pipe(map(res => res.status), catchError(() => of([] as CharacterCard[]))),
-    { initialValue: [] as CharacterCard[] }
-  );
-
-  readonly topCharacter = computed(() =>
-    [...this.allCharacters()].sort((a, b) => (b.views || 0) - (a.views || 0))[0] ?? null
+  readonly topCharacter = toSignal(
+    this.api.getTopCharacter().pipe(map(r => r.status), catchError(() => of(null))),
+    { initialValue: null }
   );
 
   onSearch(): void {
