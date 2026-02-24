@@ -213,3 +213,85 @@
   border-radius: 16px;
   grid-column: 1 / -1;
 }
+
+/* ── Pagination ── */
+.characters-page-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+.cp-page-btn {
+  position: relative;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 12px;
+  border: 2px solid #c8daea;
+  background: linear-gradient(180deg, #f8fbff 0%, #e4f0f8 100%);
+  color: #1a527a;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #a0bdd4, 0 4px 8px rgba(0,0,0,0.08);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  overflow: hidden;
+}
+.cp-page-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.05) 100%);
+  border-radius: 12px 12px 60% 60% / 12px 12px 8px 8px;
+  pointer-events: none;
+}
+.cp-page-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 #a0bdd4, 0 6px 12px rgba(0,0,0,0.12);
+}
+.cp-page-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #a0bdd4;
+}
+.cp-page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.cp-page-btn--active {
+  background: linear-gradient(180deg, #5ecfff 0%, #2aaae8 40%, #1272c0 100%);
+  border-color: #0d5a9e;
+  color: #fff;
+  box-shadow: 0 3px 0 #0a3f6e, 0 4px 10px rgba(0,0,0,0.2);
+}
+.cp-page-btn--active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 #0a3f6e, 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.cp-page-btn--nav {
+  font-size: 16px;
+}
+
+.cp-page-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  color: #aaa;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cp-page-info {
+  font-size: 12px;
+  color: #999;
+  font-weight: 600;
+  margin-left: 8px;
+  white-space: nowrap;
+}

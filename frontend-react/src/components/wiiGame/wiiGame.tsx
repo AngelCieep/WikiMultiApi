@@ -13,7 +13,8 @@ type UniverseWithCharacters = Universe & {
 
 export const WiiGame = () => {
   const [universes, setUniverses] = useState<UniverseWithCharacters[]>([]);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [slideDir, setSlideDir] = useState<'left' | 'right' | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedUniverse, setSelectedUniverse] = useState<UniverseWithCharacters | null>(null);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
@@ -43,31 +44,29 @@ export const WiiGame = () => {
     setLoading(false);
   };
 
-  const handleScroll = (direction: 'left' | 'right') => {
-    const container = document.querySelector('.wii-channels-container');
-    if (container) {
-      const scrollAmount = 300;
-      const newPosition = direction === 'left' 
-        ? scrollPosition - scrollAmount 
-        : scrollPosition + scrollAmount;
-      
-      container.scrollTo({ left: newPosition, behavior: 'smooth' });
-      setScrollPosition(newPosition);
-    }
-  };
+  const SLOTS_PER_PAGE = 12;
 
-  // Crear un array de 12 espacios para los canales (3 filas x 4 columnas)
-  const channelSlots = Array.from({ length: 12 }, (_, index) => {
-    // La primera casilla siempre es el disco de la Wii
-    if (index === 0) {
-      return { type: 'disc' as const, index };
-    }
-    // Los universos empiezan desde la segunda casilla
-    if (index - 1 < universes.length) {
-      return { type: 'universe' as const, data: universes[index - 1], index };
-    }
-    return { type: 'empty' as const, index };
-  });
+  // Build all slots: disc first, then universes
+  const allSlots: ({ type: 'disc'; index: number } | { type: 'universe'; data: UniverseWithCharacters; index: number } | { type: 'empty'; index: number })[] = [
+    { type: 'disc', index: 0 },
+    ...universes.map((u, i) => ({ type: 'universe' as const, data: u, index: i + 1 })),
+  ];
+  // Pad to at least 2 full pages so arrows always have content to navigate
+  const minSlots = SLOTS_PER_PAGE * 2;
+  while (allSlots.length < minSlots || allSlots.length % SLOTS_PER_PAGE !== 0) {
+    allSlots.push({ type: 'empty' as const, index: allSlots.length });
+  }
+  const totalPages = allSlots.length / SLOTS_PER_PAGE;
+  const safePage = Math.min(currentPage, totalPages - 1);
+  const channelSlots = allSlots.slice(safePage * SLOTS_PER_PAGE, (safePage + 1) * SLOTS_PER_PAGE);
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    setSlideDir(direction);
+    setCurrentPage(prev =>
+      direction === 'left' ? Math.max(0, prev - 1) : Math.min(totalPages - 1, prev + 1)
+    );
+    setTimeout(() => setSlideDir(null), 350);
+  };
 
   if (loading) {
     return (
@@ -114,12 +113,16 @@ export const WiiGame = () => {
       <button 
         className="wii-nav-button wii-nav-left" 
         onClick={() => handleScroll('left')}
+        disabled={safePage === 0}
       >
         ◀
       </button>
       
       <div className="wii-channels-wrapper">
-        <div className="wii-channels-container">
+        <div
+            className={`wii-channels-container${slideDir === 'left' ? ' wii-slide-left' : slideDir === 'right' ? ' wii-slide-right' : ''}`}
+            key={safePage}
+          >
           {channelSlots.map((slot) => (
             <div 
               key={slot.type === 'universe' ? slot.data._id : `${slot.type}-${slot.index}`}
@@ -159,9 +162,23 @@ export const WiiGame = () => {
       <button 
         className="wii-nav-button wii-nav-right" 
         onClick={() => handleScroll('right')}
+        disabled={safePage === totalPages - 1}
       >
         ▶
       </button>
+
+      {totalPages > 1 && (
+        <div className="wii-page-dots">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              className={`wii-page-dot ${i === safePage ? 'wii-page-dot--active' : ''}`}
+              onClick={() => setCurrentPage(i)}
+              aria-label={`Página ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
 
       {selectedUniverse && (
         <div className="wii-modal-overlay" onClick={closeDetails}>
