@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { apiService } from '../../services/api.service';
 import type { Universe } from '../../interfaces/universe.interface';
 import type { Character } from '../../interfaces/character.interface';
+import { StartPage } from '../startPage/startPage';
+import { CharactersPage } from '../charactersPage/charactersPage';
+import { CharacterDetail } from '../characterDetail/characterDetail';
 import './wiiGame.css';
 
 type UniverseWithCharacters = Universe & {
@@ -13,6 +16,8 @@ export const WiiGame = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedUniverse, setSelectedUniverse] = useState<UniverseWithCharacters | null>(null);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [modalStep, setModalStep] = useState<'universe' | 'characters' | 'character'>('universe');
 
   useEffect(() => {
     loadUniverses();
@@ -72,8 +77,36 @@ export const WiiGame = () => {
     );
   }
 
+  const openUniverse = (universe: UniverseWithCharacters) => {
+    setSelectedUniverse(universe);
+    setSelectedCharacter(null);
+    setModalStep('universe');
+  };
+
+  const openCharacters = () => {
+    setModalStep('characters');
+  };
+
+  const openCharacter = (character: Character) => {
+    setSelectedCharacter(character);
+    setModalStep('character');
+  };
+
+  const goBack = () => {
+    if (modalStep === 'character') {
+      setModalStep('characters');
+      setSelectedCharacter(null);
+      return;
+    }
+    if (modalStep === 'characters') {
+      setModalStep('universe');
+    }
+  };
+
   const closeDetails = () => {
     setSelectedUniverse(null);
+    setSelectedCharacter(null);
+    setModalStep('universe');
   };
 
   return (
@@ -95,7 +128,7 @@ export const WiiGame = () => {
                 backgroundColor: slot.data.primaryColor,
                 backgroundImage: slot.data.backgroundImage ? `url(${slot.data.backgroundImage})` : undefined,
               } : undefined}
-              onClick={slot.type === 'universe' ? () => setSelectedUniverse(slot.data) : undefined}
+              onClick={slot.type === 'universe' ? () => openUniverse(slot.data) : undefined}
             >
               {slot.type === 'disc' ? (
                 <div className="wii-channel-disc-content">
@@ -133,40 +166,30 @@ export const WiiGame = () => {
       {selectedUniverse && (
         <div className="wii-modal-overlay" onClick={closeDetails}>
           <div className="wii-modal" onClick={(event) => event.stopPropagation()}>
-            <div className="wii-modal-header">
-              <div className="wii-modal-title">{selectedUniverse.name}</div>
-              <button className="wii-modal-close" onClick={closeDetails}>✕</button>
-            </div>
             <div className="wii-modal-body">
-              {(selectedUniverse.imagenBoton || selectedUniverse.logo) && (
-                <div className="wii-modal-logo">
-                  <img
-                    src={selectedUniverse.imagenBoton || selectedUniverse.logo}
-                    alt={selectedUniverse.name}
-                  />
-                </div>
+              {modalStep === 'universe' && (
+                <StartPage
+                  title={selectedUniverse.name}
+                  backgroundImage={selectedUniverse.backgroundImage}
+                  logo={selectedUniverse.logo}
+                  onStart={openCharacters}
+                  onClose={closeDetails}
+                />
               )}
-              <div className="wii-modal-characters">
-                {selectedUniverse.characters.length === 0 ? (
-                  <div className="wii-modal-empty">No hay personajes para este universo.</div>
-                ) : (
-                  selectedUniverse.characters.map((character) => (
-                    <div key={character._id} className="wii-modal-character">
-                      <div className="wii-modal-avatar">
-                        {character.image ? (
-                          <img src={character.image} alt={character.name} />
-                        ) : (
-                          <span>{character.name.slice(0, 1)}</span>
-                        )}
-                      </div>
-                      <div className="wii-modal-name">{character.name}</div>
-                      {character.title && (
-                        <div className="wii-modal-title-small">{character.title}</div>
-                      )}
-                    </div>
-                  ))
-                )}
-              </div>
+              {modalStep === 'characters' && (
+                <CharactersPage
+                  title={selectedUniverse.name}
+                  universeId={selectedUniverse._id}
+                  onSelectCharacter={openCharacter}
+                  onBack={goBack}
+                />
+              )}
+              {modalStep === 'character' && selectedCharacter && (
+                <CharacterDetail
+                  character={selectedCharacter}
+                  onBack={goBack}
+                />
+              )}
             </div>
           </div>
         </div>

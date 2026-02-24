@@ -1,0 +1,133 @@
+.start-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.start-page-background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Semi-transparent dark overlay so buttons area is always readable */
+.start-page-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── Logo area fills most of the screen ── */
+.start-page-logo-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 80px 20px;
+}
+
+.start-page-logo-img {
+  max-width: min(780px, 85%);
+  max-height: 420px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.55));
+}
+
+.start-page-title {
+  color: #fff;
+  font-size: 48px;
+  font-weight: 900;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+  margin: 0;
+  text-align: center;
+}
+
+/* ── Bottom bar with buttons ── */
+.start-page-actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px 40px 32px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.0) 100%);
+}
+
+/* ── Shared Wii pill button ── */
+.start-page-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  padding: 12px 32px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  border: none;
+  outline: none;
+}
+
+.start-page-btn-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52%;
+  border-radius: 40px 40px 60% 60% / 40px 40px 24px 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.05) 100%);
+  pointer-events: none;
+}
+
+/* Menú de Wii — gray */
+.start-page-btn--menu {
+  background: linear-gradient(180deg, #f2f2f2 0%, #d0d0d0 45%, #b0b0b0 100%);
+  color: #222;
+  box-shadow: 0 6px 0 #737373, 0 8px 18px rgba(0,0,0,0.4);
+  text-shadow: 0 1px 1px rgba(255,255,255,0.7);
+  border: 1.5px solid #888;
+}
+
+.start-page-btn--menu:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #737373, 0 12px 22px rgba(0,0,0,0.45);
+}
+
+.start-page-btn--menu:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #737373, 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Comenzar — blue */
+.start-page-btn--start {
+  background: linear-gradient(180deg, #7edcff 0%, #2aaae8 40%, #1272c0 100%);
+  color: #fff;
+  box-shadow: 0 6px 0 #0a4a8a, 0 8px 18px rgba(0,0,0,0.4);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.45);
+  border: 1.5px solid #0d5a9e;
+}
+
+.start-page-btn--start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #0a4a8a, 0 12px 22px rgba(0,0,0,0.45);
+}
+
+.start-page-btn--start:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #0a4a8a, 0 4px 10px rgba(0,0,0,0.3);
+}
+

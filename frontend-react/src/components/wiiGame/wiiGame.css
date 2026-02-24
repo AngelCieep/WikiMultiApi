@@ -477,23 +477,42 @@
 .wii-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
   z-index: 2000;
+  animation: wiiOverlayFadeIn 180ms ease-out;
 }
 
 .wii-modal {
-  width: min(900px, 90vw);
-  max-height: 80vh;
+  width: 100vw;
+  height: 100vh;
   background: linear-gradient(160deg, #f5f5f5, #dadada);
-  border: 3px solid rgba(255, 255, 255, 0.7);
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  animation: wiiModalPopIn 220ms ease-out;
+  transform-origin: center;
+}
+
+@keyframes wiiOverlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes wiiModalPopIn {
+  0% {
+    transform: scale(0.92) translateY(8px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }
 
 .wii-modal-header {
@@ -503,6 +522,12 @@
   padding: 16px 24px;
   background: rgba(0, 160, 233, 0.15);
   border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.wii-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .wii-modal-title {
@@ -523,9 +548,63 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
+.wii-modal-back {
+  border: none;
+  background: #ffffff;
+  color: #2d6aa0;
+  padding: 8px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
 .wii-modal-body {
-  padding: 20px 24px 28px;
-  overflow-y: auto;
+  padding: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.wii-universe-panel {
+  display: grid;
+  gap: 20px;
+  justify-items: center;
+  padding: 20px 0 10px;
+}
+
+.wii-universe-backdrop {
+  width: min(640px, 100%);
+  height: 280px;
+  border-radius: 18px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+.wii-universe-logo {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 10px 16px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.wii-universe-logo img {
+  max-width: 220px;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.wii-universe-start {
+  background: linear-gradient(180deg, #6bd2ff, #2aa6e6);
+  border: 2px solid #1a7fb5;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 10px 32px;
+  border-radius: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
 .wii-modal-logo {
@@ -556,6 +635,56 @@
   align-items: center;
   text-align: center;
   box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+}
+
+.wii-character-detail {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.wii-character-detail-card {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 24px 36px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+.wii-character-detail-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 0 auto 16px;
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+}
+
+.wii-character-detail-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wii-character-detail-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+
+.wii-character-detail-title {
+  font-size: 16px;
+  color: #666;
+  margin-top: 6px;
 }
 
 .wii-modal-avatar {

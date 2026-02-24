@@ -60,5 +60,21 @@ export const apiService = {
       console.error('Error fetching characters:', error);
       return [];
     }
+  },
+
+  async getCharacter(universeId: string, characterId: string): Promise<Character | null> {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/characters/universe/${universeId}/character/${characterId}`
+      );
+      if (!response.ok) {
+        throw new Error('Error fetching character');
+      }
+      const payload = await response.json();
+      return payload.status || null;
+    } catch (error) {
+      console.error('Error fetching character:', error);
+      return null;
+    }
   }
 };
