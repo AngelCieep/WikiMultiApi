@@ -26,8 +26,8 @@ app.use('/api/v1/characters', require('./routes/characters.route'));
 app.use('/api/v1/universes', require('./routes/universe.routes'));
 app.use('/', (req, res) => res.send('Api funciona en api/v1'));
 
-// Solo escuchar en local, no en Vercel
-if (process.env.NODE_ENV !== 'production') {
+// Solo escuchar en local — Vercel inyecta VERCEL=1 automáticamente
+if (!process.env.VERCEL) {
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
     console.log('Servidor corriendo en el puerto', port);
