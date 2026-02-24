@@ -2,13 +2,13 @@
   <!-- Imagen actual (siempre visible) -->
   <div
     class="hero-bg"
-    [style.background-image]="'url(' + currentBg() + ')'">
+    [style.background-image]="currentBg() | safeBg">
   </div>
   <!-- Imagen siguiente (aparece encima con fade) -->
   <div
     class="hero-bg hero-bg-next"
     [class.visible]="transitioning()"
-    [style.background-image]="'url(' + nextBg() + ')'">
+    [style.background-image]="nextBg() | safeBg">
   </div>
 
   <div class="hero-overlay"></div>
@@ -95,7 +95,7 @@
           <a
             [routerLink]="['/universes', topUniverseDetail()!.slug]"
             class="featured-card text-decoration-none"
-            [style.background-image]="topUniverseDetail()!.backgroundImage ? 'url(' + topUniverseDetail()!.backgroundImage + ')' : 'none'"
+            [style.background-image]="topUniverseDetail()!.backgroundImage | safeBg"
             [style.background-color]="topUniverseDetail()!.primaryColor || '#1a1a2e'">
             <div class="featured-overlay"></div>
             <span class="featured-badge">🏆 Universo más visitado</span>

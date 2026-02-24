@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
 import {
   FormBuilder,
   FormGroup,
@@ -13,7 +14,7 @@ import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-add-universe',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SafeBgPipe],
   templateUrl: './add-universe.html',
   styleUrl: './add-universe.css',
 })

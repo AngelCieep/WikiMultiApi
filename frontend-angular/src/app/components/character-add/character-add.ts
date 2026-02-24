@@ -1,6 +1,7 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
 import {
   FormBuilder,
   FormGroup,
@@ -15,7 +16,7 @@ import { UniverseStyle } from '../../interfaces/universe-style.interface';
 
 @Component({
   selector: 'app-character-add',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SafeBgPipe],
   templateUrl: './character-add.html',
   styleUrl: './character-add.css',
 })

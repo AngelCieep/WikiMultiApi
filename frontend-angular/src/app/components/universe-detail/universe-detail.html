@@ -20,7 +20,7 @@
 
 	<section
 		class="hero"
-		[style.background-image]="universe()?.backgroundImage ? 'url(' + universe()?.backgroundImage + ')' : 'none'"
+		[style.background-image]="universe()?.backgroundImage | safeBg"
 		[style.background-color]="hexToRgba(universe()?.primaryColor, 0.82)"
 		[ngStyle]="{
 			'--universe-primary': universe()?.primaryColor || '#12121a',

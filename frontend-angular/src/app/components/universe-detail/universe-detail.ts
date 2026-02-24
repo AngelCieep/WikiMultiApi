@@ -2,6 +2,7 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { ApiService } from '../../services/api.service';
@@ -17,7 +18,7 @@ interface UniversePageData {
 
 @Component({
   selector: 'app-universe-detail',
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, SafeBgPipe],
   templateUrl: './universe-detail.html',
   styleUrl: './universe-detail.css',
 })

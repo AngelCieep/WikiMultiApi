@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { Navbar } from './components/navbar/navbar';
 import { Footer } from './components/footer/footer';
 import { CommonModule } from '@angular/common';
+import { SafeBgPipe } from './pipes/safe-bg.pipe';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, Footer, CommonModule],
+  imports: [RouterOutlet, Navbar, Footer, CommonModule, SafeBgPipe],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -6,10 +6,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiService } from '../../services/api.service';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { UniverseDetail } from '../../interfaces/universe-detail.interface';
+import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, CommonModule, FormsModule, NgStyle],
+  imports: [RouterLink, CommonModule, FormsModule, NgStyle, SafeBgPipe],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -28,11 +29,11 @@ export class Home implements OnDestroy {
 
   // ── Slideshow ──────────────────────────────────────────────
   readonly bgImages: string[] = [
-    'img/bg1.webp',
-    'img/bg2.webp',
-    'img/bg3.webp',
-    'img/bg4.webp',
-    'img/bg5.webp',
+    '/img/bg1.webp',
+    '/img/bg2.webp',
+    '/img/bg3.webp',
+    '/img/bg4.webp',
+    '/img/bg5.webp',
   ];
 
   readonly currentIndex = signal(0);
