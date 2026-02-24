@@ -115,7 +115,7 @@ export const WiiGame = () => {
         onClick={() => handleScroll('left')}
         disabled={safePage === 0}
       >
-        ◀
+        <img src="/src/assets/background/izquierda.png" alt="izquierda" />
       </button>
       
       <div className="wii-channels-wrapper">
@@ -164,7 +164,7 @@ export const WiiGame = () => {
         onClick={() => handleScroll('right')}
         disabled={safePage === totalPages - 1}
       >
-        ▶
+        <img src="/src/assets/background/derecha.png" alt="derecha" />
       </button>
 
       {totalPages > 1 && (

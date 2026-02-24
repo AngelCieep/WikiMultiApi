@@ -68,7 +68,7 @@ export class Home implements OnDestroy {
   readonly popularUniverses = computed(() =>
     [...this.universes()]
       .sort((a, b) => (b.popularityScore || 0) - (a.popularityScore || 0))
-      .slice(0, 6)
+      .slice(0, 10)
   );
 
   // ── Universo y personaje destacado ────────────────────────
