@@ -7,3 +7,48 @@
 main {
     flex: 1;
 }
+
+/* ── Fondo global giratorio ─────────────────────────────── */
+.global-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background-color: #0a0a0f;
+}
+
+.global-bg-layer {
+    position: absolute;
+    /* Imagen más grande que la pantalla para poder girar sin esquinas vacías */
+    width: 160vmax;
+    height: 160vmax;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.35;
+    /* Rotación continua lenta: una vuelta completa en 4 min */
+    animation: bgSpin 240s linear infinite;
+    transition: opacity 1.5s ease;
+}
+
+/* Imagen siguiente — invisible por defecto */
+.global-bg-next {
+    opacity: 0;
+    animation-delay: -120s; /* desfase para que no estén sincronizadas */
+}
+
+/* Durante la transición: actual se desvanece, siguiente aparece */
+.global-bg-layer.fading-out {
+    opacity: 0;
+}
+
+.global-bg-next.fading-in {
+    opacity: 0.35;
+}
+
+@keyframes bgSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg);   }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+}

@@ -1,3 +1,19 @@
+<!-- Fondo global giratorio -->
+<div class="global-bg" aria-hidden="true">
+  <!-- Imagen actual -->
+  <div
+    class="global-bg-layer"
+    [class.fading-out]="transitioning()"
+    [style.background-image]="'url(' + images[currentIndex()] + ')'">
+  </div>
+  <!-- Imagen siguiente (aparece durante la transición) -->
+  <div
+    class="global-bg-layer global-bg-next"
+    [class.fading-in]="transitioning()"
+    [style.background-image]="'url(' + images[nextIndex()] + ')'">
+  </div>
+</div>
+
 <app-navbar></app-navbar>
 
 <main>
