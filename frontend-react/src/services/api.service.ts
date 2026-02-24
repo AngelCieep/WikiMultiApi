@@ -32,6 +32,20 @@ export const apiService = {
     }
   },
 
+  async getUniverseStyle(slug: string): Promise<Universe | null> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/universes/style/${slug}`);
+      if (!response.ok) {
+        throw new Error('Error fetching universe style');
+      }
+      const payload = await response.json();
+      return payload.status || null;
+    } catch (error) {
+      console.error('Error fetching universe style:', error);
+      return null;
+    }
+  },
+
   async getCharactersByUniverse(universeId: string): Promise<Character[]> {
     try {
       const response = await fetch(`${API_BASE_URL}/characters/universe/${universeId}`, {

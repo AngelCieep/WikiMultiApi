@@ -23,7 +23,7 @@ universCtrl.getUniverse = async (req, res) => {
 
 //Obtener solo campos visuales de un universo por slug
 universCtrl.getUniverseStyle = async (req, res) => {
-    await Universe.findOne({ slug: req.params.slug }, '_id name slug logo backgroundImage fontFamily primaryColor secondaryColor tertiaryColor textColor')
+    await Universe.findOne({ slug: req.params.slug }, '_id name slug logo backgroundImage fontFamily primaryColor secondaryColor tertiaryColor textColor backgroundImage isActive')
     .then((data) => {
         if (data != null)
             res.status(200).json({ status: data });

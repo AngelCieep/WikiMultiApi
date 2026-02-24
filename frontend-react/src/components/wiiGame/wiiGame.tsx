@@ -23,9 +23,13 @@ export const WiiGame = () => {
     const data = await apiService.getUniverses();
     const universesWithCharacters = await Promise.all(
       data.map(async (universe) => {
-        const characters = await apiService.getCharactersByUniverse(universe._id);
+        const [characters, styleData] = await Promise.all([
+          apiService.getCharactersByUniverse(universe._id),
+          apiService.getUniverseStyle(universe.slug)
+        ]);
         return {
           ...universe,
+          ...styleData,
           characters
         };
       })
