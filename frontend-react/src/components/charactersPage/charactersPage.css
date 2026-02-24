@@ -15,6 +15,14 @@
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.characters-page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .characters-page-title {
@@ -23,6 +31,58 @@
   font-weight: 800;
   color: #1a2a3a;
 }
+
+/* ── Search bar ── */
+.characters-page-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 2px solid #c8daea;
+  border-radius: 40px;
+  padding: 0 14px;
+  height: 42px;
+  min-width: 220px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.characters-page-search-wrap:focus-within {
+  border-color: #2aaae8;
+  box-shadow: 0 0 0 3px rgba(42,170,232,0.15);
+}
+
+.characters-page-search-icon {
+  font-size: 15px;
+  margin-right: 8px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.characters-page-search {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a2a3a;
+}
+.characters-page-search::placeholder {
+  color: #aab8c4;
+  font-weight: 500;
+}
+
+.characters-page-search-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #aab8c4;
+  line-height: 1;
+  padding: 0 0 0 6px;
+  transition: color 0.15s;
+}
+.characters-page-search-clear:hover { color: #555; }
 
 /* Wii-style back button */
 .characters-page-back {

@@ -18,6 +18,7 @@ export const CharactersPage = ({
 }: CharactersPageProps) => {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     setLoading(true);
@@ -27,22 +28,42 @@ export const CharactersPage = ({
     });
   }, [universeId]);
 
+  const filtered = characters.filter((c) =>
+    c.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="characters-page">
       <div className="characters-page-header">
-        <h2 className="characters-page-title">{title}</h2>
-        {onBack && (
-          <button className="characters-page-back" onClick={onBack}>◀ Back</button>
-        )}
+        <div className="characters-page-header-left">
+          {onBack && (
+            <button className="characters-page-back" onClick={onBack}>◀ Volver</button>
+          )}
+          <h2 className="characters-page-title">{title}</h2>
+        </div>
+        <div className="characters-page-search-wrap">
+          <span className="characters-page-search-icon">🔍</span>
+          <input
+            className="characters-page-search"
+            type="text"
+            placeholder="Buscar personaje..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {search && (
+            <button className="characters-page-search-clear" onClick={() => setSearch('')}>×</button>
+          )}
+        </div>
       </div>
+
       {loading ? (
-        <div className="characters-page-empty">Loading characters...</div>
+        <div className="characters-page-empty">Cargando personajes...</div>
       ) : (
         <div className="characters-page-grid">
-          {characters.length === 0 ? (
-            <div className="characters-page-empty">No characters yet.</div>
+          {filtered.length === 0 ? (
+            <div className="characters-page-empty">No se encontraron personajes.</div>
           ) : (
-            characters.map((character) => (
+            filtered.map((character) => (
               <button
                 key={character._id}
                 className="characters-page-card"
