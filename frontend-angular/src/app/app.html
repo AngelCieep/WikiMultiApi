@@ -3,12 +3,12 @@
   <div
     class="global-bg-layer"
     [class.fading-out]="transitioning()"
-    [style.background-image]="'url(' + images[currentIndex()] + ')'">
+    [style.background-image]="images[currentIndex()] | safeBg">
   </div>
   <div
     class="global-bg-layer global-bg-next"
     [class.fading-in]="transitioning()"
-    [style.background-image]="'url(' + images[nextIndex()] + ')'">
+    [style.background-image]="images[nextIndex()] | safeBg">
   </div>
 
   <!-- Contenido -->

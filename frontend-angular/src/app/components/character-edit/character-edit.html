@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="ca-header"
       [style.border-bottom-color]="universe()?.secondaryColor || '#fff'"
-      [style.background-image]="universe()?.backgroundImage ? 'url(' + universe()!.backgroundImage + ')' : 'none'">
+      [style.background-image]="universe()?.backgroundImage | safeBg">
       <div class="ca-header-overlay"></div>
       <div class="ca-header-content">
         <a [routerLink]="['/character', id]" class="ca-back-link"

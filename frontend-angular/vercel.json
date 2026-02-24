@@ -1,0 +1,11 @@
+{
+  "buildCommand": "node node_modules/@angular/cli/bin/ng build --configuration production",
+  "outputDirectory": "dist/frontend-angular/browser",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

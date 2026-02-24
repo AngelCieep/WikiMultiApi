@@ -171,7 +171,7 @@
 
             <!-- Fondo simulado -->
             @if (form.get('backgroundImage')?.value) {
-              <div class="au-sp-bg" [style.background-image]="'url(' + form.get('backgroundImage')?.value + ')'" ></div>
+              <div class="au-sp-bg" [style.background-image]="form.get('backgroundImage')?.value | safeBg"></div>
             }
 
             <div class="au-sp-content">

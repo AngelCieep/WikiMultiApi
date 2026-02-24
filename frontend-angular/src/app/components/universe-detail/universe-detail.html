@@ -20,7 +20,7 @@
 
 	<section
 		class="hero"
-		[style.background-image]="universe()?.backgroundImage ? 'url(' + universe()?.backgroundImage + ')' : 'none'"
+		[style.background-image]="universe()?.backgroundImage | safeBg"
 		[style.background-color]="hexToRgba(universe()?.primaryColor, 0.82)"
 		[ngStyle]="{
 			'--universe-primary': universe()?.primaryColor || '#12121a',
@@ -50,7 +50,7 @@
 					<div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end">
 						<img
 							class="hero-logo-large"
-							[src]="universe()?.logo"
+						[src]="universe()?.logo | safeUrl"
 							[alt]="universe()?.name">
 					</div>
 				}
@@ -112,6 +112,7 @@
 			<div class="row g-4">
 				@for (character of paginatedCharacters(); track character._id) {
 					<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+						<div class="character-card-wrapper">
 						<a
 							class="text-decoration-none d-block h-100"
 							[routerLink]="['/universes', universe()?.slug, 'characters', character._id]">
@@ -132,6 +133,10 @@
 								</div>
 							</div>
 						</a>
+						<button class="btn-card-delete" (click)="deleteCharacter($event, character)" title="Eliminar personaje">
+							<i class="bi bi-trash3"></i>
+						</button>
+						</div>
 					</div>
 				}
 			</div>

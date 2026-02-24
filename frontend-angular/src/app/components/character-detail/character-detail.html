@@ -138,7 +138,7 @@
 				<!-- Sidebar Column -->
 				<div class="wiki-sidebar">
 					@if (character()?.image) {
-						<img class="wiki-portrait" [src]="character()?.image" [alt]="character()?.name" [style.border-color]="universe()?.textColor || '#000'">
+						<img class="wiki-portrait" [src]="character()?.image | safeUrl" [alt]="character()?.name" [style.border-color]="universe()?.textColor || '#000'">
 					}
 
 					@if (character()?.stats) {

@@ -1,6 +1,7 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
 import {
   FormBuilder, FormGroup, FormArray,
   Validators, ReactiveFormsModule,
@@ -13,7 +14,7 @@ import { UniverseDetail } from '../../interfaces/universe-detail.interface';
 
 @Component({
   selector: 'app-character-edit',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SafeBgPipe],
   templateUrl: './character-edit.html',
   styleUrl: '../character-add/character-add.css',
 })

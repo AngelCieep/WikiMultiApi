@@ -5,6 +5,7 @@ const router = express.Router();
 
 //Rutas
 router.get('/all', charsCtrl.getCharacters);
+router.get('/top', charsCtrl.getMostViewedCharacter);
 router.get('/character/:id', charsCtrl.getCharacter);
 router.get('/universe/:iduniverse/character/:idcharacter', charsCtrl.getCharacter);
 router.post('/', charsCtrl.addCharacter);
