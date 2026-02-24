@@ -3,6 +3,7 @@ import { CommonModule, KeyValuePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { ApiService } from '../../services/api.service';
 import { UniverseStyle } from '../../interfaces/universe-style.interface';
 import { CharacterDetail as CharacterDetailModel } from '../../interfaces/character-detail.interface';
@@ -15,7 +16,7 @@ interface CharacterPageData {
 
 @Component({
   selector: 'app-character-detail',
-  imports: [CommonModule, RouterLink, KeyValuePipe],
+  imports: [CommonModule, RouterLink, KeyValuePipe, SafeUrlPipe],
   templateUrl: './character-detail.html',
   styleUrl: './character-detail.css',
 })

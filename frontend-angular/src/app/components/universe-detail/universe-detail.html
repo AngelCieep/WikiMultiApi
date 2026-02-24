@@ -50,7 +50,7 @@
 					<div class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end">
 						<img
 							class="hero-logo-large"
-							[src]="universe()?.logo"
+						[src]="universe()?.logo | safeUrl"
 							[alt]="universe()?.name">
 					</div>
 				}

@@ -31,7 +31,7 @@
 								@if (character.image) {
 									<img
 										class="card-img-top character-img"
-										[src]="character.image"
+										[src]="character.image | safeUrl"
 										[alt]="character.name">
 								} @else {
 									<div class="character-placeholder">Sin imagen</div>

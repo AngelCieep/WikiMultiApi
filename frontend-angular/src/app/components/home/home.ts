@@ -7,10 +7,11 @@ import { ApiService } from '../../services/api.service';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { UniverseDetail } from '../../interfaces/universe-detail.interface';
 import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, CommonModule, FormsModule, NgStyle, SafeBgPipe],
+  imports: [RouterLink, CommonModule, FormsModule, NgStyle, SafeBgPipe, SafeUrlPipe],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { ApiService } from '../../services/api.service';
@@ -18,7 +19,7 @@ interface UniversePageData {
 
 @Component({
   selector: 'app-universe-detail',
-  imports: [CommonModule, RouterLink, FormsModule, SafeBgPipe],
+  imports: [CommonModule, RouterLink, FormsModule, SafeBgPipe, SafeUrlPipe],
   templateUrl: './universe-detail.html',
   styleUrl: './universe-detail.css',
 })

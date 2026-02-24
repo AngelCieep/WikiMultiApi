@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { ApiService } from '../../services/api.service';
@@ -16,7 +17,7 @@ interface CharactersPageData {
 
 @Component({
   selector: 'app-characters',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SafeUrlPipe],
   templateUrl: './characters.html',
   styleUrl: './characters.css',
 })

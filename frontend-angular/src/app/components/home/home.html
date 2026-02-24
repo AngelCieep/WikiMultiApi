@@ -58,7 +58,7 @@
               [ngStyle]="{ 'background-color': universe.primaryColor || '#1a1a2e' }">
               @if (universe.imagenBoton || universe.logo) {
                 <img
-                  [src]="universe.imagenBoton || universe.logo"
+                  [src]="(universe.imagenBoton || universe.logo) | safeUrl"
                   [alt]="universe.name"
                   class="netflix-logo">
               } @else {
@@ -129,7 +129,7 @@
             <div class="featured-overlay"></div>
             <span class="featured-badge">⭐ Personaje más visitado</span>
             @if (topCharacter()!.image) {
-              <img [src]="topCharacter()!.image" [alt]="topCharacter()!.name" class="featured-char-img" />
+              <img [src]="topCharacter()!.image | safeUrl" [alt]="topCharacter()!.name" class="featured-char-img" />
             }
             <div class="featured-content">
               <h3 class="featured-name">{{ topCharacter()!.name }}</h3>

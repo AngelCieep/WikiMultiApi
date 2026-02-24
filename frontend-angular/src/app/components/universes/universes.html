@@ -64,7 +64,7 @@
               @if (universe.imagenBoton || universe.logo) {
                 <img
                   #logoImg
-                  [src]="universe.imagenBoton || universe.logo"
+                  [src]="(universe.imagenBoton || universe.logo) | safeUrl"
                   [alt]="universe.name"
                   (error)="logoImg.style.display='none'; fallback.style.display='flex'"
                   style="width: 100%; height: 100%; object-fit: cover;

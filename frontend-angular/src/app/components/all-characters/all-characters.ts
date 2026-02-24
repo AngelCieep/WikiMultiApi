@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute } from '@angular/router';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of } from 'rxjs';
@@ -10,7 +11,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-all-characters',
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, SafeUrlPipe],
   templateUrl: './all-characters.html',
   styleUrl: './all-characters.css',
 })

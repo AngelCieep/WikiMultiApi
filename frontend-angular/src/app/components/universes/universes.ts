@@ -1,6 +1,7 @@
 import { Component, computed, signal, inject, effect } from '@angular/core';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule, NgStyle } from '@angular/common';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ApiService } from '../../services/api.service';
@@ -9,7 +10,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-universes',
-  imports: [CommonModule, NgStyle, RouterLink, FormsModule],
+  imports: [CommonModule, NgStyle, RouterLink, FormsModule, SafeUrlPipe],
   templateUrl: './universes.html',
   styleUrl: './universes.css',
 })
