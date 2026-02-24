@@ -55,10 +55,12 @@ export const CharactersPage = ({
                     <span>{character.name.slice(0, 1)}</span>
                   )}
                 </div>
-                <div className="characters-page-name">{character.name}</div>
-                {character.title && (
-                  <div className="characters-page-subtitle">{character.title}</div>
-                )}
+                <div className="characters-page-info">
+                  <div className="characters-page-name">{character.name}</div>
+                  {character.title && (
+                    <div className="characters-page-subtitle">{character.title}</div>
+                  )}
+                </div>
               </button>
             ))
           )}
