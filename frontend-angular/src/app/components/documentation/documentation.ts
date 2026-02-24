@@ -17,7 +17,7 @@ interface Endpoint {
   styleUrl: './documentation.css',
 })
 export class Documentation {
-  baseUrl = 'https://backend-wikiapi.vercel.app/api/v1';
+  baseUrl = 'https://backend-wikiapi.vercel.app';
 
   universeEndpoints: Endpoint[] = [
     {
