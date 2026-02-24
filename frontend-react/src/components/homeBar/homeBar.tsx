@@ -1,6 +1,24 @@
 import { useState, useEffect } from 'react';
 import './homeBar.css';
 
+import digit0 from '../../assets/background/0.png';
+import digit1 from '../../assets/background/1.png';
+import digit2 from '../../assets/background/2.png';
+import digit3 from '../../assets/background/3.png';
+import digit4 from '../../assets/background/4.png';
+import digit5 from '../../assets/background/5.png';
+import digit6 from '../../assets/background/6.png';
+import digit7 from '../../assets/background/7.png';
+import digit8 from '../../assets/background/8.png';
+import digit9 from '../../assets/background/9.png';
+import digitColon from '../../assets/background/dosPuntos.png';
+
+const DIGIT_MAP: Record<string, string> = {
+  '0': digit0, '1': digit1, '2': digit2, '3': digit3, '4': digit4,
+  '5': digit5, '6': digit6, '7': digit7, '8': digit8, '9': digit9,
+  ':': digitColon,
+};
+
 export const HomeBar = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [letterOpen, setLetterOpen] = useState(false);
@@ -13,13 +31,6 @@ export const HomeBar = () => {
 
     return () => clearInterval(timer);
   }, []);
-
-  const getImagePath = (char: string): string => {
-    if (char === ':') {
-      return '/src/assets/background/dosPuntos.png';
-    }
-    return `/src/assets/background/${char}.png`;
-  };
 
   const formatTime = () => {
     let hours = currentTime.getHours();
@@ -60,7 +71,7 @@ export const HomeBar = () => {
             {timeString.split('').map((char, index) => (
               <img
                 key={index}
-                src={getImagePath(char)}
+                src={DIGIT_MAP[char]}
                 alt={char}
                 className="time-digit"
               />
