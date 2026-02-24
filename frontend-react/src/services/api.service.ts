@@ -1,7 +1,7 @@
 import type { Universe } from '../interfaces/universe.interface';
 import type { Character } from '../interfaces/character.interface';
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'https://backend-wikiapi.vercel.app/api/v1').replace(/\/$/, '');
 
 export const apiService = {
   async getUniverses(): Promise<Universe[]> {
