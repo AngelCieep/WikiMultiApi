@@ -17,7 +17,7 @@ interface Endpoint {
   styleUrl: './documentation.css',
 })
 export class Documentation {
-  baseUrl = 'http://localhost:3000/api/v1';
+  baseUrl = 'https://backend-wikiapi.vercel.app/api/v1';
 
   universeEndpoints: Endpoint[] = [
     {
@@ -52,13 +52,41 @@ export class Documentation {
     "description": "string",
     "logo": "string",
     "backgroundImage": "string",
+    "imagenBoton": "string",
     "primaryColor": "string",
     "secondaryColor": "string",
+    "tertiaryColor": "string",
+    "textColor": "string",
     "fontFamily": "string",
     "popularityScore": number,
     "releaseDate": "date",
     "isActive": boolean,
-    "labels": {},
+    "labels": { "type": "string", "abilities": "string", "stats": "string" },
+    "typeLabels": {},
+    "statLabels": {},
+    "abilityLabels": {}
+  }
+}`
+    },
+    {
+      method: 'GET',
+      path: '/universes/style/:slug',
+      description: 'Obtener los datos de estilo visual de un universo por slug',
+      params: [{ name: 'slug', type: 'string', description: 'Slug único del universo' }],
+      response: `{
+  "status": {
+    "_id": "string",
+    "name": "string",
+    "slug": "string",
+    "logo": "string",
+    "backgroundImage": "string",
+    "imagenBoton": "string",
+    "primaryColor": "string",
+    "secondaryColor": "string",
+    "tertiaryColor": "string",
+    "textColor": "string",
+    "fontFamily": "string",
+    "labels": { "type": "string", "abilities": "string", "stats": "string" },
     "typeLabels": {},
     "statLabels": {},
     "abilityLabels": {}
@@ -211,14 +239,22 @@ export class Documentation {
       path: '/characters',
       description: 'Crear un nuevo personaje',
       body: `{
-  "name": "string",
+  "name": "string",           // requerido
   "title": "string",
   "description": "string",
+  "descriptionSections": [
+    { "sectionTitle": "string", "content": "string" }
+  ],
   "image": "string",
   "universeId": "string",
-  "numericField": number,
-  "dateField": "date",
-  "booleanField": boolean
+  "location": "string",
+  "affiliation": "string",
+  "type": "string",
+  "abilities": ["string"],
+  "stats": { "clave": number },
+  "numericField": number,     // requerido
+  "dateField": "date",        // requerido
+  "booleanField": boolean     // requerido
 }`,
       response: `{
   "status": { /* personaje creado */ }
@@ -229,8 +265,13 @@ export class Documentation {
       path: '/characters/bulk',
       description: 'Inserción masiva de personajes',
       body: `[
-  { /* personaje 1 */ },
-  { /* personaje 2 */ }
+  {
+    "name": "string",
+    "universeId": "string",
+    "numericField": number,
+    "dateField": "date",
+    "booleanField": boolean
+  }
 ]`,
       response: `{
   "inserted": number,
