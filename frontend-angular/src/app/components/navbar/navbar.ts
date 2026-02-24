@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,45 +11,24 @@ import { ApiService } from '../../services/api.service';
 })
 export class Navbar {
   searchQuery: string = '';
-  searchResults: any[] = [];
-  isSearching: boolean = false;
+  searchType: 'universes' | 'characters' = 'universes';
+  searchTypeLabel = 'Universos';
 
-  constructor(private router: Router, private api: ApiService) {}
+  constructor(private router: Router) {}
 
-  onSearch(): void {
-    if (!this.searchQuery.trim()) {
-      this.searchResults = [];
-      return;
-    }
-    this.isSearching = true;
-    this.api.getUniverses().subscribe({
-      next: (res) => {
-        const query = this.searchQuery.toLowerCase();
-        this.searchResults = res.status.filter((u: any) =>
-          u.name.toLowerCase().includes(query) ||
-          u.slug.toLowerCase().includes(query)
-        );
-        this.isSearching = false;
-      },
-      error: () => { this.isSearching = false; }
-    });
-  }
-
-  goToUniverse(slug: string): void {
-    this.searchQuery = '';
-    this.searchResults = [];
-    this.router.navigate(['/universes', slug]);
+  setSearchType(type: 'universes' | 'characters', label: string): void {
+    this.searchType = type;
+    this.searchTypeLabel = label;
   }
 
   submitSearch(): void {
-    if (this.searchQuery.trim()) {
-      this.searchResults = [];
-      this.router.navigate(['/universes'], { queryParams: { search: this.searchQuery } });
+    const q = this.searchQuery.trim();
+    if (!q) return;
+    if (this.searchType === 'characters') {
+      this.router.navigate(['/characters'], { queryParams: { search: q } });
+    } else {
+      this.router.navigate(['/universes'], { queryParams: { search: q } });
     }
-  }
-
-  clearSearch(): void {
     this.searchQuery = '';
-    this.searchResults = [];
   }
 }

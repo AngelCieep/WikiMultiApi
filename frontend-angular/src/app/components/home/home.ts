@@ -17,6 +17,13 @@ export class Home implements OnDestroy {
   private readonly router = inject(Router);
 
   searchQuery: string = '';
+  searchType: 'universes' | 'characters' = 'universes';
+  searchTypeLabel = 'Universos';
+
+  setSearchType(type: 'universes' | 'characters', label: string): void {
+    this.searchType = type;
+    this.searchTypeLabel = label;
+  }
 
   // ── Slideshow ──────────────────────────────────────────────
   readonly bgImages: string[] = [
@@ -63,8 +70,12 @@ export class Home implements OnDestroy {
   );
 
   onSearch(): void {
-    if (this.searchQuery.trim()) {
-      this.router.navigate(['/universes'], { queryParams: { search: this.searchQuery } });
+    const q = this.searchQuery.trim();
+    if (!q) return;
+    if (this.searchType === 'characters') {
+      this.router.navigate(['/characters'], { queryParams: { search: q } });
+    } else {
+      this.router.navigate(['/universes'], { queryParams: { search: q } });
     }
   }
 }

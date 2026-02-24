@@ -82,6 +82,36 @@
   }
 }
 
+.search-type-dropdown {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.search-type-btn {
+  height: 100%;
+  padding: 0 14px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-right: 1px solid #ddd;
+  border-radius: 6px 0 0 6px;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.search-type-btn:hover {
+  background: #e0e0e0;
+}
+
+.search-type-dropdown .dropdown-menu {
+  border-radius: 8px;
+  min-width: 140px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
 .search-box {
   display: flex;
   gap: 0.5rem;

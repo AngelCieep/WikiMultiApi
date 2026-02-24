@@ -17,10 +17,19 @@
     <h1 class="animated-title">WikiMultiApi</h1>
 
     <form class="search-box" (ngSubmit)="onSearch()" (submit)="$event.preventDefault()">
+      <div class="search-type-dropdown">
+        <button type="button" class="search-type-btn" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ searchTypeLabel }} ▾
+        </button>
+        <ul class="dropdown-menu">
+          <li><button class="dropdown-item" type="button" (click)="setSearchType('universes', 'Universos')">Universos</button></li>
+          <li><button class="dropdown-item" type="button" (click)="setSearchType('characters', 'Personajes')">Personajes</button></li>
+        </ul>
+      </div>
       <input
         type="text"
         class="search-input"
-        placeholder="Busca tu universo favorito..."
+        [placeholder]="searchType === 'characters' ? 'Busca un personaje...' : 'Busca tu universo favorito...'"
         [(ngModel)]="searchQuery"
         name="searchQuery"
         autocomplete="off"
