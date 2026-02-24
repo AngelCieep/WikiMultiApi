@@ -106,10 +106,8 @@ export const WiiGame = () => {
               key={slot.type === 'universe' ? slot.data._id : `${slot.type}-${slot.index}`}
               className={`wii-channel ${slot.type === 'empty' ? 'wii-channel-empty' : ''} ${slot.type === 'disc' ? 'wii-channel-disc' : ''}`}
               style={slot.type === 'universe' ? {
+                backgroundColor: slot.data.primaryColor || getChannelColor(slot.index),
                 backgroundImage: slot.data.backgroundImage ? `url(${slot.data.backgroundImage})` : undefined,
-                backgroundColor: slot.data.backgroundImage
-                  ? undefined
-                  : slot.data.primaryColor || getChannelColor(slot.index),
               } : undefined}
               onClick={slot.type === 'universe' ? () => setSelectedUniverse(slot.data) : undefined}
             >
