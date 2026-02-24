@@ -80,3 +80,71 @@
     }
   </div>
 </section>
+
+<section class="featured-section">
+  <div class="container">
+    <h2 class="section-title ps-0">Lo más destacado</h2>
+    <div class="row g-4">
+
+      <!-- Universo más visitado -->
+      <div class="col-12 col-md-6">
+        @if (topUniverseDetail()) {
+          <a
+            [routerLink]="['/universes', topUniverseDetail()!.slug]"
+            class="featured-card text-decoration-none"
+            [style.background-image]="topUniverseDetail()!.backgroundImage ? 'url(' + topUniverseDetail()!.backgroundImage + ')' : 'none'"
+            [style.background-color]="topUniverseDetail()!.primaryColor || '#1a1a2e'">
+            <div class="featured-overlay"></div>
+            <span class="featured-badge">🏆 Universo más visitado</span>
+            <div class="featured-content" [style.color]="topUniverseDetail()!.secondaryColor || '#fff'">
+              @if (topUniverseDetail()!.logo) {
+                <img [src]="topUniverseDetail()!.logo" [alt]="topUniverseDetail()!.name" class="featured-logo" />
+              }
+              <h3 class="featured-name" [style.font-family]="topUniverseDetail()!.fontFamily || 'inherit'">{{ topUniverseDetail()!.name }}</h3>
+              @if (topUniverseDetail()!.description) {
+                <p class="featured-description">{{ topUniverseDetail()!.description }}</p>
+              }
+              <div class="featured-meta">
+                <span><i class="bi bi-star-fill me-1"></i>{{ topUniverseDetail()!.popularityScore }} pts</span>
+                <span><i class="bi bi-calendar3 me-1"></i>{{ topUniverseDetail()!.releaseDate | date:'yyyy' }}</span>
+              </div>
+            </div>
+          </a>
+        } @else {
+          <div class="featured-card featured-placeholder">
+            <div class="spinner-border text-light" role="status"></div>
+          </div>
+        }
+      </div>
+
+      <!-- Personaje más visitado -->
+      <div class="col-12 col-md-6">
+        @if (topCharacter()) {
+          <a
+            [routerLink]="['/character', topCharacter()!._id]"
+            class="featured-card text-decoration-none">
+            <div class="featured-overlay"></div>
+            <span class="featured-badge">⭐ Personaje más visitado</span>
+            @if (topCharacter()!.image) {
+              <img [src]="topCharacter()!.image" [alt]="topCharacter()!.name" class="featured-char-img" />
+            }
+            <div class="featured-content">
+              <h3 class="featured-name">{{ topCharacter()!.name }}</h3>
+              @if (topCharacter()!.title) {
+                <p class="featured-char-title">{{ topCharacter()!.title }}</p>
+              }
+              <div class="featured-meta">
+                <span><i class="bi bi-eye-fill me-1"></i>{{ topCharacter()!.views }} visitas</span>
+              </div>
+            </div>
+          </a>
+        } @else {
+          <div class="featured-card featured-placeholder">
+            <div class="spinner-border text-light" role="status"></div>
+          </div>
+        }
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -1,23 +1,22 @@
-<!-- Fondo global giratorio -->
-<div class="global-bg" aria-hidden="true">
-  <!-- Imagen actual -->
+<div class="global-bg">
+  <!-- Capas de imagen de fondo -->
   <div
     class="global-bg-layer"
     [class.fading-out]="transitioning()"
     [style.background-image]="'url(' + images[currentIndex()] + ')'">
   </div>
-  <!-- Imagen siguiente (aparece durante la transición) -->
   <div
     class="global-bg-layer global-bg-next"
     [class.fading-in]="transitioning()"
     [style.background-image]="'url(' + images[nextIndex()] + ')'">
   </div>
+
+  <!-- Contenido -->
+  <div class="global-content">
+    <app-navbar></app-navbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+    <app-footer></app-footer>
+  </div>
 </div>
-
-<app-navbar></app-navbar>
-
-<main>
-  <router-outlet></router-outlet>
-</main>
-
-<app-footer></app-footer>

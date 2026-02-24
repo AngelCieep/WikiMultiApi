@@ -13,19 +13,26 @@
 } @else {
 	<div
 		[style.font-family]="universe()?.fontFamily || 'inherit'"
-		[style.background-color]="universe()?.primaryColor || '#12121a'"
+		[style.background-color]="hexToRgba(universe()?.primaryColor, 0.82)"
 		[style.color]="universe()?.textColor || universe()?.secondaryColor || '#ffffff'"
 		class="wiki-page-wrapper">
 
 		<!-- Wiki Card Main Container -->
-		<div class="wiki-main-card" [style.background-color]="universe()?.tertiaryColor || universe()?.primaryColor">
+		<div class="wiki-main-card" [style.background-color]="hexToRgba(universe()?.tertiaryColor ?? universe()?.primaryColor, 0.82)">
 			<!-- Back Button -->
-			<div class="wiki-back-bar" [style.border-bottom-color]="universe()?.secondaryColor || '#ddd'">
+			<div class="wiki-back-bar" [style.border-bottom-color]="universe()?.secondaryColor || '#ddd'"
+				style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
 				<a
 					class="wiki-back-link"
 					[style.color]="universe()?.secondaryColor || '#0645ad'"
 					[routerLink]="['/universes', universe()?.slug]">
 					&larr; Ir a su universo: {{ universe()?.name }}
+				</a>
+				<a
+					class="wiki-back-link"
+					[style.color]="universe()?.secondaryColor || '#0645ad'"
+					[routerLink]="['/character', character()?._id, 'edit']">
+					✏️ Editar personaje
 				</a>
 			</div>
 

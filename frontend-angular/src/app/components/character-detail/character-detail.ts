@@ -74,6 +74,14 @@ export class CharacterDetail {
   readonly notFound = computed(() => this.pageData()?.notFound ?? false);
   readonly isLoading = computed(() => this.pageData() === undefined);
 
+  hexToRgba(hex: string | null | undefined, alpha: number): string {
+    if (!hex) return `rgba(18,18,26,${alpha})`;
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
   constructor() {
     effect(() => {
       const fontFamily = this.universe()?.fontFamily;

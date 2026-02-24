@@ -11,21 +11,28 @@
 		<a class="btn btn-dark" routerLink="/universes">Ver universos</a>
 	</div>
 } @else {
+	<div class="universe-page-outer">
 	<div
 		[style.font-family]="universe()?.fontFamily || 'inherit'"
-		[style.background-color]="universe()?.primaryColor || '#12121a'"
+		[style.background-color]="hexToRgba(universe()?.primaryColor, 0.82)"
 		[style.color]="universe()?.secondaryColor || '#ffffff'"
-		style="min-height: 100vh;">
+		class="universe-page-card">
 
 	<section
 		class="hero"
 		[style.background-image]="universe()?.backgroundImage ? 'url(' + universe()?.backgroundImage + ')' : 'none'"
-		[style.background-color]="universe()?.primaryColor || '#12121a'"
+		[style.background-color]="hexToRgba(universe()?.primaryColor, 0.82)"
 		[ngStyle]="{
 			'--universe-primary': universe()?.primaryColor || '#12121a',
 			'--universe-secondary': universe()?.secondaryColor || '#ffffff'
 		}">
 		<div class="hero-overlay"></div>
+		<a [routerLink]="['/universes', universe()?.slug, 'edit']"
+			class="btn-edit-hero"
+			[style.color]="universe()?.secondaryColor || '#fff'"
+			[style.border-color]="universe()?.secondaryColor || '#fff'">
+			✏️ Editar universo
+		</a>
 		<div class="container py-5 hero-content">
 			<div class="row align-items-center g-4">
 				<div class="col-12 col-md-8">
@@ -66,6 +73,11 @@
 				<span class="characters-count-badge">{{ characters().length }} / {{ allCharacters().length }}</span>
 			</h2>
 			<div class="characters-search-wrapper d-flex gap-2">
+			<a
+				[routerLink]="['/universes', universe()?.slug, 'add-character']"
+				class="btn-sort-universe text-decoration-none d-flex align-items-center gap-1">
+				<span>＋</span> Añadir personaje
+			</a>
 				<input
 					type="search"
 					class="form-control characters-search"
@@ -155,5 +167,6 @@
 			}
 		}
 	</section>
+	</div>
 	</div>
 }

@@ -5,6 +5,14 @@
   z-index: 1030;
 }
 
+/* Navbar semitransparente */
+:host ::ng-deep .navbar.bg-dark {
+  background-color: rgba(0, 0, 0, 0.20) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
 /* Contenedor con position relative para poder centrar absolutamente el buscador */
 .navbar-container {
   position: relative;

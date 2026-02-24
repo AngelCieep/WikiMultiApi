@@ -6,7 +6,7 @@
 
 .hero-section {
   position: relative;
-  height: 600px;
+  height: 420px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +50,7 @@
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.25);
 }
 
 .hero-content {
@@ -166,7 +166,7 @@
 }
 
 .popular-section {
-  background: rgba(14, 14, 14, 0.82);
+  background: transparent;
   padding: 2.5rem 0 3rem;
   overflow: hidden;
 }
@@ -255,6 +255,117 @@
 
 .netflix-item:hover .netflix-rank {
   -webkit-text-stroke: 3px #e5e5e5;
+}
+
+/* ── Featured section ───────────────────────────────────── */
+.featured-section {
+  padding: 0 0 3rem;
+}
+
+.featured-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 420px;
+  border-radius: 14px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center top;
+  background-color: #1a1a2e;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+.featured-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 55%, transparent 100%);
+}
+
+.featured-content {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem;
+  color: #fff;
+}
+
+.featured-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.featured-logo {
+  height: 56px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 0.6rem;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+}
+
+.featured-name {
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+.featured-description {
+  font-size: 0.88rem;
+  opacity: 0.85;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.featured-meta {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.84rem;
+  opacity: 0.9;
+}
+
+.featured-char-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.featured-char-title {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.featured-placeholder {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {

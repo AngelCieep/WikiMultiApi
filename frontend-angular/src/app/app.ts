@@ -14,10 +14,9 @@ export class App implements OnInit, OnDestroy {
   title = 'WikiMultiApi';
 
   readonly images = [
-    '/img/background/pexels-felix-mittermeier-956981_1_11zon_60.webp',
-    '/img/background/pexels-krisof-1252890_2_11zon_60.webp',
-    '/img/background/pexels-philippedonn-1257860_3_11zon_60.webp',
-    '/img/background/pexels-wendywei-2753432_4_11zon_60.webp',
+    '/img/background/pexels-felix-mittermeier-956981_1_11zon_60.jpg',
+    '/img/background/pexels-krisof-1252890_2_11zon_60.jpg',
+    '/img/background/pexels-philippedonn-1257860_3_11zon_60.jpg',
   ];
 
   currentIndex = signal(0);

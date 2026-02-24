@@ -1,7 +1,7 @@
 :host {
   display: block;
   min-height: 100vh;
-  background-color: rgba(14, 14, 14, 0.82);
+  background-color: transparent;
   color: #e5e5e5;
 }
 
@@ -40,7 +40,7 @@
   aspect-ratio: 3 / 4;
   width: 100%;
   position: relative;
-  background-color: #1f1f1f;
+  background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;

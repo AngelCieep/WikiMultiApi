@@ -1,0 +1,7 @@
+/* Footer semitransparente */
+footer.bg-dark {
+  background-color: rgba(0, 0, 0, 0.20) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
