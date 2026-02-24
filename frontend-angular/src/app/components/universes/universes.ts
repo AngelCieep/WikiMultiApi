@@ -24,13 +24,20 @@ export class Universes {
   readonly isLoading = computed(() => this.universesResponse() === undefined);
 
   readonly searchQuery = signal('');
+  readonly sortBy = signal<'popular' | 'relevant' | 'date' | 'name'>('popular');
   readonly currentPage = signal(1);
   readonly pageSize = 30;
 
   readonly universes = computed<UniverseCard[]>(() => {
     const q = this.searchQuery().toLowerCase().trim();
-    if (!q) return this.allUniverses();
-    return this.allUniverses().filter(u => u.name.toLowerCase().includes(q));
+    let list = q ? this.allUniverses().filter(u => u.name.toLowerCase().includes(q)) : [...this.allUniverses()];
+    switch (this.sortBy()) {
+      case 'popular':   list.sort((a, b) => b.popularityScore - a.popularityScore); break;
+      case 'relevant':  list.sort((a, b) => a.popularityScore - b.popularityScore); break;
+      case 'date':      list.sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()); break;
+      case 'name':      list.sort((a, b) => a.name.localeCompare(b.name)); break;
+    }
+    return list;
   });
 
   readonly totalPages = computed(() =>
@@ -45,6 +52,11 @@ export class Universes {
   });
 
   onSearchChange(): void {
+    this.currentPage.set(1);
+  }
+
+  setSortBy(sort: 'popular' | 'relevant' | 'date' | 'name'): void {
+    this.sortBy.set(sort);
     this.currentPage.set(1);
   }
 

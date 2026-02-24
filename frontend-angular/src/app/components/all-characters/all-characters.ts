@@ -17,8 +17,8 @@ export class AllCharacters {
   private readonly api = inject(ApiService);
   private readonly route = inject(ActivatedRoute);
 
-  // Search & Pagination state
   readonly searchQuery = signal('');
+  readonly sortBy = signal<'popular' | 'relevant' | 'date' | 'name'>('popular');
   readonly currentPage = signal(1);
   readonly itemsPerPage = signal(24);
 
@@ -34,9 +34,20 @@ export class AllCharacters {
 
   readonly characters = computed(() => {
     const q = this.searchQuery().toLowerCase().trim();
-    if (!q) return this.allCharactersList();
-    return this.allCharactersList().filter(c => c.name.toLowerCase().includes(q));
+    let list = q ? this.allCharactersList().filter(c => c.name.toLowerCase().includes(q)) : [...this.allCharactersList()];
+    switch (this.sortBy()) {
+      case 'popular':  list.sort((a, b) => b.views - a.views); break;
+      case 'relevant': list.sort((a, b) => a.views - b.views); break;
+      case 'date':     list.sort((a, b) => b._id.localeCompare(a._id)); break;
+      case 'name':     list.sort((a, b) => a.name.localeCompare(b.name)); break;
+    }
+    return list;
   });
+
+  setSortBy(sort: 'popular' | 'relevant' | 'date' | 'name'): void {
+    this.sortBy.set(sort);
+    this.currentPage.set(1);
+  }
 
   constructor() {
     this.route.queryParamMap.subscribe(params => {

@@ -5,105 +5,105 @@
     </div>
   </div>
 } @else {
-  <div class="all-characters-page">
-    <div class="all-characters-container">
-      <!-- Header -->
-      <div class="all-characters-header">
-        <h1 class="all-characters-title">Todos los Personajes</h1>
-        <p class="all-characters-count">{{ characters().length }} personajes en total</p>
+  <div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h2 class="fw-bold mb-0">Personajes</h2>
+      <span class="characters-count">{{ characters().length }} personajes</span>
+    </div>
+
+    <!-- Search + Sort bar -->
+    <div class="mb-4 d-flex align-items-center gap-2 flex-wrap">
+      <input
+        type="search"
+        class="form-control page-search-input"
+        placeholder="Buscar personaje..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event); currentPage.set(1)"
+        autocomplete="off"
+        style="max-width: 400px;"
+      />
+      <div class="btn-group">
+        <button type="button" class="btn btn-sort dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-funnel"></i>
+          {{ sortBy() === 'popular' ? 'Más populares' : sortBy() === 'relevant' ? 'Relevantes' : sortBy() === 'date' ? 'Más recientes' : 'Nombre' }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark">
+          <li><button class="dropdown-item" [class.active]="sortBy()==='popular'"  (click)="setSortBy('popular')">  <i class="bi bi-fire"></i>          Más populares</button></li>
+          <li><button class="dropdown-item" [class.active]="sortBy()==='relevant'" (click)="setSortBy('relevant')"><i class="bi bi-graph-up-arrow"></i>   Relevantes</button></li>
+          <li><button class="dropdown-item" [class.active]="sortBy()==='date'"     (click)="setSortBy('date')">    <i class="bi bi-calendar3"></i>       Más recientes</button></li>
+          <li><button class="dropdown-item" [class.active]="sortBy()==='name'"     (click)="setSortBy('name')">    <i class="bi bi-sort-alpha-down"></i>  Nombre A-Z</button></li>
+        </ul>
       </div>
-
-      <!-- Search bar -->
-      <div class="all-characters-search">
-        <input
-          type="search"
-          class="all-characters-search-input"
-          placeholder="Buscar personaje..."
-          [ngModel]="searchQuery()"
-          (ngModelChange)="searchQuery.set($event); currentPage.set(1)"
-          autocomplete="off"
-        />
-        @if (searchQuery()) {
-          <small>{{ characters().length }} resultado(s) para "{{ searchQuery() }}"</small>
-        }
-      </div>
-
-      <!-- Characters Grid -->
-      @if (paginatedCharacters().length === 0) {
-        <div class="all-characters-empty">
-          <p>No hay personajes disponibles.</p>
-        </div>
-      } @else {
-        <div class="all-characters-grid">
-          @for (character of paginatedCharacters(); track character._id) {
-            <a
-              [routerLink]="['/character', character._id]"
-              class="character-card">
-              <div class="character-card-image">
-                @if (character.image) {
-                  <img [src]="character.image" [alt]="character.name" />
-                } @else {
-                  <div class="character-card-placeholder">
-                    {{ character.name.charAt(0) }}
-                  </div>
-                }
-              </div>
-              <div class="character-card-content">
-                <h3 class="character-card-name">{{ character.name }}</h3>
-                @if (character.title) {
-                  <p class="character-card-title">{{ character.title }}</p>
-                }
-              </div>
-            </a>
-          }
-        </div>
-
-        <!-- Pagination -->
-        @if (totalPages() > 1) {
-          <div class="pagination-container">
-            <button
-              class="pagination-btn"
-              [disabled]="currentPage() === 1"
-              (click)="previousPage()">
-              ← Anterior
-            </button>
-
-            <div class="pagination-numbers">
-              @if (pageNumbers()[0] > 1) {
-                <button class="pagination-number" (click)="goToPage(1)">1</button>
-                @if (pageNumbers()[0] > 2) {
-                  <span class="pagination-ellipsis">...</span>
-                }
-              }
-
-              @for (page of pageNumbers(); track page) {
-                <button
-                  class="pagination-number"
-                  [class.active]="page === currentPage()"
-                  (click)="goToPage(page)">
-                  {{ page }}
-                </button>
-              }
-
-              @if (pageNumbers()[pageNumbers().length - 1] < totalPages()) {
-                @if (pageNumbers()[pageNumbers().length - 1] < totalPages() - 1) {
-                  <span class="pagination-ellipsis">...</span>
-                }
-                <button class="pagination-number" (click)="goToPage(totalPages())">
-                  {{ totalPages() }}
-                </button>
-              }
-            </div>
-
-            <button
-              class="pagination-btn"
-              [disabled]="currentPage() === totalPages()"
-              (click)="nextPage()">
-              Siguiente →
-            </button>
-          </div>
-        }
+      @if (searchQuery()) {
+        <small class="text-muted">{{ characters().length }} resultado(s)</small>
       }
     </div>
+
+    <!-- Characters Grid -->
+    @if (paginatedCharacters().length === 0) {
+      <p class="text-muted">
+        @if (searchQuery()) {
+          No se encontraron personajes para "{{ searchQuery() }}".
+        } @else {
+          No hay personajes disponibles.
+        }
+      </p>
+    } @else {
+      <div class="row g-3">
+        @for (character of paginatedCharacters(); track character._id) {
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <a [routerLink]="['/character', character._id]" class="text-decoration-none d-block">
+              <div class="character-card">
+                @if (character.image) {
+                  <img [src]="character.image" [alt]="character.name"
+                    style="width:100%;height:100%;object-fit:cover;" />
+                } @else {
+                  <div class="character-card-placeholder">{{ character.name.charAt(0) }}</div>
+                }
+                <div class="character-card-overlay">
+                  <span class="character-card-name">{{ character.name }}</span>
+                  @if (character.title) {
+                    <span class="character-card-title">{{ character.title }}</span>
+                  }
+                </div>
+              </div>
+            </a>
+          </div>
+        }
+      </div>
+
+      <!-- Pagination -->
+      @if (totalPages() > 1) {
+        <nav class="mt-5 d-flex justify-content-center">
+          <ul class="pagination" style="border-radius:0">
+            <li class="page-item" [class.disabled]="currentPage() === 1">
+              <button class="page-link" style="border-radius:0" (click)="previousPage()">&laquo;</button>
+            </li>
+            @if (pageNumbers()[0] > 1) {
+              <li class="page-item"><button class="page-link" style="border-radius:0" (click)="goToPage(1)">1</button></li>
+              @if (pageNumbers()[0] > 2) {
+                <li class="page-item disabled"><span class="page-link" style="border-radius:0">…</span></li>
+              }
+            }
+            @for (page of pageNumbers(); track page) {
+              <li class="page-item" [class.active]="page === currentPage()">
+                <button class="page-link" style="border-radius:0" (click)="goToPage(page)">{{ page }}</button>
+              </li>
+            }
+            @if (pageNumbers()[pageNumbers().length - 1] < totalPages()) {
+              @if (pageNumbers()[pageNumbers().length - 1] < totalPages() - 1) {
+                <li class="page-item disabled"><span class="page-link" style="border-radius:0">…</span></li>
+              }
+              <li class="page-item"><button class="page-link" style="border-radius:0" (click)="goToPage(totalPages())">{{ totalPages() }}</button></li>
+            }
+            <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+              <button class="page-link" style="border-radius:0" (click)="nextPage()">&raquo;</button>
+            </li>
+          </ul>
+        </nav>
+      }
+    }
   </div>
 }

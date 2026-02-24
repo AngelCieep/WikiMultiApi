@@ -5,6 +5,25 @@
   color: #e5e5e5;
 }
 
+/* Search input */
+.page-search-input {
+  max-width: 400px;
+  background-color: #1f1f1f;
+  border: 1px solid #333;
+  color: #e5e5e5;
+}
+
+.page-search-input::placeholder {
+  color: #666;
+}
+
+.page-search-input:focus {
+  background-color: #252525;
+  border-color: #555;
+  color: #e5e5e5;
+  box-shadow: none;
+}
+
 .universe-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
@@ -40,4 +59,23 @@
 .btn-add-universe:hover {
     background-color: #e5e5e5;
     color: #141414;
+}
+
+.btn-sort {
+    background-color: transparent;
+    color: #e5e5e5;
+    border: 1px solid #555;
+    border-radius: 6px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-sort:hover,
+.btn-sort:focus {
+    background-color: #2a2a2a;
+    border-color: #888;
+    color: #fff;
+    box-shadow: none;
 }

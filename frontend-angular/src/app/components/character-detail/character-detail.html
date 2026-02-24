@@ -8,7 +8,7 @@
 	<div class="container py-5 text-center">
 		<h2 class="fw-bold mb-3">Personaje no encontrado</h2>
 		<p class="text-muted">Revisa el enlace o vuelve al universo.</p>
-		<a class="btn btn-dark" [routerLink]="['/universes', universe()?.slug]">Volver al universo</a>
+		<a class="btn btn-dark" [routerLink]="['/universes', universe()?.slug]">Ir a su universo</a>
 	</div>
 } @else {
 	<div
@@ -25,7 +25,7 @@
 					class="wiki-back-link"
 					[style.color]="universe()?.secondaryColor || '#0645ad'"
 					[routerLink]="['/universes', universe()?.slug]">
-					&larr; Volver a {{ universe()?.name }}
+					&larr; Ir a su universo: {{ universe()?.name }}
 				</a>
 			</div>
 

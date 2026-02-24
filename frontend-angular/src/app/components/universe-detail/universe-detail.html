@@ -57,18 +57,48 @@
 	</div>
 
 	<section class="container py-5">
-		<h2
-			class="fw-bold mb-4"
-			[style.font-family]="universe()?.fontFamily || 'inherit'"
-			[style.color]="universe()?.secondaryColor || '#ffffff'">
-			Personajes
-		</h2>
+		<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+			<h2
+				class="fw-bold mb-0"
+				[style.font-family]="universe()?.fontFamily || 'inherit'"
+				[style.color]="universe()?.secondaryColor || '#ffffff'">
+				Personajes
+				<span class="characters-count-badge">{{ characters().length }} / {{ allCharacters().length }}</span>
+			</h2>
+			<div class="characters-search-wrapper d-flex gap-2">
+				<input
+					type="search"
+					class="form-control characters-search"
+					placeholder="Buscar personaje..."
+					[ngModel]="searchQuery()"
+					(ngModelChange)="onSearchChange($event)"
+					autocomplete="off"
+				/>
+				<div class="btn-group">
+					<button type="button" class="btn btn-sort-universe dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+						<i class="bi bi-funnel"></i>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li><button class="dropdown-item" [class.active]="sortBy()==='popular'"  (click)="setSortBy('popular')">  <i class="bi bi-fire"></i>          Más populares</button></li>
+						<li><button class="dropdown-item" [class.active]="sortBy()==='relevant'" (click)="setSortBy('relevant')"><i class="bi bi-graph-up-arrow"></i>   Relevantes</button></li>
+						<li><button class="dropdown-item" [class.active]="sortBy()==='date'"     (click)="setSortBy('date')">    <i class="bi bi-calendar3"></i>       Más recientes</button></li>
+						<li><button class="dropdown-item" [class.active]="sortBy()==='name'"     (click)="setSortBy('name')">    <i class="bi bi-sort-alpha-down"></i>  Nombre A-Z</button></li>
+					</ul>
+				</div>
+			</div>
+		</div>
 
 		@if (characters().length === 0) {
-			<p class="text-muted">No hay personajes para este universo.</p>
+			<p class="text-muted">
+				@if (searchQuery()) {
+					No se encontraron personajes para "{{ searchQuery() }}".
+				} @else {
+					No hay personajes para este universo.
+				}
+			</p>
 		} @else {
 			<div class="row g-4">
-				@for (character of characters(); track character._id) {
+				@for (character of paginatedCharacters(); track character._id) {
 					<div class="col-12 col-sm-6 col-md-4 col-lg-3">
 						<a
 							class="text-decoration-none d-block h-100"
@@ -93,6 +123,36 @@
 					</div>
 				}
 			</div>
+
+			@if (totalPages() > 1) {
+				<nav class="mt-5 d-flex justify-content-center">
+					<ul class="pagination characters-pagination">
+						<li class="page-item" [class.disabled]="currentPage() === 1">
+							<button class="page-link" (click)="goToPage(currentPage() - 1)">&laquo;</button>
+						</li>
+						@if (pageNumbers()[0] > 1) {
+							<li class="page-item"><button class="page-link" (click)="goToPage(1)">1</button></li>
+							@if (pageNumbers()[0] > 2) {
+								<li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+							}
+						}
+						@for (page of pageNumbers(); track page) {
+							<li class="page-item" [class.active]="page === currentPage()">
+								<button class="page-link" (click)="goToPage(page)">{{ page }}</button>
+							</li>
+						}
+						@if (pageNumbers()[pageNumbers().length - 1] < totalPages()) {
+							@if (pageNumbers()[pageNumbers().length - 1] < totalPages() - 1) {
+								<li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+							}
+							<li class="page-item"><button class="page-link" (click)="goToPage(totalPages())">{{ totalPages() }}</button></li>
+						}
+						<li class="page-item" [class.disabled]="currentPage() === totalPages()">
+							<button class="page-link" (click)="goToPage(currentPage() + 1)">&raquo;</button>
+						</li>
+					</ul>
+				</nav>
+			}
 		}
 	</section>
 	</div>

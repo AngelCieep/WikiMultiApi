@@ -30,16 +30,39 @@ export class CharacterDetail {
         id: params.get('id') ?? '',
       })),
       switchMap(({ slug, id }) => {
-        if (!slug || !id) {
+        if (!id) {
           return of({ universe: null, character: null, notFound: true });
         }
-        return forkJoin({
-          universe: this.api.getUniverseStyle(slug).pipe(map((r) => r.status)),
-          character: this.api.getCharacter(id).pipe(map((r) => r.status)),
-        }).pipe(
-          map(({ universe, character }) => ({ universe, character, notFound: false })),
-          catchError(() => of({ universe: null, character: null, notFound: true }))
-        );
+
+        if (slug) {
+          // Ruta con slug: /universes/:slug/characters/:id
+          return forkJoin({
+            universe: this.api.getUniverseStyle(slug).pipe(map((r) => r.status)),
+            character: this.api.getCharacter(id).pipe(map((r) => r.status)),
+          }).pipe(
+            map(({ universe, character }) => ({ universe, character, notFound: false })),
+            catchError(() => of({ universe: null, character: null, notFound: true }))
+          );
+        } else {
+          // Ruta sin slug: /character/:id — obtener universo desde el personaje
+          return this.api.getCharacter(id).pipe(
+            map((r) => r.status),
+            switchMap((character) =>
+              this.api.getUniverse(character.universeId).pipe(
+                switchMap((univRes) =>
+                  this.api.getUniverseStyle(univRes.status.slug).pipe(
+                    map((styleRes) => ({
+                      universe: styleRes.status,
+                      character,
+                      notFound: false,
+                    }))
+                  )
+                )
+              )
+            ),
+            catchError(() => of({ universe: null, character: null, notFound: true }))
+          );
+        }
       }),
       catchError(() => of({ universe: null, character: null, notFound: true }))
     ),

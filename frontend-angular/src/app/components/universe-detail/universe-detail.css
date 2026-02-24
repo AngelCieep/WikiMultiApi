@@ -41,6 +41,81 @@
 	display: none;
 }
 
+/* Sort button inside universe (adapts to universe theme) */
+.btn-sort-universe {
+	background-color: rgba(0, 0, 0, 0.35);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: #fff;
+	border-radius: 6px;
+	padding: 0.375rem 0.65rem;
+	transition: background-color 0.2s ease;
+}
+
+.btn-sort-universe:hover,
+.btn-sort-universe:focus {
+	background-color: rgba(0, 0, 0, 0.55);
+	border-color: rgba(255, 255, 255, 0.5);
+	color: #fff;
+	box-shadow: none;
+}
+
+/* Characters search */
+.characters-search-wrapper {
+	min-width: 220px;
+}
+
+.characters-search {
+	background-color: rgba(0, 0, 0, 0.35);
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	color: #fff;
+	border-radius: 6px;
+}
+
+.characters-search::placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.characters-search:focus {
+	background-color: rgba(0, 0, 0, 0.5);
+	border-color: rgba(255, 255, 255, 0.5);
+	color: #fff;
+	box-shadow: none;
+}
+
+.characters-count-badge {
+	font-size: 0.9rem;
+	font-weight: 400;
+	opacity: 0.6;
+	margin-left: 8px;
+}
+
+/* Pagination */
+.characters-pagination .page-link {
+	background-color: rgba(0, 0, 0, 0.35);
+	border-color: rgba(255, 255, 255, 0.25);
+	color: #fff;
+	border-radius: 0;
+}
+
+.characters-pagination .page-link:hover {
+	background-color: rgba(0, 0, 0, 0.55);
+	border-color: rgba(255, 255, 255, 0.5);
+	color: #fff;
+}
+
+.characters-pagination .page-item.active .page-link {
+	background-color: rgba(255, 255, 255, 0.9);
+	border-color: rgba(255, 255, 255, 0.9);
+	color: #111;
+	font-weight: 700;
+}
+
+.characters-pagination .page-item.disabled .page-link {
+	background-color: rgba(0, 0, 0, 0.2);
+	border-color: rgba(255, 255, 255, 0.1);
+	color: rgba(255, 255, 255, 0.3);
+}
+
 .character-card {
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	transition: transform 0.2s ease, box-shadow 0.2s ease;

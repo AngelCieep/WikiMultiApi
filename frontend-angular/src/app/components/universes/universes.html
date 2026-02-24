@@ -6,21 +6,31 @@
     </a>
   </div>
 
-  <!-- Search bar -->
-  <div class="mb-4">
+  <!-- Search + Sort bar -->
+  <div class="mb-4 d-flex align-items-center gap-2 flex-wrap">
     <input
       type="search"
-      class="form-control"
+      class="form-control page-search-input"
       placeholder="Buscar universo..."
       [ngModel]="searchQuery()"
       (ngModelChange)="searchQuery.set($event); onSearchChange()"
       autocomplete="off"
       style="max-width: 400px;"
     />
+    <div class="btn-group">
+      <button type="button" class="btn btn-sort dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-funnel"></i>
+        {{ sortBy() === 'popular' ? 'Más populares' : sortBy() === 'relevant' ? 'Relevantes' : sortBy() === 'date' ? 'Más recientes' : 'Nombre' }}
+      </button>
+      <ul class="dropdown-menu dropdown-menu-dark">
+        <li><button class="dropdown-item" [class.active]="sortBy()==='popular'"  (click)="setSortBy('popular')">  <i class="bi bi-fire"></i>       Más populares</button></li>
+        <li><button class="dropdown-item" [class.active]="sortBy()==='relevant'" (click)="setSortBy('relevant')"><i class="bi bi-graph-up-arrow"></i> Relevantes</button></li>
+        <li><button class="dropdown-item" [class.active]="sortBy()==='date'"     (click)="setSortBy('date')">    <i class="bi bi-calendar3"></i>    Más recientes</button></li>
+        <li><button class="dropdown-item" [class.active]="sortBy()==='name'"     (click)="setSortBy('name')">    <i class="bi bi-sort-alpha-down"></i> Nombre A-Z</button></li>
+      </ul>
+    </div>
     @if (searchQuery()) {
-      <small class="text-muted mt-1 d-block">
-        {{ universes().length }} resultado(s) para "{{ searchQuery() }}"
-      </small>
+      <small class="text-muted">{{ universes().length }} resultado(s)</small>
     }
   </div>
 
