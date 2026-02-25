@@ -9,6 +9,9 @@ export interface UniverseStyle {
   secondaryColor: string;
   tertiaryColor?: string;
   textColor?: string;
+  hasType?: boolean;
+  hasAbilities?: boolean;
+  hasStats?: boolean;
   labels?: {
     type: string;
     abilities: string;

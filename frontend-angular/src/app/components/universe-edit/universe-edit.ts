@@ -29,6 +29,33 @@ export class UniverseEdit {
   readonly successMsg   = signal('');
   readonly isLoading    = signal(true);
   private universeId    = '';
+  readonly showCustomFont = signal(false);
+
+  // Lista de tipografías comunes
+  readonly fontOptions = [
+    "'Arial', sans-serif",
+    "'Helvetica', sans-serif",
+    "'Times New Roman', serif",
+    "'Georgia', serif",
+    "'Courier New', monospace",
+    "'Verdana', sans-serif",
+    "'Trebuchet MS', sans-serif",
+    "'Comic Sans MS', cursive",
+    "'Impact', sans-serif",
+    "'Roboto', sans-serif",
+    "'Open Sans', sans-serif",
+    "'Lato', sans-serif",
+    "'Montserrat', sans-serif",
+    "'Oswald', sans-serif",
+    "'Ubuntu', sans-serif",
+    "'Press Start 2P', cursive",
+    "'Creepster', cursive",
+    "'Orbitron', sans-serif",
+    "'Righteous', cursive",
+    "'Bangers', cursive",
+    "'Pacifico', cursive",
+    "'Permanent Marker', cursive",
+  ];
 
   readonly universe = toSignal(
     this.api.getUniverseStyle(this.slug).pipe(
@@ -53,12 +80,13 @@ export class UniverseEdit {
     popularityScore: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
     releaseDate:     ['', Validators.required],
     isActive:        [true, Validators.required],
+    hasType:         [true],
+    hasAbilities:    [true],
+    hasStats:        [true],
     labelType:       [''],
     labelAbilities:  [''],
     labelStats:      [''],
-    typeLabels:      this.fb.array([]),
     statLabels:      this.fb.array([]),
-    abilityLabels:   this.fb.array([]),
   });
 
   constructor() {
@@ -81,39 +109,40 @@ export class UniverseEdit {
         popularityScore: u.popularityScore ?? 0,
         releaseDate,
         isActive: u.isActive ?? true,
+        hasType: u.hasType ?? true,
+        hasAbilities: u.hasAbilities ?? true,
+        hasStats: u.hasStats ?? true,
         labelType: u.labels?.type ?? '',
         labelAbilities: u.labels?.abilities ?? '',
         labelStats: u.labels?.stats ?? '',
       });
 
-      this.typeLabels.clear();
-      for (const [k, v] of Object.entries(u.typeLabels ?? {}))
-        this.typeLabels.push(this.newPair(k, v as string));
-
       this.statLabels.clear();
       for (const [k, v] of Object.entries(u.statLabels ?? {}))
         this.statLabels.push(this.newPair(k, v as string));
-
-      this.abilityLabels.clear();
-      for (const [k, v] of Object.entries(u.abilityLabels ?? {}))
-        this.abilityLabels.push(this.newPair(k, v as string));
     });
   }
 
-  get typeLabels()    { return this.form.get('typeLabels')    as FormArray; }
   get statLabels()    { return this.form.get('statLabels')    as FormArray; }
-  get abilityLabels() { return this.form.get('abilityLabels') as FormArray; }
 
   private newPair(k = '', v = ''): FormGroup {
     return this.fb.group({ key: [k], value: [v] });
   }
 
-  addTypeLabel()             { this.typeLabels.push(this.newPair()); }
   addStatLabel()             { this.statLabels.push(this.newPair()); }
-  addAbilityLabel()          { this.abilityLabels.push(this.newPair()); }
-  removeTypeLabel(i: number)    { this.typeLabels.removeAt(i); }
   removeStatLabel(i: number)    { this.statLabels.removeAt(i); }
-  removeAbilityLabel(i: number) { this.abilityLabels.removeAt(i); }
+
+  // ── Selección de fuente ────────────────────────────────
+  onFontSelect(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    if (value === 'custom') {
+      this.showCustomFont.set(true);
+      this.form.get('fontFamily')!.setValue('');
+    } else {
+      this.showCustomFont.set(false);
+      this.form.get('fontFamily')!.setValue(value);
+    }
+  }
 
   onImgError(e: Event): void { (e.target as HTMLImageElement).style.display = 'none'; }
 
@@ -141,10 +170,9 @@ export class UniverseEdit {
       secondaryColor: v.secondaryColor, tertiaryColor: v.tertiaryColor,
       textColor: v.textColor, popularityScore: v.popularityScore,
       releaseDate: v.releaseDate, isActive: v.isActive,
+      hasType: v.hasType, hasAbilities: v.hasAbilities, hasStats: v.hasStats,
       labels: { type: v.labelType, abilities: v.labelAbilities, stats: v.labelStats },
-      typeLabels:    this.pairsToMap(v.typeLabels),
       statLabels:    this.pairsToMap(v.statLabels),
-      abilityLabels: this.pairsToMap(v.abilityLabels),
     };
     this.isSubmitting.set(true);
     this.errorMsg.set('');

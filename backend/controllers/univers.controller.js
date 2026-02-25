@@ -4,7 +4,7 @@ const universCtrl = {};
 
 //Obtener todos los universos
 universCtrl.getUniverses = async (req, res) => {
-    await Universe.find({}, '_id name slug logo backgroundImage imagenBoton primaryColor secondaryColor fontFamily isActive popularityScore releaseDate')
+    await Universe.find({}, '_id name slug logo backgroundImage imagenBoton primaryColor secondaryColor fontFamily isActive popularityScore releaseDate hasType hasAbilities hasStats')
     .then((data) => res.status(200).json({status: data}))
     .catch((err) => res.status(400).json({status: err}));
 };
@@ -33,7 +33,7 @@ universCtrl.getUniverse = async (req, res) => {
 
 //Obtener solo campos visuales de un universo por slug
 universCtrl.getUniverseStyle = async (req, res) => {
-    await Universe.findOne({ slug: req.params.slug }, '_id name slug logo backgroundImage fontFamily primaryColor secondaryColor tertiaryColor textColor backgroundImage isActive labelType labelAbilities labelStats')
+    await Universe.findOne({ slug: req.params.slug }, '_id name slug logo backgroundImage fontFamily primaryColor secondaryColor tertiaryColor textColor backgroundImage isActive hasType hasAbilities hasStats labelType labelAbilities labelStats')
     .then((data) => {
         if (data != null) {
             // Transform flat labels to nested object

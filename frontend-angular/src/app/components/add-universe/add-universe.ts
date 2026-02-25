@@ -26,6 +26,33 @@ export class AddUniverse {
   readonly isSubmitting = signal(false);
   readonly errorMsg     = signal('');
   readonly successMsg   = signal('');
+  readonly showCustomFont = signal(false);
+
+  // Lista de tipografías comunes
+  readonly fontOptions = [
+    "'Arial', sans-serif",
+    "'Helvetica', sans-serif",
+    "'Times New Roman', serif",
+    "'Georgia', serif",
+    "'Courier New', monospace",
+    "'Verdana', sans-serif",
+    "'Trebuchet MS', sans-serif",
+    "'Comic Sans MS', cursive",
+    "'Impact', sans-serif",
+    "'Roboto', sans-serif",
+    "'Open Sans', sans-serif",
+    "'Lato', sans-serif",
+    "'Montserrat', sans-serif",
+    "'Oswald', sans-serif",
+    "'Ubuntu', sans-serif",
+    "'Press Start 2P', cursive",
+    "'Creepster', cursive",
+    "'Orbitron', sans-serif",
+    "'Righteous', cursive",
+    "'Bangers', cursive",
+    "'Pacifico', cursive",
+    "'Permanent Marker', cursive",
+  ];
 
   form: FormGroup = this.fb.group({
     // Información principal
@@ -50,33 +77,42 @@ export class AddUniverse {
     releaseDate:     ['', Validators.required],
     isActive:        [true, Validators.required],
 
+    // Display flags
+    hasType:         [true],
+    hasAbilities:    [true],
+    hasStats:        [true],
+
     // Labels
     labelType:       [''],
     labelAbilities:  [''],
     labelStats:      [''],
 
     // Mapas dinámicos
-    typeLabels:      this.fb.array([]),
     statLabels:      this.fb.array([]),
-    abilityLabels:   this.fb.array([]),
   });
 
   // ── Getters FormArrays ───────────────────────────────────────
-  get typeLabels()    { return this.form.get('typeLabels')    as FormArray; }
   get statLabels()    { return this.form.get('statLabels')    as FormArray; }
-  get abilityLabels() { return this.form.get('abilityLabels') as FormArray; }
 
   private newPair(k = '', v = ''): FormGroup {
     return this.fb.group({ key: [k], value: [v] });
   }
 
-  addTypeLabel()    { this.typeLabels.push(this.newPair()); }
   addStatLabel()    { this.statLabels.push(this.newPair()); }
-  addAbilityLabel() { this.abilityLabels.push(this.newPair()); }
 
-  removeTypeLabel(i: number)    { this.typeLabels.removeAt(i); }
   removeStatLabel(i: number)    { this.statLabels.removeAt(i); }
-  removeAbilityLabel(i: number) { this.abilityLabels.removeAt(i); }
+
+  // ── Selección de fuente ────────────────────────────────
+  onFontSelect(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    if (value === 'custom') {
+      this.showCustomFont.set(true);
+      this.form.get('fontFamily')!.setValue('');
+    } else {
+      this.showCustomFont.set(false);
+      this.form.get('fontFamily')!.setValue(value);
+    }
+  }
 
   // ── Manejo de error en imágenes ────────────────────────────
   onImgError(event: Event): void {
@@ -124,14 +160,15 @@ export class AddUniverse {
       popularityScore: v.popularityScore,
       releaseDate:     v.releaseDate,
       isActive:        v.isActive,
+      hasType:         v.hasType,
+      hasAbilities:    v.hasAbilities,
+      hasStats:        v.hasStats,
       labels: {
         type:      v.labelType,
         abilities: v.labelAbilities,
         stats:     v.labelStats,
       },
-      typeLabels:    this.pairsToMap(v.typeLabels),
       statLabels:    this.pairsToMap(v.statLabels),
-      abilityLabels: this.pairsToMap(v.abilityLabels),
     };
 
     this.isSubmitting.set(true);

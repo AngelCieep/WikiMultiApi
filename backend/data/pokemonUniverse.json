@@ -13,29 +13,12 @@
   "popularityScore": 99,
   "releaseDate": "1996-02-27T00:00:00.000Z",
   "isActive": true,
+  "hasType": true,
+  "hasAbilities": true,
+  "hasStats": true,
   "labelType": "Tipo",
   "labelAbilities": "Habilidades",
   "labelStats": "Estadísticas Base",
-  "typeLabels": {
-    "normal": "Normal",
-    "fire": "Fuego",
-    "water": "Agua",
-    "electric": "Eléctrico",
-    "grass": "Planta",
-    "ice": "Hielo",
-    "fighting": "Lucha",
-    "poison": "Veneno",
-    "ground": "Tierra",
-    "flying": "Volador",
-    "psychic": "Psíquico",
-    "bug": "Bicho",
-    "rock": "Roca",
-    "ghost": "Fantasma",
-    "dragon": "Dragón",
-    "dark": "Siniestro",
-    "steel": "Acero",
-    "fairy": "Hada"
-  },
   "statLabels": {
     "hp": "PS",
     "attack": "Ataque",
@@ -43,6 +26,5 @@
     "special-attack": "Ataque Esp.",
     "special-defense": "Defensa Esp.",
     "speed": "Velocidad"
-  },
-  "abilityLabels": {}
+  }
 }

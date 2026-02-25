@@ -11,6 +11,9 @@ export interface Universe {
   isActive?: boolean;
   popularityScore?: number;
   releaseDate?: string;
+  hasType?: boolean;
+  hasAbilities?: boolean;
+  hasStats?: boolean;
 }
 
 export interface UniverseStyle {

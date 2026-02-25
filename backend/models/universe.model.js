@@ -20,13 +20,16 @@ const universeSchema = new Schema(
         releaseDate:      { type: Date,   required: true },
         isActive:         { type: Boolean, required: true },
 
+        // Display flags
+        hasType:        { type: Boolean, default: true },
+        hasAbilities:   { type: Boolean, default: true },
+        hasStats:       { type: Boolean, default: true },
+
         labelType:      { type: String, trim: true },
         labelAbilities: { type: String, trim: true },
         labelStats:     { type: String, trim: true },
 
-        typeLabels:    { type: Map, of: String },
         statLabels:    { type: Map, of: String },
-        abilityLabels: { type: Map, of: String }
     },
     {
         timestamps: true

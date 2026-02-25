@@ -129,7 +129,19 @@
 
               <div class="col-12">
                 <label class="au-label">Fuente (fontFamily)</label>
-                <input formControlName="fontFamily" class="au-input" placeholder="'Press Start 2P', cursive">
+                <select class="au-input" (change)="onFontSelect($event)" [value]="form.get('fontFamily')?.value || ''">
+                  <option value="">-- Selecciona una fuente --</option>
+                  @for (font of fontOptions; track font) {
+                    <option [value]="font">{{ font }}</option>
+                  }
+                  <option value="custom">Personalizada...</option>
+                </select>
+                
+                @if (showCustomFont() || (!fontOptions.includes(form.get('fontFamily')?.value) && form.get('fontFamily')?.value)) {
+                  <input formControlName="fontFamily" class="au-input mt-2" 
+                         placeholder="Escribe tu fuente personalizada"
+                         autocomplete="off">
+                }
               </div>
 
               <div class="col-6">
@@ -250,7 +262,40 @@
 
         </div>
       </section>
+      <!-- ── Display flags ──────────────────────────────── -->
+      <section class="au-section">
+        <h5 class="au-section-title">Visualización de información</h5>
+        <div class="row g-3">
 
+          <div class="col-md-4">
+            <div class="form-check">
+              <input type="checkbox" formControlName="hasType" class="form-check-input" id="editHasType">
+              <label class="form-check-label" for="editHasType">
+                Mostrar Tipo
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-check">
+              <input type="checkbox" formControlName="hasAbilities" class="form-check-input" id="editHasAbilities">
+              <label class="form-check-label" for="editHasAbilities">
+                Mostrar Habilidades
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-check">
+              <input type="checkbox" formControlName="hasStats" class="form-check-input" id="editHasStats">
+              <label class="form-check-label" for="editHasStats">
+                Mostrar Estadísticas
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </section>
       <!-- ── Etiquetas de sección ────────────────────────────── -->
       <section class="au-section">
         <h5 class="au-section-title">Etiquetas de sección</h5>
@@ -270,27 +315,6 @@
         </div>
       </section>
 
-      <!-- ── typeLabels ─────────────────────────────────────── -->
-      <section class="au-section">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <h5 class="au-section-title mb-0">typeLabels <span class="au-badge">Mapa clave→valor</span></h5>
-          <button type="button" class="au-btn-add-row" (click)="addTypeLabel()">＋ Añadir</button>
-        </div>
-        <div formArrayName="typeLabels">
-          @for (ctrl of typeLabels.controls; track $index) {
-            <div [formGroupName]="$index" class="au-pair-row">
-              <input formControlName="key"   class="au-input au-pair-key"   placeholder="Clave (ej: fire)">
-              <span class="au-pair-sep">→</span>
-              <input formControlName="value" class="au-input au-pair-value" placeholder="Valor (ej: Fuego)">
-              <button type="button" class="au-btn-remove" (click)="removeTypeLabel($index)">✕</button>
-            </div>
-          }
-          @if (typeLabels.length === 0) {
-            <p class="au-empty-hint">Sin entradas. Pulsa «Añadir» para empezar.</p>
-          }
-        </div>
-      </section>
-
       <!-- ── statLabels ─────────────────────────────────────── -->
       <section class="au-section">
         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -307,27 +331,6 @@
             </div>
           }
           @if (statLabels.length === 0) {
-            <p class="au-empty-hint">Sin entradas. Pulsa «Añadir» para empezar.</p>
-          }
-        </div>
-      </section>
-
-      <!-- ── abilityLabels ──────────────────────────────────── -->
-      <section class="au-section">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <h5 class="au-section-title mb-0">abilityLabels <span class="au-badge">Mapa clave→valor</span></h5>
-          <button type="button" class="au-btn-add-row" (click)="addAbilityLabel()">＋ Añadir</button>
-        </div>
-        <div formArrayName="abilityLabels">
-          @for (ctrl of abilityLabels.controls; track $index) {
-            <div [formGroupName]="$index" class="au-pair-row">
-              <input formControlName="key"   class="au-input au-pair-key"   placeholder="Clave">
-              <span class="au-pair-sep">→</span>
-              <input formControlName="value" class="au-input au-pair-value" placeholder="Valor">
-              <button type="button" class="au-btn-remove" (click)="removeAbilityLabel($index)">✕</button>
-            </div>
-          }
-          @if (abilityLabels.length === 0) {
             <p class="au-empty-hint">Sin entradas. Pulsa «Añadir» para empezar.</p>
           }
         </div>

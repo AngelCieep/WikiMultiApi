@@ -3,7 +3,7 @@ export interface UniverseDetailResponse {
 }
 
 export interface UniverseDetail {
-  labels: Labels;
+  labels?: Labels;
   _id: string;
   name: string;
   slug: string;
@@ -19,9 +19,10 @@ export interface UniverseDetail {
   popularityScore: number;
   releaseDate: string;
   isActive: boolean;
-  typeLabels: { [key: string]: string };
+  hasType?: boolean;
+  hasAbilities?: boolean;
+  hasStats?: boolean;
   statLabels: { [key: string]: string };
-  abilityLabels: { [key: string]: string };
   createdAt: string;
   updatedAt: string;
   __v: number;
