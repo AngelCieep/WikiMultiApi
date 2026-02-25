@@ -77,10 +77,12 @@
             </div>
           </div>
 
-          <div class="col-12 col-md-6">
-            <label class="ca-label">Tipo</label>
-            <input formControlName="type" type="text" class="ca-input" placeholder="p.ej. Héroe, Villano..." />
-          </div>
+          @if (universe()?.hasType) {
+            <div class="col-12 col-md-6">
+              <label class="ca-label">Tipo</label>
+              <input formControlName="type" type="text" class="ca-input" placeholder="p.ej. Héroe, Villano..." />
+            </div>
+          }
 
           <div class="col-12 col-md-6">
             <label class="ca-label">Localización</label>
@@ -126,43 +128,47 @@
       </div>
 
       <!-- SECCIÓN: Habilidades -->
-      <div class="ca-section">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <h5 class="ca-section-title mb-0">Habilidades</h5>
-          <button type="button" class="ca-btn-add" (click)="addAbility()">+ Añadir</button>
+      @if (universe()?.hasAbilities) {
+        <div class="ca-section">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h5 class="ca-section-title mb-0">Habilidades</h5>
+            <button type="button" class="ca-btn-add" (click)="addAbility()">+ Añadir</button>
+          </div>
+          <div formArrayName="abilities" class="d-flex flex-column gap-2">
+            @for (ctrl of abilitiesArray.controls; track $index) {
+              <div class="d-flex gap-2 align-items-center">
+                <input [formControlName]="$index" type="text" class="ca-input flex-grow-1" placeholder="Habilidad..." />
+                <button type="button" class="ca-btn-remove" (click)="removeAbility($index)">✕</button>
+              </div>
+            }
+          </div>
         </div>
-        <div formArrayName="abilities" class="d-flex flex-column gap-2">
-          @for (ctrl of abilitiesArray.controls; track $index) {
-            <div class="d-flex gap-2 align-items-center">
-              <input [formControlName]="$index" type="text" class="ca-input flex-grow-1" placeholder="Habilidad..." />
-              <button type="button" class="ca-btn-remove" (click)="removeAbility($index)">✕</button>
-            </div>
-          }
-        </div>
-      </div>
+      }
 
       <!-- SECCIÓN: Estadísticas -->
-      <div class="ca-section">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <h5 class="ca-section-title mb-0">Estadísticas</h5>
-          <button type="button" class="ca-btn-add" (click)="addStat()">+ Añadir</button>
+      @if (universe()?.hasStats) {
+        <div class="ca-section">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h5 class="ca-section-title mb-0">Estadísticas</h5>
+            <button type="button" class="ca-btn-add" (click)="addStat()">+ Añadir</button>
+          </div>
+          <div formArrayName="stats" class="d-flex flex-column gap-2">
+            @for (ctrl of statsArray.controls; track $index) {
+              <div class="row g-2 align-items-center" [formGroupName]="$index">
+                <div class="col-5">
+                  <input formControlName="key" type="text" class="ca-input" placeholder="Nombre stat..." />
+                </div>
+                <div class="col-5">
+                  <input formControlName="value" type="number" class="ca-input" placeholder="0" />
+                </div>
+                <div class="col-2">
+                  <button type="button" class="ca-btn-remove w-100" (click)="removeStat($index)">✕</button>
+                </div>
+              </div>
+            }
+          </div>
         </div>
-        <div formArrayName="stats" class="d-flex flex-column gap-2">
-          @for (ctrl of statsArray.controls; track $index) {
-            <div class="row g-2 align-items-center" [formGroupName]="$index">
-              <div class="col-5">
-                <input formControlName="key" type="text" class="ca-input" placeholder="Nombre stat..." />
-              </div>
-              <div class="col-5">
-                <input formControlName="value" type="number" class="ca-input" placeholder="0" />
-              </div>
-              <div class="col-2">
-                <button type="button" class="ca-btn-remove w-100" (click)="removeStat($index)">✕</button>
-              </div>
-            </div>
-          }
-        </div>
-      </div>
+      }
 
       <!-- SECCIÓN: Secciones de descripción -->
       <div class="ca-section">
