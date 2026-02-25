@@ -1,7 +1,8 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import {
   FormBuilder, FormGroup, FormArray,
   Validators, ReactiveFormsModule,
@@ -14,7 +15,7 @@ import { UniverseDetail } from '../../interfaces/universe-detail.interface';
 
 @Component({
   selector: 'app-character-edit',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, SafeBgPipe],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SafeBgPipe, SafeUrlPipe],
   templateUrl: './character-edit.html',
   styleUrl: '../character-add/character-add.css',
 })
@@ -64,6 +65,8 @@ export class CharacterEdit {
     stats:        this.fb.array([]),
     descriptionSections: this.fb.array([]),
   });
+
+  imagePreview = computed(() => this.form.get('image')?.value || '');
 
   constructor() {
     effect(() => {

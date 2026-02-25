@@ -9,6 +9,11 @@ export interface UniverseStyle {
   secondaryColor: string;
   tertiaryColor?: string;
   textColor?: string;
+  labels?: {
+    type: string;
+    abilities: string;
+    stats: string;
+  };
 }
 
 export interface UniverseStyleResponse {

@@ -13,11 +13,9 @@
   "popularityScore": 99,
   "releaseDate": "1996-02-27T00:00:00.000Z",
   "isActive": true,
-  "labels": {
-    "type": "Tipo",
-    "abilities": "Habilidades",
-    "stats": "Estadísticas Base"
-  },
+  "labelType": "Tipo",
+  "labelAbilities": "Habilidades",
+  "labelStats": "Estadísticas Base",
   "typeLabels": {
     "normal": "Normal",
     "fire": "Fuego",

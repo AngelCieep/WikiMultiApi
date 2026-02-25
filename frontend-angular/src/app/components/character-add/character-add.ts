@@ -2,6 +2,7 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { SafeBgPipe } from '../../pipes/safe-bg.pipe';
+import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
 import {
   FormBuilder,
   FormGroup,
@@ -16,7 +17,7 @@ import { UniverseStyle } from '../../interfaces/universe-style.interface';
 
 @Component({
   selector: 'app-character-add',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, SafeBgPipe],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, SafeBgPipe, SafeUrlPipe],
   templateUrl: './character-add.html',
   styleUrl: './character-add.css',
 })
@@ -55,6 +56,8 @@ export class CharacterAdd {
     stats:        this.fb.array([]),
     descriptionSections: this.fb.array([]),
   });
+
+  imagePreview = computed(() => this.form.get('image')?.value || '');
 
   // ── Abilities ──────────────────────────────────────────────
   get abilitiesArray(): FormArray { return this.form.get('abilities') as FormArray; }

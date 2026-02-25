@@ -8,14 +8,6 @@
 .au-page {
   min-height: 100vh;
   background-color: transparent;
-  padding: 2rem 0;
-}
-
-/* Contenedor ancho reducido */
-.au-container--wide {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1rem;
 }
 
 /* Header */

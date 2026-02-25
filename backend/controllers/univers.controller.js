@@ -13,8 +13,18 @@ universCtrl.getUniverses = async (req, res) => {
 universCtrl.getUniverse = async (req, res) => {
     await Universe.findById(req.params.id)
     .then((data) => {
-        if(data != null)
-        res.status(200).json({status: data});
+        if(data != null) {
+            // Transform flat labels to nested object
+            const response = {
+                ...data.toObject(),
+                labels: {
+                    type: data.labelType,
+                    abilities: data.labelAbilities,
+                    stats: data.labelStats
+                }
+            };
+            res.status(200).json({status: response});
+        }
         else
         res.status(404).json({status: "Universo no encontrado"});
     })
@@ -23,10 +33,24 @@ universCtrl.getUniverse = async (req, res) => {
 
 //Obtener solo campos visuales de un universo por slug
 universCtrl.getUniverseStyle = async (req, res) => {
-    await Universe.findOne({ slug: req.params.slug }, '_id name slug logo backgroundImage fontFamily primaryColor secondaryColor tertiaryColor textColor backgroundImage isActive')
+    await Universe.findOne({ slug: req.params.slug }, '_id name slug logo backgroundImage fontFamily primaryColor secondaryColor tertiaryColor textColor backgroundImage isActive labelType labelAbilities labelStats')
     .then((data) => {
-        if (data != null)
-            res.status(200).json({ status: data });
+        if (data != null) {
+            // Transform flat labels to nested object
+            const response = {
+                ...data.toObject(),
+                labels: {
+                    type: data.labelType,
+                    abilities: data.labelAbilities,
+                    stats: data.labelStats
+                }
+            };
+            // Remove flat fields from response
+            delete response.labelType;
+            delete response.labelAbilities;
+            delete response.labelStats;
+            res.status(200).json({ status: response });
+        }
         else
             res.status(404).json({ status: 'Universo no encontrado' });
     })
@@ -35,18 +59,53 @@ universCtrl.getUniverseStyle = async (req, res) => {
 
 //Añadir un universo
 universCtrl.addUniverse = async (req, res) => {
-    const newUniverse = new Universe(req.body);
+    // Transform nested labels to flat structure
+    const body = { ...req.body };
+    if (body.labels) {
+        body.labelType = body.labels.type;
+        body.labelAbilities = body.labels.abilities;
+        body.labelStats = body.labels.stats;
+        delete body.labels;
+    }
+    const newUniverse = new Universe(body);
     await newUniverse.save()
-    .then((data) => res.status(201).json({status: data}))
+    .then((data) => {
+        const response = {
+            ...data.toObject(),
+            labels: {
+                type: data.labelType,
+                abilities: data.labelAbilities,
+                stats: data.labelStats
+            }
+        };
+        res.status(201).json({status: response});
+    })
     .catch((err) => res.status(400).json({status: err}));
 };
 
 //Actualizar un universo por ID
 universCtrl.updateUniverse = async (req, res) => {
-    await Universe.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    // Transform nested labels to flat structure
+    const body = { ...req.body };
+    if (body.labels) {
+        body.labelType = body.labels.type;
+        body.labelAbilities = body.labels.abilities;
+        body.labelStats = body.labels.stats;
+        delete body.labels;
+    }
+    await Universe.findByIdAndUpdate(req.params.id, body, {new: true})
     .then((data) => {
-        if(data != null)
-        res.status(200).json({status: data});
+        if(data != null) {
+            const response = {
+                ...data.toObject(),
+                labels: {
+                    type: data.labelType,
+                    abilities: data.labelAbilities,
+                    stats: data.labelStats
+                }
+            };
+            res.status(200).json({status: response});
+        }
         else
         res.status(404).json({status: "Universo no encontrado"});
     })

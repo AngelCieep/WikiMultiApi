@@ -15,7 +15,7 @@
 		[style.font-family]="universe()?.fontFamily || 'inherit'"
 		[style.background-color]="hexToRgba(universe()?.primaryColor, 0.82)"
 		[style.color]="universe()?.textColor || universe()?.secondaryColor || '#ffffff'"
-		class="wiki-page-wrapper">
+		class="wiki-page-wrapper container-xxl py-4">
 
 		<!-- Wiki Card Main Container -->
 		<div class="wiki-main-card" [style.background-color]="hexToRgba(universe()?.tertiaryColor ?? universe()?.primaryColor, 0.82)">
@@ -82,7 +82,7 @@
 										class="wiki-badge"
 										[style.background-color]="universe()?.textColor || '#000'"
 										[style.color]="universe()?.primaryColor || '#fff'">
-										<strong>Tipo:</strong> {{ character()?.type }}
+										<strong>{{ universe()?.labels?.type || 'Tipo' }}:</strong> {{ character()?.type }}
 									</span>
 								}
 							</div>
@@ -119,7 +119,7 @@
 								class="wiki-section-title"
 							[style.color]="universe()?.secondaryColor || '#000'"
 							[style.border-bottom-color]="universe()?.secondaryColor || '#000'">
-								Habilidades
+								{{ universe()?.labels?.abilities || 'Habilidades' }}
 							</h2>
 							<ul class="wiki-abilities-list">
 								@for (ability of character()?.abilities; track ability) {
@@ -147,7 +147,7 @@
 								class="wiki-section-title"
 							[style.color]="universe()?.secondaryColor || '#000'"
 							[style.border-bottom-color]="universe()?.secondaryColor || '#000'">
-								Estadísticas
+								{{ universe()?.labels?.stats || 'Estadísticas' }}
 							</h2>
 							<div class="wiki-stats-grid">
 								@for (stat of character()?.stats | keyvalue; track stat.key) {

@@ -20,11 +20,9 @@ const universeSchema = new Schema(
         releaseDate:      { type: Date,   required: true },
         isActive:         { type: Boolean, required: true },
 
-        labels: {
-            type:      { type: String, trim: true },
-            abilities: { type: String, trim: true },
-            stats:     { type: String, trim: true }
-        },
+        labelType:      { type: String, trim: true },
+        labelAbilities: { type: String, trim: true },
+        labelStats:     { type: String, trim: true },
 
         typeLabels:    { type: Map, of: String },
         statLabels:    { type: Map, of: String },

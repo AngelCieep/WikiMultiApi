@@ -11,7 +11,7 @@
 		<a class="btn btn-dark" routerLink="/universes">Ver universos</a>
 	</div>
 } @else {
-	<div class="universe-page-outer">
+	<div class="container-xxl py-4">
 	<div
 		[style.font-family]="universe()?.fontFamily || 'inherit'"
 		[style.background-color]="hexToRgba(universe()?.primaryColor, 0.82)"
@@ -76,7 +76,7 @@
 			<a
 				[routerLink]="['/universes', universe()?.slug, 'add-character']"
 				class="btn-sort-universe text-decoration-none d-flex align-items-center gap-1">
-				<span>＋</span> Añadir personaje
+				<span>＋</span> Añadir
 			</a>
 				<input
 					type="search"

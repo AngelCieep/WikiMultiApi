@@ -1,4 +1,4 @@
-<div class="ca-page-outer">
+<div class="ca-page-outer container-xxl py-4">
   <div class="ca-card"
     [style.background-color]="universe() ? 'rgba(' + hexToRgbStr(universe()!.primaryColor) + ',0.88)' : 'rgba(18,18,26,0.88)'"
     [style.color]="universe()?.secondaryColor || '#fff'"
@@ -57,9 +57,24 @@
               placeholder="Descripción general del personaje"></textarea>
           </div>
 
-          <div class="col-12 col-md-6">
+          <div class="col-12">
             <label class="ca-label">URL de imagen</label>
-            <input formControlName="image" type="url" class="ca-input" placeholder="https://..." />
+            <div class="row g-3">
+              <div class="col-12 col-md-8">
+                <input formControlName="image" type="url" class="ca-input" placeholder="https://..." />
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="card bg-dark border-secondary" style="height: 150px;">
+                  @if (imagePreview()) {
+                    <img [src]="imagePreview() | safeUrl" class="card-img-top h-100" style="object-fit: cover;" alt="Preview">
+                  } @else {
+                    <div class="card-body d-flex align-items-center justify-content-center text-muted">
+                      <small>Vista previa</small>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="col-12 col-md-6">

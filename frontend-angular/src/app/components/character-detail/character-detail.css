@@ -1,7 +1,6 @@
 /* Wiki Page Wrapper */
 .wiki-page-wrapper {
 	min-height: 100vh;
-	padding: 1.5rem;
 	display: flex;
 	flex-direction: column;
 }
