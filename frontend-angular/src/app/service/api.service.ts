@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   UniverseCardResponse,
@@ -19,8 +19,20 @@ export class ApiService {
 
   // ── UNIVERSOS ──────────────────────────────────────────────
 
-  getUniverses(): Observable<UniverseCardResponse> {
-    return this.http.get<UniverseCardResponse>(`${this.baseUrl}/universes`);
+  getUniverses(page: number = 1, limit: number = 10): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+    return this.http.get<any>(`${this.baseUrl}/universes`, { params });
+  }
+
+  getUniversesFiltered(page: number = 1, limit: number = 10, sortBy: string = 'createdAt', order: string = 'desc'): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString())
+      .set('sortBy', sortBy)
+      .set('order', order);
+    return this.http.get<any>(`${this.baseUrl}/universes/filtered`, { params });
   }
 
   getUniverse(id: string): Observable<UniverseDetailResponse> {
@@ -39,34 +51,45 @@ export class ApiService {
     return this.http.put(`${this.baseUrl}/universes/${id}`, universe);
   }
 
+  updatePopularityScore(id: string, popularityScore: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/universes/${id}/popularity`, { popularityScore });
+  }
+
   deleteUniverse(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/universes/${id}`);
   }
 
   // ── PERSONAJES ─────────────────────────────────────────────
 
-  getCharacters(): Observable<CharacterCardResponse> {
-    return this.http.get<CharacterCardResponse>(`${this.baseUrl}/characters/all`);
+  getCharacters(page: number = 1, limit: number = 10): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+    return this.http.get<any>(`${this.baseUrl}/characters/all`, { params });
   }
 
-  getCharacter(id: string): Observable<CharacterDetailResponse> {
-    return this.http.get<CharacterDetailResponse>(`${this.baseUrl}/characters/character/${id}`);
+  getCharactersFiltered(page: number = 1, limit: number = 10, sortBy: string = 'createdAt', order: string = 'desc'): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString())
+      .set('sortBy', sortBy)
+      .set('order', order);
+    return this.http.get<any>(`${this.baseUrl}/characters/filtered`, { params });
   }
 
-  getTopCharacter(): Observable<CharacterDetailResponse> {
-    return this.http.get<CharacterDetailResponse>(`${this.baseUrl}/characters/top`);
+  getCharacter(universeId: string, characterId: string): Observable<CharacterDetailResponse> {
+    return this.http.get<CharacterDetailResponse>(`${this.baseUrl}/characters/universe/${universeId}/character/${characterId}`);
   }
 
-  getCharactersByUniverse(slug: string): Observable<CharacterCardResponse> {
-    return this.http.post<CharacterCardResponse>(`${this.baseUrl}/characters/universe/${slug}`, {});
+  getCharactersByUniverse(slug: string, page: number = 1, limit: number = 10): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+    return this.http.post<any>(`${this.baseUrl}/characters/universe/${slug}`, {}, { params });
   }
 
   addCharacter(character: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/characters`, character);
-  }
-
-  addCharactersBulk(characters: any[]): Observable<any> {
-    return this.http.post(`${this.baseUrl}/characters/bulk`, characters);
   }
 
   updateCharacter(id: string, character: any): Observable<any> {
