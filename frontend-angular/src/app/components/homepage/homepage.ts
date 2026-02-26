@@ -20,6 +20,7 @@ export class Homepage {
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
   loadingToggleId = signal<string | null>(null);
+  loadingDeleteId = signal<string | null>(null);
   
   // Search signal from service
   searchTerm = this.searchService.searchTerm;
@@ -178,6 +179,31 @@ export class Homepage {
         this.error.set(err.error?.error || `Error al ${action} el universo`);
         this.loadingToggleId.set(null);
         console.error('Error al actualizar universo:', err);
+      }
+    });
+  }
+
+  deleteUniverse(event: Event, universo: UniverseCard): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const confirmMessage = `¿Estás seguro de que deseas ELIMINAR "${universo.name}"? Esta acción no se puede deshacer.`;
+    
+    if (!confirm(confirmMessage)) return;
+
+    this.loadingDeleteId.set(universo._id);
+
+    this.apiService.deleteUniverse(universo._id).subscribe({
+      next: (response) => {
+        this.loadingDeleteId.set(null);
+        
+        // Reload the entire page to avoid empty gaps in pagination
+        this.loadUniverses();
+      },
+      error: (err) => {
+        this.error.set(err.error?.error || 'Error al eliminar el universo');
+        this.loadingDeleteId.set(null);
+        console.error('Error al eliminar universo:', err);
       }
     });
   }

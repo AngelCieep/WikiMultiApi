@@ -38,6 +38,7 @@ export class UniverseDetail implements OnInit {
   loading = signal<boolean>(true);
   loadingCharacters = signal<boolean>(true);
   loadingToggle = signal<boolean>(false);
+  loadingDelete = signal<boolean>(false);
   error = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   
@@ -162,6 +163,35 @@ export class UniverseDetail implements OnInit {
         this.error.set(err.error?.error || `Error al ${action} el universo`);
         this.loadingToggle.set(false);
         console.error('Error al actualizar universo:', err);
+      }
+    });
+  }
+
+  deleteUniverse(): void {
+    const currentUniverse = this.universe();
+    if (!currentUniverse) return;
+
+    const confirmMessage = `¿Estás seguro de que deseas ELIMINAR "${currentUniverse.name}"? Esta acción no se puede deshacer y eliminará todos los personajes asociados.`;
+    
+    if (!confirm(confirmMessage)) return;
+
+    this.loadingDelete.set(true);
+    this.error.set(null);
+    this.successMessage.set(null);
+
+    this.apiService.deleteUniverse(currentUniverse._id).subscribe({
+      next: (response) => {
+        this.successMessage.set('Universo eliminado correctamente. Redirigiendo...');
+        
+        // Redirect to homepage after 1 second
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 1000);
+      },
+      error: (err) => {
+        this.error.set(err.error?.error || 'Error al eliminar el universo');
+        this.loadingDelete.set(false);
+        console.error('Error al eliminar universo:', err);
       }
     });
   }

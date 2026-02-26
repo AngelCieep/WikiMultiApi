@@ -5,9 +5,9 @@ const router = express.Router();
 
 //Rutas
 router.get('/', universCtrl.getUniverses);
+router.post('/', universCtrl.addUniverse);
 router.get('/filtered', universCtrl.getUniversesFiltered);
 router.post('/search', universCtrl.searchUniverses);
-router.post('/', universCtrl.addUniverse);
 router.get('/style/:slug', universCtrl.getUniverseStyle);
 router.get('/:id', universCtrl.getUniverse);
 router.put('/:id/popularity', universCtrl.updatePopularityScore);

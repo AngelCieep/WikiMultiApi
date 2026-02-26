@@ -58,7 +58,7 @@ export class UniverseAdd {
     secondaryColor: ['#5A4A42', [Validators.required, Validators.pattern(/^#[0-9A-Fa-f]{6}$/)]],
     tertiaryColor: ['#C9A96E', Validators.pattern(/^#[0-9A-Fa-f]{6}$/)],
     textColor: ['#000000', Validators.pattern(/^#[0-9A-Fa-f]{6}$/)],
-    popularityScore: [0, [Validators.required, Validators.min(0), Validators.max(10000)]],
+    popularityScore: [0, [Validators.min(0), Validators.max(10000)]],
     releaseDate: ['', Validators.required],
     isActive: [true],
     hasType: [false],

@@ -127,6 +127,18 @@
                 style="cursor: pointer; width: 3rem; height: 1.5rem;"
               />
             </div>
+            <button 
+              class="btn btn-danger btn-sm w-100 mt-2" 
+              (click)="deleteUniverse($event, universo)"
+              [disabled]="loadingDeleteId() === universo._id"
+            >
+              @if (loadingDeleteId() === universo._id) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Eliminando...
+              } @else {
+                <i class="bi bi-trash-fill me-1"></i>Eliminar Universo
+              }
+            </button>
           </div>
         </div>
       </a>
