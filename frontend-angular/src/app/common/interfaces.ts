@@ -61,6 +61,7 @@ export interface UniverseCard {
   name: string;
   slug: string;
   logo: string;
+  backgroundImage?: string;
   primaryColor: string;
   secondaryColor: string;
   tertiaryColor?: string;

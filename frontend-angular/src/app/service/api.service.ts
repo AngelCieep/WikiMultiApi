@@ -35,6 +35,13 @@ export class ApiService {
     return this.http.get<any>(`${this.baseUrl}/universes/filtered`, { params });
   }
 
+  searchUniverses(query: string, page: number = 1, limit: number = 10): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+    return this.http.post<any>(`${this.baseUrl}/universes/search`, { query }, { params });
+  }
+
   getUniverse(id: string): Observable<UniverseDetailResponse> {
     return this.http.get<UniverseDetailResponse>(`${this.baseUrl}/universes/${id}`);
   }

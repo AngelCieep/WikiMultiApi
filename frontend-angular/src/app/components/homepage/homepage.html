@@ -1,0 +1,216 @@
+<div class="container my-5">
+  <!-- Header Section -->
+  <div class="text-center mb-5">
+    <h1 class="display-4 fw-bold mb-3 text-dark">
+      <i class="bi bi-stars me-2 text-primary"></i>WikiMultiApi
+    </h1>
+    <p class="lead text-secondary col-md-8 mx-auto">
+      Explora múltiples universos ficticios y descubre sus personajes, historias y características únicas.
+      Una enciclopedia multimedia con información detallada de tus universos favoritos.
+    </p>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-8">
+      <!-- Search Bar -->
+      <form (ngSubmit)="handleSearch($event)" class="mb-3">
+        <div class="input-group input-group-lg shadow-sm">
+          <span class="input-group-text bg-white border-end-0">
+            <i class="bi bi-search text-muted"></i>
+          </span>
+          <input
+            type="search"
+            class="form-control border-start-0"
+            placeholder="Buscar universo... (presiona Enter)"
+            [value]="searchInput()"
+            (input)="searchInput.set($any($event.target).value)"
+          />
+          <button
+            *ngIf="searchInput()"
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="clearSearch()"
+            title="Limpiar búsqueda"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Filters (only visible when not searching) -->
+      <div *ngIf="!isSearchMode()" class="row g-2">
+        <div class="col-md-6">
+          <label class="form-label small text-muted mb-1">
+            <i class="bi bi-sort-down me-1"></i>Ordenar por
+          </label>
+          <select
+            class="form-select"
+            [value]="sortBy()"
+            (change)="sortBy.set($any($event.target).value); onSortChange()"
+          >
+            <option value="createdAt">Fecha de creación</option>
+            <option value="updatedAt">Última actualización</option>
+            <option value="popularityScore">Popularidad</option>
+            <option value="name">Nombre</option>
+            <option value="releaseDate">Fecha de lanzamiento</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small text-muted mb-1">
+            <i class="bi bi-arrow-down-up me-1"></i>Orden
+          </label>
+          <select
+            class="form-select"
+            [value]="order()"
+            (change)="order.set($any($event.target).value); onOrderChange()"
+          >
+            <option value="desc">Descendente</option>
+            <option value="asc">Ascendente</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Search Badge -->
+      <div *ngIf="isSearchMode()" class="alert alert-info d-flex align-items-center mt-3 mb-0" role="alert">
+        <i class="bi bi-info-circle me-2"></i>
+        <div>
+          Mostrando resultados para: <strong>"{{ searchTerm() }}"</strong>
+          <button class="btn btn-sm btn-link ms-2 p-0" (click)="clearSearch()">
+            <i class="bi bi-x-circle"></i> Limpiar búsqueda
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading()" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3 text-muted">Cargando universos...</p>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="error()" class="alert alert-danger d-flex align-items-center" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <div>
+      <strong>Error:</strong> {{ error() }}
+    </div>
+  </div>
+
+  <!-- Universe Cards Grid -->
+  <div *ngIf="!loading() && !error()" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+    <div *ngFor="let universo of universos()" class="col">
+      <a [routerLink]="['/universo', universo._id]" class="text-decoration-none">
+        <div class="card h-100 shadow-sm border-0 hover-card">
+          <div 
+            class="position-relative overflow-hidden" 
+            [style.height.px]="200"
+            [style.background-image]="universo.backgroundImage ? 'linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(' + universo.backgroundImage + ')' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'"
+            [style.background-size]="'cover'"
+            [style.background-position]="'center'"
+          >
+            <img 
+              [src]="universo.logo" 
+              [alt]="universo.name"
+              class="card-img-top position-absolute top-50 start-50 translate-middle"
+              style="max-height: 160px; max-width: 90%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));"
+              (error)="$any($event.target).src='https://placehold.co/400x300?text=' + universo.name"
+            />
+          </div>
+          <div class="card-body">
+            <h5 class="card-title fw-bold text-dark mb-2">{{ universo.name }}</h5>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge rounded-pill" [style.background-color]="universo.primaryColor || '#0d6efd'">
+                {{ universo.isActive ? 'Activo' : 'Inactivo' }}
+              </span>
+              <small class="text-muted">
+                <i class="bi bi-star-fill text-warning me-1"></i>{{ universo.popularityScore || 0 }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <nav *ngIf="!loading() && !error() && totalPages() > 1" aria-label="Paginación de universos" class="mt-5">
+    <ul class="pagination justify-content-center">
+      <!-- Previous Button -->
+      <li class="page-item" [class.disabled]="!hasPrevPage()">
+        <button 
+          class="page-link" 
+          (click)="prevPage()" 
+          [disabled]="!hasPrevPage()"
+          aria-label="Anterior"
+        >
+          <i class="bi bi-chevron-left"></i>
+          <span class="d-none d-sm-inline ms-1">Anterior</span>
+        </button>
+      </li>
+      
+      <!-- First Page -->
+      <li *ngIf="pageNumbers()[0] > 1" class="page-item">
+        <button class="page-link" (click)="goToPage(1)">1</button>
+      </li>
+      <li *ngIf="pageNumbers()[0] > 2" class="page-item disabled">
+        <span class="page-link">...</span>
+      </li>
+      
+      <!-- Page Numbers -->
+      <li 
+        *ngFor="let page of pageNumbers()" 
+        class="page-item" 
+        [class.active]="page === currentPage()"
+      >
+        <button 
+          class="page-link" 
+          (click)="goToPage(page)"
+          [attr.aria-current]="page === currentPage() ? 'page' : null"
+        >
+          {{ page }}
+        </button>
+      </li>
+      
+      <!-- Last Page -->
+      <li *ngIf="pageNumbers()[pageNumbers().length - 1] < totalPages() - 1" class="page-item disabled">
+        <span class="page-link">...</span>
+      </li>
+      <li *ngIf="pageNumbers()[pageNumbers().length - 1] < totalPages()" class="page-item">
+        <button class="page-link" (click)="goToPage(totalPages())">{{ totalPages() }}</button>
+      </li>
+      
+      <!-- Next Button -->
+      <li class="page-item" [class.disabled]="!hasNextPage()">
+        <button 
+          class="page-link" 
+          (click)="nextPage()" 
+          [disabled]="!hasNextPage()"
+          aria-label="Siguiente"
+        >
+          <span class="d-none d-sm-inline me-1">Siguiente</span>
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </li>
+    </ul>
+    
+    <!-- Pagination Info -->
+    <div class="text-center text-muted small mt-2">
+      <i class="bi bi-info-circle me-1"></i>
+      Página {{ currentPage() }} de {{ totalPages() }}
+      <span *ngIf="totalItems() > 0"> • {{ totalItems() }} universos en total</span>
+    </div>
+  </nav>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading() && !error() && universos().length === 0" class="text-center my-5">
+    <i class="bi bi-inbox display-1 text-muted"></i>
+    <p class="mt-3 text-muted">No se encontraron universos.</p>
+  </div>
+</div>

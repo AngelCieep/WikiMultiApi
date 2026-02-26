@@ -1,0 +1,53 @@
+.hover-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Pagination styles */
+.pagination .page-link {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination .page-item.disabled .page-link {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination .page-item.active .page-link {
+  font-weight: 600;
+}
+
+.pagination .page-link:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Search bar styles */
+.input-group-lg .form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+  border-color: #86b7fe;
+}
+
+.input-group-text {
+  transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus + .input-group-text,
+.form-control:focus ~ .input-group-text {
+  border-color: #86b7fe;
+}
+
+/* Filter select styles */
+.form-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.form-label {
+  font-weight: 500;
+}
