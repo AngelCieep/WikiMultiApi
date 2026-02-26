@@ -49,10 +49,24 @@
                   id="name" 
                   formControlName="name"
                   placeholder="Ej: Pokémon"
-                  [class.is-invalid]="isFieldInvalid('name')"
+                  [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
                   (blur)="generateSlug()">
-                @if (isFieldInvalid('name')) {
-                  <div class="invalid-feedback">{{ getFieldError('name') }}</div>
+                @if (name.invalid && (name.dirty || name.touched)) {
+                  @if (name.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      El nombre es obligatorio.
+                    </div>
+                  }
+                  @if (name.errors['minlength']) {
+                    <div class="invalid-feedback d-block">
+                      El nombre debe tener mínimo 2 caracteres.
+                    </div>
+                  }
+                  @if (name.errors['maxlength']) {
+                    <div class="invalid-feedback d-block">
+                      El nombre debe tener máximo 100 caracteres.
+                    </div>
+                  }
                 }
               </div>
 
@@ -68,9 +82,23 @@
                   id="slug" 
                   formControlName="slug"
                   placeholder="Ej: pokemon"
-                  [class.is-invalid]="isFieldInvalid('slug')">
-                @if (isFieldInvalid('slug')) {
-                  <div class="invalid-feedback">{{ getFieldError('slug') }}</div>
+                  [class.is-invalid]="slug.invalid && (slug.dirty || slug.touched)">
+                @if (slug.invalid && (slug.dirty || slug.touched)) {
+                  @if (slug.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      El slug es obligatorio.
+                    </div>
+                  }
+                  @if (slug.errors['pattern']) {
+                    <div class="invalid-feedback d-block">
+                      El slug solo puede contener letras minúsculas, números y guiones.
+                    </div>
+                  }
+                  @if (slug.errors['maxlength']) {
+                    <div class="invalid-feedback d-block">
+                      El slug debe tener máximo 100 caracteres.
+                    </div>
+                  }
                 }
               </div>
 
@@ -85,9 +113,23 @@
                   formControlName="description"
                   rows="4"
                   placeholder="Describe el universo..."
-                  [class.is-invalid]="isFieldInvalid('description')"></textarea>
-                @if (isFieldInvalid('description')) {
-                  <div class="invalid-feedback">{{ getFieldError('description') }}</div>
+                  [class.is-invalid]="description.invalid && (description.dirty || description.touched)"></textarea>
+                @if (description.invalid && (description.dirty || description.touched)) {
+                  @if (description.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      La descripción es obligatoria.
+                    </div>
+                  }
+                  @if (description.errors['minlength']) {
+                    <div class="invalid-feedback d-block">
+                      La descripción debe tener mínimo 10 caracteres.
+                    </div>
+                  }
+                  @if (description.errors['maxlength']) {
+                    <div class="invalid-feedback d-block">
+                      La descripción debe tener máximo 2000 caracteres.
+                    </div>
+                  }
                 }
               </div>
             </div>
@@ -113,9 +155,18 @@
                   formControlName="logo"
                   placeholder="https://ejemplo.com/logo.png"
                   (input)="onLogoChange($event)"
-                  [class.is-invalid]="isFieldInvalid('logo')">
-                @if (isFieldInvalid('logo')) {
-                  <div class="invalid-feedback">{{ getFieldError('logo') }}</div>
+                  [class.is-invalid]="logo.invalid && (logo.dirty || logo.touched)">
+                @if (logo.invalid && (logo.dirty || logo.touched)) {
+                  @if (logo.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      El logo es obligatorio.
+                    </div>
+                  }
+                  @if (logo.errors['pattern']) {
+                    <div class="invalid-feedback d-block">
+                      Debe ser una URL válida (http:// o https://).
+                    </div>
+                  }
                 }
                 
                 <!-- Logo Preview -->
@@ -143,9 +194,18 @@
                   formControlName="backgroundImage"
                   placeholder="https://ejemplo.com/background.jpg"
                   (input)="onBackgroundChange($event)"
-                  [class.is-invalid]="isFieldInvalid('backgroundImage')">
-                @if (isFieldInvalid('backgroundImage')) {
-                  <div class="invalid-feedback">{{ getFieldError('backgroundImage') }}</div>
+                  [class.is-invalid]="backgroundImage.invalid && (backgroundImage.dirty || backgroundImage.touched)">
+                @if (backgroundImage.invalid && (backgroundImage.dirty || backgroundImage.touched)) {
+                  @if (backgroundImage.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      La imagen de fondo es obligatoria.
+                    </div>
+                  }
+                  @if (backgroundImage.errors['pattern']) {
+                    <div class="invalid-feedback d-block">
+                      Debe ser una URL válida (http:// o https://).
+                    </div>
+                  }
                 }
                 
                 <!-- Background Preview -->
@@ -173,9 +233,13 @@
                   formControlName="imagenBoton"
                   placeholder="https://ejemplo.com/boton.png"
                   (input)="onButtonImageChange($event)"
-                  [class.is-invalid]="isFieldInvalid('imagenBoton')">
-                @if (isFieldInvalid('imagenBoton')) {
-                  <div class="invalid-feedback">{{ getFieldError('imagenBoton') }}</div>
+                  [class.is-invalid]="imagenBoton.invalid && (imagenBoton.dirty || imagenBoton.touched)">
+                @if (imagenBoton.invalid && (imagenBoton.dirty || imagenBoton.touched)) {
+                  @if (imagenBoton.errors['pattern']) {
+                    <div class="invalid-feedback d-block">
+                      Debe ser una URL válida (http:// o https://).
+                    </div>
+                  }
                 }
                 
                 <!-- Button Image Preview -->
@@ -213,16 +277,25 @@
                     class="form-control form-control-color" 
                     id="primaryColor" 
                     formControlName="primaryColor"
-                    [class.is-invalid]="isFieldInvalid('primaryColor')">
+                    [class.is-invalid]="primaryColor.invalid && (primaryColor.dirty || primaryColor.touched)">
                   <input 
                     type="text" 
                     class="form-control form-control-sm" 
                     formControlName="primaryColor"
                     placeholder="#7D2424"
-                    [class.is-invalid]="isFieldInvalid('primaryColor')">
+                    [class.is-invalid]="primaryColor.invalid && (primaryColor.dirty || primaryColor.touched)">
                 </div>
-                @if (isFieldInvalid('primaryColor')) {
-                  <div class="invalid-feedback d-block">{{ getFieldError('primaryColor') }}</div>
+                @if (primaryColor.invalid && (primaryColor.dirty || primaryColor.touched)) {
+                  @if (primaryColor.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      El color primario es obligatorio.
+                    </div>
+                  }
+                  @if (primaryColor.errors['pattern']) {
+                    <div class="invalid-feedback d-block">
+                      Debe ser un color hexadecimal válido (#RRGGBB).
+                    </div>
+                  }
                 }
               </div>
 
@@ -237,16 +310,25 @@
                     class="form-control form-control-color" 
                     id="secondaryColor" 
                     formControlName="secondaryColor"
-                    [class.is-invalid]="isFieldInvalid('secondaryColor')">
+                    [class.is-invalid]="secondaryColor.invalid && (secondaryColor.dirty || secondaryColor.touched)">
                   <input 
                     type="text" 
                     class="form-control form-control-sm" 
                     formControlName="secondaryColor"
                     placeholder="#5A4A42"
-                    [class.is-invalid]="isFieldInvalid('secondaryColor')">
+                    [class.is-invalid]="secondaryColor.invalid && (secondaryColor.dirty || secondaryColor.touched)">
                 </div>
-                @if (isFieldInvalid('secondaryColor')) {
-                  <div class="invalid-feedback d-block">{{ getFieldError('secondaryColor') }}</div>
+                @if (secondaryColor.invalid && (secondaryColor.dirty || secondaryColor.touched)) {
+                  @if (secondaryColor.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      El color secundario es obligatorio.
+                    </div>
+                  }
+                  @if (secondaryColor.errors['pattern']) {
+                    <div class="invalid-feedback d-block">
+                      Debe ser un color hexadecimal válido (#RRGGBB).
+                    </div>
+                  }
                 }
               </div>
 
@@ -261,16 +343,20 @@
                     class="form-control form-control-color" 
                     id="tertiaryColor" 
                     formControlName="tertiaryColor"
-                    [class.is-invalid]="isFieldInvalid('tertiaryColor')">
+                    [class.is-invalid]="tertiaryColor.invalid && (tertiaryColor.dirty || tertiaryColor.touched)">
                   <input 
                     type="text" 
                     class="form-control form-control-sm" 
                     formControlName="tertiaryColor"
                     placeholder="#C9A96E"
-                    [class.is-invalid]="isFieldInvalid('tertiaryColor')">
+                    [class.is-invalid]="tertiaryColor.invalid && (tertiaryColor.dirty || tertiaryColor.touched)">
                 </div>
-                @if (isFieldInvalid('tertiaryColor')) {
-                  <div class="invalid-feedback d-block">{{ getFieldError('tertiaryColor') }}</div>
+                @if (tertiaryColor.invalid && (tertiaryColor.dirty || tertiaryColor.touched)) {
+                  @if (tertiaryColor.errors['pattern']) {
+                    <div class="invalid-feedback d-block">
+                      Debe ser un color hexadecimal válido (#RRGGBB).
+                    </div>
+                  }
                 }
               </div>
 
@@ -285,16 +371,20 @@
                     class="form-control form-control-color" 
                     id="textColor" 
                     formControlName="textColor"
-                    [class.is-invalid]="isFieldInvalid('textColor')">
+                    [class.is-invalid]="textColor.invalid && (textColor.dirty || textColor.touched)">
                   <input 
                     type="text" 
                     class="form-control form-control-sm" 
                     formControlName="textColor"
                     placeholder="#000000"
-                    [class.is-invalid]="isFieldInvalid('textColor')">
+                    [class.is-invalid]="textColor.invalid && (textColor.dirty || textColor.touched)">
                 </div>
-                @if (isFieldInvalid('textColor')) {
-                  <div class="invalid-feedback d-block">{{ getFieldError('textColor') }}</div>
+                @if (textColor.invalid && (textColor.dirty || textColor.touched)) {
+                  @if (textColor.errors['pattern']) {
+                    <div class="invalid-feedback d-block">
+                      Debe ser un color hexadecimal válido (#RRGGBB).
+                    </div>
+                  }
                 }
               </div>
             </div>
@@ -313,22 +403,42 @@
                 <label for="fontFamily" class="form-label fw-bold">
                   Fuente Tipográfica <span class="text-muted">(opcional)</span>
                 </label>
-                <input 
-                  type="text" 
-                  class="form-control" 
+                <select 
+                  class="form-select" 
                   id="fontFamily" 
                   formControlName="fontFamily"
-                  placeholder="Ej: 'Roboto', sans-serif"
-                  [class.is-invalid]="isFieldInvalid('fontFamily')">
-                @if (isFieldInvalid('fontFamily')) {
-                  <div class="invalid-feedback">{{ getFieldError('fontFamily') }}</div>
+                  [class.is-invalid]="fontFamily.invalid && (fontFamily.dirty || fontFamily.touched)">
+                  <option value="">-- Selecciona una fuente --</option>
+                  <option value="'Roboto', sans-serif">Roboto</option>
+                  <option value="'Open Sans', sans-serif">Open Sans</option>
+                  <option value="'Lato', sans-serif">Lato</option>
+                  <option value="'Montserrat', sans-serif">Montserrat</option>
+                  <option value="'Poppins', sans-serif">Poppins</option>
+                  <option value="'Raleway', sans-serif">Raleway</option>
+                  <option value="'Nunito', sans-serif">Nunito</option>
+                  <option value="'Crimson Text', Georgia, serif">Crimson Text</option>
+                  <option value="'Playfair Display', Georgia, serif">Playfair Display</option>
+                  <option value="'Merriweather', Georgia, serif">Merriweather</option>
+                  <option value="'PT Serif', Georgia, serif">PT Serif</option>
+                  <option value="'Courier New', monospace">Courier New</option>
+                  <option value="'Fira Code', monospace">Fira Code</option>
+                  <option value="Arial, sans-serif">Arial</option>
+                  <option value="Georgia, serif">Georgia</option>
+                  <option value="'Times New Roman', serif">Times New Roman</option>
+                </select>
+                @if (fontFamily.invalid && (fontFamily.dirty || fontFamily.touched)) {
+                  @if (fontFamily.errors['maxlength']) {
+                    <div class="invalid-feedback d-block">
+                      La fuente debe tener máximo 100 caracteres.
+                    </div>
+                  }
                 }
               </div>
 
               <!-- Popularity Score -->
               <div class="col-md-4">
                 <label for="popularityScore" class="form-label fw-bold">
-                  Puntuación de Popularidad <span class="text-danger">*</span>
+                  Puntuación de Popularidad <span class="text-muted">(automático)</span>
                 </label>
                 <input 
                   type="number" 
@@ -337,9 +447,26 @@
                   formControlName="popularityScore"
                   min="0"
                   max="10000"
-                  [class.is-invalid]="isFieldInvalid('popularityScore')">
-                @if (isFieldInvalid('popularityScore')) {
-                  <div class="invalid-feedback">{{ getFieldError('popularityScore') }}</div>
+                  readonly
+                  style="background-color: #f8f9fa; cursor: not-allowed;"
+                  [class.is-invalid]="popularityScore.invalid && (popularityScore.dirty || popularityScore.touched)">
+                <small class="text-muted">Este valor se calcula automáticamente.</small>
+                @if (popularityScore.invalid && (popularityScore.dirty || popularityScore.touched)) {
+                  @if (popularityScore.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      La puntuación es obligatoria.
+                    </div>
+                  }
+                  @if (popularityScore.errors['min']) {
+                    <div class="invalid-feedback d-block">
+                      La puntuación mínima es 0.
+                    </div>
+                  }
+                  @if (popularityScore.errors['max']) {
+                    <div class="invalid-feedback d-block">
+                      La puntuación máxima es 10000.
+                    </div>
+                  }
                 }
               </div>
 
@@ -353,9 +480,13 @@
                   class="form-control" 
                   id="releaseDate" 
                   formControlName="releaseDate"
-                  [class.is-invalid]="isFieldInvalid('releaseDate')">
-                @if (isFieldInvalid('releaseDate')) {
-                  <div class="invalid-feedback">{{ getFieldError('releaseDate') }}</div>
+                  [class.is-invalid]="releaseDate.invalid && (releaseDate.dirty || releaseDate.touched)">
+                @if (releaseDate.invalid && (releaseDate.dirty || releaseDate.touched)) {
+                  @if (releaseDate.errors['required']) {
+                    <div class="invalid-feedback d-block">
+                      La fecha de lanzamiento es obligatoria.
+                    </div>
+                  }
                 }
               </div>
             </div>
@@ -530,7 +661,7 @@
             type="submit" 
             class="btn btn-primary px-4"
             style="background-color: #7D2424; border-color: #7D2424;"
-            [disabled]="universeForm.invalid || loading()">
+            [disabled]="loading()">
             @if (loading()) {
               <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
               Guardando...
