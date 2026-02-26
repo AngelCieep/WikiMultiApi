@@ -17,8 +17,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Search Bar -->
-      <div class="row w-100 justify-content-center">
-        <div class="col-10 col-md-8 col-lg-6">
+      <div class="row w-100 justify-content-center align-items-center">
+        <div class="col-10 col-md-7 col-lg-5">
           <form (ngSubmit)="handleSearch($event)">
             <div class="input-group input-group-sm">
               <input
@@ -42,6 +42,12 @@
               </button>
             </div>
           </form>
+        </div>
+        <div class="col-auto ms-auto">
+          <a routerLink="/universo/agregar" class="btn btn-sm btn-outline-light">
+            <i class="bi bi-plus-circle me-1"></i>
+            Agregar Universo
+          </a>
         </div>
       </div>
     </div>

@@ -1,0 +1,545 @@
+<div class="container-fluid py-4" style="background-color: #FFF8E7; min-height: 100vh;">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold" style="color: #7D2424;">
+          <i class="bi bi-plus-circle me-2"></i>Agregar Universo
+        </h1>
+        <a routerLink="/" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-2"></i>Volver
+        </a>
+      </div>
+
+      <!-- Success Message -->
+      @if (success()) {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <strong>¡Éxito!</strong> El universo ha sido creado correctamente. Redirigiendo...
+        </div>
+      }
+
+      <!-- Error Message -->
+      @if (error()) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <strong>Error:</strong> {{ error() }}
+          <button type="button" class="btn-close" (click)="error.set(null)"></button>
+        </div>
+      }
+
+      <!-- Form -->
+      <form [formGroup]="universeForm" (ngSubmit)="onSubmit()">
+        
+        <!-- BASIC INFORMATION -->
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-header" style="background-color: #7D2424; color: white;">
+            <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Información Básica</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <!-- Name -->
+              <div class="col-md-6">
+                <label for="name" class="form-label fw-bold">
+                  Nombre <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="name" 
+                  formControlName="name"
+                  placeholder="Ej: Pokémon"
+                  [class.is-invalid]="isFieldInvalid('name')"
+                  (blur)="generateSlug()">
+                @if (isFieldInvalid('name')) {
+                  <div class="invalid-feedback">{{ getFieldError('name') }}</div>
+                }
+              </div>
+
+              <!-- Slug -->
+              <div class="col-md-6">
+                <label for="slug" class="form-label fw-bold">
+                  Slug <span class="text-danger">*</span>
+                  <small class="text-muted">(solo minúsculas y guiones)</small>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="slug" 
+                  formControlName="slug"
+                  placeholder="Ej: pokemon"
+                  [class.is-invalid]="isFieldInvalid('slug')">
+                @if (isFieldInvalid('slug')) {
+                  <div class="invalid-feedback">{{ getFieldError('slug') }}</div>
+                }
+              </div>
+
+              <!-- Description -->
+              <div class="col-12">
+                <label for="description" class="form-label fw-bold">
+                  Descripción <span class="text-danger">*</span>
+                </label>
+                <textarea 
+                  class="form-control" 
+                  id="description" 
+                  formControlName="description"
+                  rows="4"
+                  placeholder="Describe el universo..."
+                  [class.is-invalid]="isFieldInvalid('description')"></textarea>
+                @if (isFieldInvalid('description')) {
+                  <div class="invalid-feedback">{{ getFieldError('description') }}</div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- IMAGES -->
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-header" style="background-color: #7D2424; color: white;">
+            <h5 class="mb-0"><i class="bi bi-image me-2"></i>Imágenes</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <!-- Logo -->
+              <div class="col-md-6">
+                <label for="logo" class="form-label fw-bold">
+                  Logo (URL) <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="url" 
+                  class="form-control" 
+                  id="logo" 
+                  formControlName="logo"
+                  placeholder="https://ejemplo.com/logo.png"
+                  (input)="onLogoChange($event)"
+                  [class.is-invalid]="isFieldInvalid('logo')">
+                @if (isFieldInvalid('logo')) {
+                  <div class="invalid-feedback">{{ getFieldError('logo') }}</div>
+                }
+                
+                <!-- Logo Preview -->
+                @if (logoPreview()) {
+                  <div class="mt-3 text-center">
+                    <p class="text-muted small mb-2">Vista previa del logo:</p>
+                    <img 
+                      [src]="logoPreview()" 
+                      alt="Logo preview" 
+                      class="preview-image"
+                      (error)="logoPreview.set('')">
+                  </div>
+                }
+              </div>
+
+              <!-- Background Image -->
+              <div class="col-md-6">
+                <label for="backgroundImage" class="form-label fw-bold">
+                  Imagen de Fondo (URL) <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="url" 
+                  class="form-control" 
+                  id="backgroundImage" 
+                  formControlName="backgroundImage"
+                  placeholder="https://ejemplo.com/background.jpg"
+                  (input)="onBackgroundChange($event)"
+                  [class.is-invalid]="isFieldInvalid('backgroundImage')">
+                @if (isFieldInvalid('backgroundImage')) {
+                  <div class="invalid-feedback">{{ getFieldError('backgroundImage') }}</div>
+                }
+                
+                <!-- Background Preview -->
+                @if (backgroundPreview()) {
+                  <div class="mt-3">
+                    <p class="text-muted small mb-2">Vista previa del fondo:</p>
+                    <div 
+                      class="preview-background"
+                      [style.background-image]="'url(' + backgroundPreview() + ')'"
+                      (error)="backgroundPreview.set('')">
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <!-- Button Image -->
+              <div class="col-12">
+                <label for="imagenBoton" class="form-label fw-bold">
+                  Imagen de Botón (URL) <span class="text-muted">(opcional)</span>
+                </label>
+                <input 
+                  type="url" 
+                  class="form-control" 
+                  id="imagenBoton" 
+                  formControlName="imagenBoton"
+                  placeholder="https://ejemplo.com/boton.png"
+                  (input)="onButtonImageChange($event)"
+                  [class.is-invalid]="isFieldInvalid('imagenBoton')">
+                @if (isFieldInvalid('imagenBoton')) {
+                  <div class="invalid-feedback">{{ getFieldError('imagenBoton') }}</div>
+                }
+                
+                <!-- Button Image Preview -->
+                @if (buttonImagePreview()) {
+                  <div class="mt-3 text-center">
+                    <p class="text-muted small mb-2">Vista previa de la imagen del botón:</p>
+                    <img 
+                      [src]="buttonImagePreview()" 
+                      alt="Button image preview" 
+                      class="preview-image"
+                      style="max-height: 150px;"
+                      (error)="buttonImagePreview.set('')">
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLORS -->
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-header" style="background-color: #7D2424; color: white;">
+            <h5 class="mb-0"><i class="bi bi-palette me-2"></i>Colores</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <!-- Primary Color -->
+              <div class="col-md-6 col-lg-3">
+                <label for="primaryColor" class="form-label fw-bold">
+                  Color Primario <span class="text-danger">*</span>
+                </label>
+                <div class="d-flex gap-2 align-items-center">
+                  <input 
+                    type="color" 
+                    class="form-control form-control-color" 
+                    id="primaryColor" 
+                    formControlName="primaryColor"
+                    [class.is-invalid]="isFieldInvalid('primaryColor')">
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    formControlName="primaryColor"
+                    placeholder="#7D2424"
+                    [class.is-invalid]="isFieldInvalid('primaryColor')">
+                </div>
+                @if (isFieldInvalid('primaryColor')) {
+                  <div class="invalid-feedback d-block">{{ getFieldError('primaryColor') }}</div>
+                }
+              </div>
+
+              <!-- Secondary Color -->
+              <div class="col-md-6 col-lg-3">
+                <label for="secondaryColor" class="form-label fw-bold">
+                  Color Secundario <span class="text-danger">*</span>
+                </label>
+                <div class="d-flex gap-2 align-items-center">
+                  <input 
+                    type="color" 
+                    class="form-control form-control-color" 
+                    id="secondaryColor" 
+                    formControlName="secondaryColor"
+                    [class.is-invalid]="isFieldInvalid('secondaryColor')">
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    formControlName="secondaryColor"
+                    placeholder="#5A4A42"
+                    [class.is-invalid]="isFieldInvalid('secondaryColor')">
+                </div>
+                @if (isFieldInvalid('secondaryColor')) {
+                  <div class="invalid-feedback d-block">{{ getFieldError('secondaryColor') }}</div>
+                }
+              </div>
+
+              <!-- Tertiary Color -->
+              <div class="col-md-6 col-lg-3">
+                <label for="tertiaryColor" class="form-label fw-bold">
+                  Color Terciario <span class="text-muted">(opcional)</span>
+                </label>
+                <div class="d-flex gap-2 align-items-center">
+                  <input 
+                    type="color" 
+                    class="form-control form-control-color" 
+                    id="tertiaryColor" 
+                    formControlName="tertiaryColor"
+                    [class.is-invalid]="isFieldInvalid('tertiaryColor')">
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    formControlName="tertiaryColor"
+                    placeholder="#C9A96E"
+                    [class.is-invalid]="isFieldInvalid('tertiaryColor')">
+                </div>
+                @if (isFieldInvalid('tertiaryColor')) {
+                  <div class="invalid-feedback d-block">{{ getFieldError('tertiaryColor') }}</div>
+                }
+              </div>
+
+              <!-- Text Color -->
+              <div class="col-md-6 col-lg-3">
+                <label for="textColor" class="form-label fw-bold">
+                  Color de Texto <span class="text-muted">(opcional)</span>
+                </label>
+                <div class="d-flex gap-2 align-items-center">
+                  <input 
+                    type="color" 
+                    class="form-control form-control-color" 
+                    id="textColor" 
+                    formControlName="textColor"
+                    [class.is-invalid]="isFieldInvalid('textColor')">
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    formControlName="textColor"
+                    placeholder="#000000"
+                    [class.is-invalid]="isFieldInvalid('textColor')">
+                </div>
+                @if (isFieldInvalid('textColor')) {
+                  <div class="invalid-feedback d-block">{{ getFieldError('textColor') }}</div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONFIGURATION -->
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-header" style="background-color: #7D2424; color: white;">
+            <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Configuración</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <!-- Font Family -->
+              <div class="col-md-4">
+                <label for="fontFamily" class="form-label fw-bold">
+                  Fuente Tipográfica <span class="text-muted">(opcional)</span>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="fontFamily" 
+                  formControlName="fontFamily"
+                  placeholder="Ej: 'Roboto', sans-serif"
+                  [class.is-invalid]="isFieldInvalid('fontFamily')">
+                @if (isFieldInvalid('fontFamily')) {
+                  <div class="invalid-feedback">{{ getFieldError('fontFamily') }}</div>
+                }
+              </div>
+
+              <!-- Popularity Score -->
+              <div class="col-md-4">
+                <label for="popularityScore" class="form-label fw-bold">
+                  Puntuación de Popularidad <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="popularityScore" 
+                  formControlName="popularityScore"
+                  min="0"
+                  max="10000"
+                  [class.is-invalid]="isFieldInvalid('popularityScore')">
+                @if (isFieldInvalid('popularityScore')) {
+                  <div class="invalid-feedback">{{ getFieldError('popularityScore') }}</div>
+                }
+              </div>
+
+              <!-- Release Date -->
+              <div class="col-md-4">
+                <label for="releaseDate" class="form-label fw-bold">
+                  Fecha de Lanzamiento <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="releaseDate" 
+                  formControlName="releaseDate"
+                  [class.is-invalid]="isFieldInvalid('releaseDate')">
+                @if (isFieldInvalid('releaseDate')) {
+                  <div class="invalid-feedback">{{ getFieldError('releaseDate') }}</div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-header" style="background-color: #7D2424; color: white;">
+            <h5 class="mb-0"><i class="bi bi-toggles me-2"></i>Opciones</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <!-- Active Status -->
+              <div class="col-md-3">
+                <div class="form-check form-switch">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="isActive" 
+                    formControlName="isActive">
+                  <label class="form-check-label fw-bold" for="isActive">
+                    Activo
+                  </label>
+                </div>
+              </div>
+
+              <!-- Has Type -->
+              <div class="col-md-3">
+                <div class="form-check form-switch">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="hasType" 
+                    formControlName="hasType">
+                  <label class="form-check-label fw-bold" for="hasType">
+                    Tiene Tipos
+                  </label>
+                </div>
+              </div>
+
+              <!-- Has Abilities -->
+              <div class="col-md-3">
+                <div class="form-check form-switch">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="hasAbilities" 
+                    formControlName="hasAbilities">
+                  <label class="form-check-label fw-bold" for="hasAbilities">
+                    Tiene Habilidades
+                  </label>
+                </div>
+              </div>
+
+              <!-- Has Stats -->
+              <div class="col-md-3">
+                <div class="form-check form-switch">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="hasStats" 
+                    formControlName="hasStats">
+                  <label class="form-check-label fw-bold" for="hasStats">
+                    Tiene Estadísticas
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LABELS -->
+        <div class="card mb-4 shadow-sm border-0" formGroupName="labels">
+          <div class="card-header" style="background-color: #7D2424; color: white;">
+            <h5 class="mb-0"><i class="bi bi-tags me-2"></i>Etiquetas</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <!-- Type Label -->
+              <div class="col-md-4">
+                <label for="labelType" class="form-label fw-bold">
+                  Etiqueta Tipo
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="labelType" 
+                  formControlName="type"
+                  placeholder="Ej: Tipo">
+              </div>
+
+              <!-- Abilities Label -->
+              <div class="col-md-4">
+                <label for="labelAbilities" class="form-label fw-bold">
+                  Etiqueta Habilidades
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="labelAbilities" 
+                  formControlName="abilities"
+                  placeholder="Ej: Habilidades">
+              </div>
+
+              <!-- Stats Label -->
+              <div class="col-md-4">
+                <label for="labelStats" class="form-label fw-bold">
+                  Etiqueta Estadísticas
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="labelStats" 
+                  formControlName="stats"
+                  placeholder="Ej: Estadísticas">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STAT LABELS (Dynamic) -->
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #7D2424; color: white;">
+            <h5 class="mb-0"><i class="bi bi-list-ol me-2"></i>Etiquetas de Estadísticas</h5>
+            <button type="button" class="btn btn-sm btn-light" (click)="addStatLabel()">
+              <i class="bi bi-plus-circle me-1"></i>Agregar
+            </button>
+          </div>
+          <div class="card-body" formArrayName="statLabels">
+            @if (statLabelsArray.length === 0) {
+              <p class="text-muted text-center mb-0">
+                No hay etiquetas de estadísticas. Haz clic en "Agregar" para crear una.
+              </p>
+            }
+            
+            @for (statLabel of statLabelsArray.controls; track $index) {
+              <div [formGroupName]="$index" class="row g-2 mb-2 align-items-center">
+                <div class="col-md-5">
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    formControlName="key"
+                    placeholder="Clave (ej: hp)">
+                </div>
+                <div class="col-md-5">
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    formControlName="value"
+                    placeholder="Valor (ej: Puntos de Vida)">
+                </div>
+                <div class="col-md-2">
+                  <button 
+                    type="button" 
+                    class="btn btn-sm btn-danger w-100" 
+                    (click)="removeStatLabel($index)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="d-flex gap-3 justify-content-end">
+          <a routerLink="/" class="btn btn-secondary">
+            <i class="bi bi-x-circle me-2"></i>Cancelar
+          </a>
+          <button 
+            type="submit" 
+            class="btn btn-primary px-4"
+            style="background-color: #7D2424; border-color: #7D2424;"
+            [disabled]="universeForm.invalid || loading()">
+            @if (loading()) {
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Guardando...
+            } @else {
+              <i class="bi bi-check-circle me-2"></i>Crear Universo
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

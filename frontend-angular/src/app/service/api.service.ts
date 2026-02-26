@@ -95,6 +95,13 @@ export class ApiService {
     return this.http.post<any>(`${this.baseUrl}/characters/universe/${slug}`, {}, { params });
   }
 
+  getCharactersByUniverseId(universeId: string, page: number = 1, limit: number = 100): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+    return this.http.post<any>(`${this.baseUrl}/characters/universe/${universeId}`, {}, { params });
+  }
+
   addCharacter(character: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/characters`, character);
   }

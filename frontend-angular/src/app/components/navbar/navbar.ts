@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SearchService } from '../../service/search.service';
 
 @Component({
@@ -20,12 +20,14 @@ import { SearchService } from '../../service/search.service';
 })
 export class Navbar {
   private searchService = inject(SearchService);
+  private router = inject(Router);
   searchInput = signal<string>('');
 
   handleSearch(event: Event): void {
     event.preventDefault();
     const trimmed = this.searchInput().trim();
     this.searchService.setSearchTerm(trimmed);
+    this.router.navigate(['/']);
   }
 
   clearSearch(): void {

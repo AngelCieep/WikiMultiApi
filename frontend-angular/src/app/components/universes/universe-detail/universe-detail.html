@@ -1,0 +1,232 @@
+<div *ngIf="loading()" class="container my-5">
+  <div class="text-center">
+    <div class="spinner-border" style="color: #7D2424;" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3" style="color: #5A4A42;">Cargando universo...</p>
+  </div>
+</div>
+
+<div *ngIf="error()" class="container my-5">
+  <div class="alert alert-danger d-flex align-items-center" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <div>
+      <strong>Error:</strong> {{ error() }}
+    </div>
+  </div>
+  <a routerLink="/" class="btn btn-primary">
+    <i class="bi bi-house-fill me-2"></i>Volver al inicio
+  </a>
+</div>
+
+<div *ngIf="!loading() && !error() && universe()" class="mb-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="container mt-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/" class="text-decoration-none" [style.color]="universe()?.primaryColor || '#7D2424'">
+          <i class="bi bi-house-fill me-1"></i>Inicio
+        </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">{{ universe()?.name }}</li>
+    </ol>
+  </nav>
+
+  <!-- Hero Section with Background -->
+  <div 
+    class="position-relative overflow-hidden"
+    [style.background-image]="universe()?.backgroundImage ? 'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(' + universe()?.backgroundImage + ')' : 'linear-gradient(135deg, ' + (universe()?.primaryColor || '#7D2424') + ' 0%, ' + (universe()?.secondaryColor || '#5A4A42') + ' 100%)'"
+    [style.background-size]="'cover'"
+    [style.background-position]="'center'"
+    style="min-height: 350px;"
+  >
+    <div class="container py-5">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <img 
+            [src]="universe()?.logo" 
+            [alt]="universe()?.name"
+            class="img-fluid"
+            style="max-height: 250px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));"
+            (error)="$any($event.target).src='https://placehold.co/400x300?text=' + universe()?.name"
+          />
+        </div>
+        <div class="col-md-7 text-white text-end">
+          <h1 
+            class="display-3 fw-bold mb-3" 
+            [style.font-family]="universe()?.fontFamily || 'Crimson Text, Georgia, serif'"
+            style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);"
+          >
+            {{ universe()?.name }}
+          </h1>
+          <p class="lead mb-3" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+            {{ universe()?.description }}
+          </p>
+          <div class="d-flex flex-wrap gap-3 mb-3 justify-content-end">
+            <span class="badge rounded-pill fs-6 px-3 py-2" [style.background-color]="universe()?.primaryColor || '#7D2424'">
+              <i class="bi bi-star-fill me-2"></i>{{ universe()?.popularityScore || 0 }} puntos
+            </span>
+            <span class="badge rounded-pill fs-6 px-3 py-2" [style.background-color]="universe()?.secondaryColor || '#5A4A42'">
+              <i class="bi bi-calendar-event me-2"></i>{{ universe()?.releaseDate | date:'yyyy' }}
+            </span>
+            <span class="badge rounded-pill fs-6 px-3 py-2" [style.background-color]="universe()?.isActive ? '#28a745' : '#dc3545'">
+              <i [class]="universe()?.isActive ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'" class="me-2"></i>
+              {{ universe()?.isActive ? 'Activo' : 'Inactivo' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="container my-5">
+    <!-- Success Message -->
+    <div *ngIf="successMessage()" class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      {{ successMessage() }}
+      <button type="button" class="btn-close" (click)="successMessage.set(null)"></button>
+    </div>
+
+    <!-- Action Toggle -->
+    <div class="mb-4 d-flex justify-content-end gap-2">
+      <div class="form-check form-switch d-flex align-items-center gap-3" (click)="toggleUniverseStatus()" style="cursor: pointer;">
+        <label class="form-check-label fw-bold" [style.color]="universe()?.primaryColor || '#7D2424'" style="cursor: pointer; font-size: 1rem;">
+          @if (loadingToggle()) {
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Procesando...
+          } @else {
+            <i [class]="universe()?.isActive ? 'bi bi-toggle-on' : 'bi bi-toggle-off'" class="me-2" style="font-size: 1.2rem;"></i>
+            {{ universe()?.isActive ? 'Universo Activo' : 'Universo Inactivo' }}
+          }
+        </label>
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          role="switch" 
+          [checked]="universe()?.isActive"
+          [disabled]="loadingToggle()"
+          style="cursor: pointer; width: 4rem; height: 2rem;"
+        />
+      </div>
+    </div>
+
+    <!-- Characters Section -->
+    <div class="row">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm mb-4">
+          <div 
+            class="card-header text-white d-flex justify-content-between align-items-center"
+            [style.background-color]="universe()?.primaryColor || '#7D2424'"
+          >
+            <h3 class="mb-0" [style.font-family]="universe()?.fontFamily || 'Crimson Text, Georgia, serif'">
+              <i class="bi bi-people-fill me-2"></i>Personajes
+            </h3>
+            <span class="badge bg-light" [style.color]="universe()?.primaryColor || '#7D2424'">
+              {{ totalItemsChars() || characters().length }}
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="loadingCharacters()" class="text-center py-4">
+          <div class="spinner-border spinner-border-sm" [style.color]="universe()?.primaryColor || '#7D2424'" role="status">
+            <span class="visually-hidden">Cargando personajes...</span>
+          </div>
+        </div>
+
+        <div *ngIf="!loadingCharacters() && characters().length === 0" class="text-center py-5" style="color: #5A4A42;">
+          <i class="bi bi-inbox display-4 d-block mb-3"></i>
+          <p class="lead">No hay personajes registrados en este universo.</p>
+        </div>
+
+        <div *ngIf="!loadingCharacters() && characters().length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+          <div *ngFor="let character of characters()" class="col">
+            <div 
+              class="card h-100 shadow-sm border-0 hover-card" 
+              (click)="goToCharacter(character._id)"
+              style="cursor: pointer;"
+            >
+              <div 
+                class="position-relative overflow-hidden"
+                style="height: 280px;"
+                [style.background-color]="universe()?.secondaryColor || '#5A4A42'"
+              >
+                <img 
+                  [src]="character.image" 
+                  [alt]="character.name"
+                  class="card-img-top position-absolute top-50 start-50 translate-middle"
+                  style="max-height: 100%; max-width: 100%; object-fit: cover;"
+                  (error)="$any($event.target).src='https://placehold.co/400x500?text=' + character.name"
+                />
+              </div>
+              <div class="card-body">
+                <h5 
+                  class="card-title fw-bold mb-2" 
+                  [style.color]="universe()?.primaryColor || '#7D2424'"
+                  [style.font-family]="universe()?.fontFamily || 'Crimson Text, Georgia, serif'"
+                >
+                  {{ character.name }}
+                </h5>
+                <p class="card-text text-muted small mb-2">
+                  <i class="bi bi-award me-1"></i>{{ character.title }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span 
+                    class="badge rounded-pill" 
+                    [style.background-color]="character.booleanField ? '#28a745' : '#6c757d'"
+                  >
+                    <i [class]="character.booleanField ? 'bi bi-check-circle-fill' : 'bi bi-circle'" class="me-1"></i>
+                    {{ character.booleanField ? 'Disponible' : 'Bloqueado' }}
+                  </span>
+                  <small class="text-muted">
+                    <i class="bi bi-eye-fill me-1"></i>{{ character.views || 0 }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <nav *ngIf="!loadingCharacters() && totalPagesChars() > 1" aria-label="Paginación de personajes" class="mt-4">
+          <ul class="pagination justify-content-center pagination-sm">
+            <!-- Previous Button -->
+            <li class="page-item" [class.disabled]="!hasPrevPageChars()">
+              <button 
+                class="page-link" 
+                (click)="prevPageChars()" 
+                [disabled]="!hasPrevPageChars()"
+                [style.color]="universe()?.primaryColor || '#7D2424'"
+                aria-label="Anterior"
+              >
+                <i class="bi bi-chevron-left"></i>
+                <span class="ms-1">Anterior</span>
+              </button>
+            </li>
+            
+            <!-- Next Button -->
+            <li class="page-item" [class.disabled]="!hasNextPageChars()">
+              <button 
+                class="page-link" 
+                (click)="nextPageChars()" 
+                [disabled]="!hasNextPageChars()"
+                [style.color]="universe()?.primaryColor || '#7D2424'"
+                aria-label="Siguiente"
+              >
+                <span class="me-1">Siguiente</span>
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+          </ul>
+          
+          <!-- Pagination Info -->
+          <div class="text-center small mt-2" style="color: #5A4A42;">
+            <i class="bi bi-info-circle me-1" [style.color]="universe()?.primaryColor || '#C9A96E'"></i>
+            Página {{ currentPageChars() }} de {{ totalPagesChars() }}
+            <span *ngIf="totalItemsChars() > 0"> • {{ totalItemsChars() }} personajes en total</span>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

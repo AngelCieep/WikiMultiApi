@@ -19,6 +19,7 @@ export class Homepage {
   universos = signal<UniverseCard[]>([]);
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
+  loadingToggleId = signal<string | null>(null);
   
   // Search signal from service
   searchTerm = this.searchService.searchTerm;
@@ -145,5 +146,39 @@ export class Homepage {
       this.currentPage.set(this.currentPage() - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  toggleUniverseStatus(event: Event, universo: UniverseCard): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const action = universo.isActive ? 'desactivar' : 'activar';
+    const confirmMessage = `¿Estás seguro de que deseas ${action} "${universo.name}"?`;
+    
+    if (!confirm(confirmMessage)) return;
+
+    this.loadingToggleId.set(universo._id);
+
+    const updateData = {
+      ...universo,
+      isActive: !universo.isActive
+    };
+
+    this.apiService.updateUniverse(universo._id, updateData).subscribe({
+      next: (response) => {
+        // Update the universe in the list
+        const currentUniversos = this.universos();
+        const updatedUniversos = currentUniversos.map(u => 
+          u._id === universo._id ? { ...u, isActive: !u.isActive } : u
+        );
+        this.universos.set(updatedUniversos);
+        this.loadingToggleId.set(null);
+      },
+      error: (err) => {
+        this.error.set(err.error?.error || `Error al ${action} el universo`);
+        this.loadingToggleId.set(null);
+        console.error('Error al actualizar universo:', err);
+      }
+    });
   }
 }
