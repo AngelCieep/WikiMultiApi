@@ -112,28 +112,7 @@ universCtrl.updateUniverse = async (req, res) => {
     .catch((err) => res.status(400).json({status: err}));
 };
 
-//Actualizar solo el popularityScore de un universo
-universCtrl.updatePopularityScore = async (req, res) => {
-    const { popularityScore } = req.body;
-    if (popularityScore === undefined || typeof popularityScore !== 'number' || popularityScore < 0 || popularityScore > 100) {
-        return res.status(400).json({ status: 'popularityScore debe ser un número entre 0 y 100' });
-    }
-    await Universe.findByIdAndUpdate(req.params.id, { popularityScore }, { new: true })
-    .then((data) => {
-        if (data != null)
-            res.status(200).json({ status: data });
-        else
-            res.status(404).json({ status: 'Universo no encontrado' });
-    })
-    .catch((err) => res.status(400).json({ status: err }));
-};
 
-//Insertar múltiples universos
-universCtrl.addUniverses = async (req, res) => {
-    await Universe.insertMany(req.body)
-    .then((data) => res.status(201).json({status: data}))
-    .catch((err) => res.status(400).json({status: err}));
-};
 
 //Eliminar un universo por ID (y todos sus personajes)
 universCtrl.deleteUniverse = async (req, res) => {
