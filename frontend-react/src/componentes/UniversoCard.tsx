@@ -1,11 +1,10 @@
-export default function UniversoCard({ universo }: {
-  universo: {
-    _id: string;
-    name: string;
-    imagenBoton?: string;
-    logo?: string;
-  }
-}) {
+import type { UniversoCard } from '../types';
+
+interface UniversoCardProps {
+  universo: UniversoCard;
+}
+
+export default function UniversoCard({ universo }: UniversoCardProps) {
   const placeholder = 'https://placehold.co/300x180?text=Universo';
 
   return (

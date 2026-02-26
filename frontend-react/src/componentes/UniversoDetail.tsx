@@ -1,7 +1,10 @@
 ﻿import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import type { UniversoDetail as IUniversoDetail, PersonajeCard } from '../types';
+import { validateSingleAPIResponse, validateAPIResponse, validateUniversoDetail, validatePersonajeCard } from '../types/validators';
 import PersonajeCardComponent from './PersonajeCard';
+import { Spinner, Alert } from './common';
+import { API_BASE_URL } from '../App';
 
 export default function UniversoDetail() {
   const { id } = useParams<{ id: string }>();
@@ -17,14 +20,19 @@ export default function UniversoDetail() {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetch(`https://backend-wikiapi.vercel.app/api/v1/universes/${id}`)
+    fetch(`${API_BASE_URL}/universes/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
         return res.json();
       })
       .then((data) => {
-        setUniverso(data.status);
-        setLoading(false);
+        try {
+          const validated = validateSingleAPIResponse(data, validateUniversoDetail);
+          setUniverso(validated.status);
+          setLoading(false);
+        } catch (validationError) {
+          throw new Error(`Datos del universo inválidos: ${validationError instanceof Error ? validationError.message : 'Error desconocido'}`);
+        }
       })
       .catch((err: Error) => {
         setError(err.message);
@@ -35,54 +43,49 @@ export default function UniversoDetail() {
   useEffect(() => {
     if (!id) return;
     setLoadingPersonajes(true);
-    fetch(`https://backend-wikiapi.vercel.app/api/v1/characters/universe/${id}`, { method: 'POST' })
+    fetch(`${API_BASE_URL}/characters/universe/${id}`, { method: 'POST' })
       .then((res) => {
         if (!res.ok) return null;
         return res.json();
       })
       .then((data) => {
-        if (data && Array.isArray(data.status)) {
-          // Ordenar personajes según sortBy y order
-          const sorted = [...data.status].sort((a, b) => {
-            let comparison = 0;
+        if (data) {
+          try {
+            const validated = validateAPIResponse(data, validatePersonajeCard);
+            // Ordenar personajes según sortBy y order
+            const sorted = [...validated.status].sort((a, b) => {
+              let comparison = 0;
+              
+              if (sortBy === 'name') {
+                comparison = a.name.localeCompare(b.name);
+              } else if (sortBy === 'views') {
+                comparison = (a.views || 0) - (b.views || 0);
+              } else if (sortBy === 'createdAt' || sortBy === 'updatedAt') {
+                const dateA = new Date(a[sortBy] || 0).getTime();
+                const dateB = new Date(b[sortBy] || 0).getTime();
+                comparison = dateA - dateB;
+              }
+              
+              return order === 'asc' ? comparison : -comparison;
+            });
             
-            if (sortBy === 'name') {
-              comparison = a.name.localeCompare(b.name);
-            } else if (sortBy === 'views') {
-              comparison = (a.views || 0) - (b.views || 0);
-            } else if (sortBy === 'createdAt' || sortBy === 'updatedAt') {
-              const dateA = new Date(a[sortBy] || 0).getTime();
-              const dateB = new Date(b[sortBy] || 0).getTime();
-              comparison = dateA - dateB;
-            }
-            
-            return order === 'asc' ? comparison : -comparison;
-          });
-          
-          setPersonajes(sorted);
+            setPersonajes(sorted);
+          } catch (validationError) {
+            console.error('Error validando personajes:', validationError);
+            setPersonajes([]);
+          }
         }
         setLoadingPersonajes(false);
       })
       .catch(() => setLoadingPersonajes(false));
   }, [id, sortBy, order]);
 
-  if (loading)
-    return (
-      <div className="d-flex flex-column align-items-center justify-content-center py-5 gap-3">
-        <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-        <p className="text-muted">Cargando universo...</p>
-      </div>
-    );
+  if (loading) return <Spinner size="lg" message="Cargando universo..." />;
 
   if (error)
     return (
       <div className="container my-5">
-        <div className="alert alert-danger d-flex align-items-center gap-2">
-          <i className="bi bi-exclamation-triangle-fill fs-4" />
-          <div><strong>Error:</strong> {error}</div>
-        </div>
+        <Alert type="danger" title="Error:" message={error} />
         <a href="/" className="btn btn-outline-dark">
           <i className="bi bi-house me-2" />Inicio
         </a>
@@ -92,10 +95,7 @@ export default function UniversoDetail() {
   if (!universo)
     return (
       <div className="container my-5">
-        <div className="alert alert-warning d-flex align-items-center gap-2">
-          <i className="bi bi-question-circle-fill fs-4" />
-          Universo no encontrado.
-        </div>
+        <Alert type="warning" message="Universo no encontrado." />
         <a href="/" className="btn btn-outline-dark">
           <i className="bi bi-house me-2" />Inicio
         </a>
@@ -213,10 +213,7 @@ export default function UniversoDetail() {
         )}
 
         {!loadingPersonajes && personajes.length === 0 && (
-          <div className="alert alert-info d-flex align-items-center gap-2">
-            <i className="bi bi-info-circle-fill fs-5" />
-            No hay personajes registrados para este universo.
-          </div>
+          <Alert type="info" message="No hay personajes registrados para este universo." />
         )}
 
         {!loadingPersonajes && personajes.length > 0 && (

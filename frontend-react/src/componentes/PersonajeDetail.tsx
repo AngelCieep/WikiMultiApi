@@ -1,6 +1,9 @@
 ﻿import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import type { PersonajeDetail as IPersonajeDetail } from '../types';
+import { validateSingleAPIResponse, validatePersonajeDetail } from '../types/validators';
+import { Spinner, Alert } from './common';
+import { API_BASE_URL } from '../App';
 
 export default function PersonajeDetail() {
   const { id, universeId } = useParams<{ id: string; universeId: string }>();
@@ -16,7 +19,7 @@ export default function PersonajeDetail() {
     const abortController = new AbortController();
     setLoading(true);
     
-    fetch(`https://backend-wikiapi.vercel.app/api/v1/characters/universe/${universeId}/character/${id}`, {
+    fetch(`${API_BASE_URL}/characters/universe/${universeId}/character/${id}`, {
       signal: abortController.signal
     })
       .then((res) => {
@@ -30,7 +33,14 @@ export default function PersonajeDetail() {
         return res.json();
       })
       .then((data) => {
-        if (data) setPersonaje(data.status);
+        if (data) {
+          try {
+            const validated = validateSingleAPIResponse(data, validatePersonajeDetail);
+            setPersonaje(validated.status);
+          } catch (validationError) {
+            throw new Error(`Datos del personaje inválidos: ${validationError instanceof Error ? validationError.message : 'Error desconocido'}`);
+          }
+        }
         setLoading(false);
       })
       .catch((err: Error) => {
@@ -43,23 +53,12 @@ export default function PersonajeDetail() {
     return () => abortController.abort();
   }, [id, universeId]);
 
-  if (loading)
-    return (
-      <div className="d-flex flex-column align-items-center justify-content-center py-5 gap-3">
-        <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-        <p className="text-muted">Cargando personaje...</p>
-      </div>
-    );
+  if (loading) return <Spinner size="lg" message="Cargando personaje..." />;
 
   if (error)
     return (
       <div className="container my-5">
-        <div className="alert alert-danger d-flex align-items-center gap-2">
-          <i className="bi bi-exclamation-triangle-fill fs-4" />
-          <div><strong>Error:</strong> {error}</div>
-        </div>
+        <Alert type="danger" title="Error:" message={error} />
         <a href="/" className="btn btn-outline-dark">
           <i className="bi bi-house me-2" />Inicio
         </a>
@@ -69,10 +68,7 @@ export default function PersonajeDetail() {
   if (notFound)
     return (
       <div className="container my-5">
-        <div className="alert alert-warning d-flex align-items-center gap-2">
-          <i className="bi bi-question-circle-fill fs-4" />
-          Personaje no encontrado.
-        </div>
+        <Alert type="warning" message="Personaje no encontrado." />
         <a href="/" className="btn btn-outline-dark">
           <i className="bi bi-house me-2" />Inicio
         </a>

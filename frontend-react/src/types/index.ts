@@ -8,6 +8,8 @@ export interface PersonajeCard {
   booleanField: boolean;
   universeId?: string;
   views?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface DescriptionSection {

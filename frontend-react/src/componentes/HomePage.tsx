@@ -1,6 +1,9 @@
 ﻿import { useEffect, useState } from 'react';
 import type { UniversoCard as IUniversoCard } from '../types';
+import { validateAPIResponse, validateUniversoCard } from '../types/validators';
 import UniversoCardComponent from './UniversoCard';
+import { Spinner, Alert } from './common';
+import { API_BASE_URL } from '../App';
 
 export default function HomePage() {
   const [universos, setUniversos] = useState<IUniversoCard[]>([]);
@@ -21,16 +24,20 @@ export default function HomePage() {
     // Si no hay búsqueda, usar GET filtered con ordenamiento
     if (searchTrimmed === '') {
       setLoading(true);
-      fetch(`https://backend-wikiapi.vercel.app/api/v1/universes/filtered?sortBy=${sortBy}&order=${order}&limit=100`)
+      fetch(`${API_BASE_URL}/universes/filtered?sortBy=${sortBy}&order=${order}&limit=100`)
         .then((res) => {
           if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
           return res.json();
         })
         .then((data) => {
-          const list = Array.isArray(data.status) ? data.status : Array.isArray(data) ? data : [];
-          setUniversos(list);
-          setLoading(false);
-          setError(null);
+          try {
+            const validated = validateAPIResponse(data, validateUniversoCard);
+            setUniversos(validated.status);
+            setLoading(false);
+            setError(null);
+          } catch (validationError) {
+            throw new Error(`Datos inválidos: ${validationError instanceof Error ? validationError.message : 'Error desconocido'}`);
+          }
         })
         .catch((err: Error) => {
           setError(err.message);
@@ -39,8 +46,7 @@ export default function HomePage() {
     } else {
       // Si hay búsqueda, usar POST search
       setLoading(true);
-      console.log('Enviando búsqueda:', searchTrimmed);
-      fetch('https://backend-wikiapi.vercel.app/api/v1/universes/search?limit=100', {
+      fetch(`${API_BASE_URL}/universes/search?limit=100`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,23 +54,23 @@ export default function HomePage() {
         body: JSON.stringify({ query: searchTrimmed }),
       })
         .then(async (res) => {
-          console.log('Respuesta recibida:', res.status);
           if (!res.ok) {
             const errorData = await res.json().catch(() => ({ error: 'Error del servidor' }));
-            console.error('Error del backend:', errorData);
             throw new Error(errorData.error || `Error del servidor: ${res.status}`);
           }
           return res.json();
         })
         .then((data) => {
-          console.log('Datos recibidos:', data);
-          const list = Array.isArray(data.status) ? data.status : [];
-          setUniversos(list);
-          setLoading(false);
-          setError(null);
+          try {
+            const validated = validateAPIResponse(data, validateUniversoCard);
+            setUniversos(validated.status);
+            setLoading(false);
+            setError(null);
+          } catch (validationError) {
+            throw new Error(`Datos de búsqueda inválidos: ${validationError instanceof Error ? validationError.message : 'Error desconocido'}`);
+          }
         })
         .catch((err: Error) => {
-          console.error('Error completo:', err);
           setError(err.message);
           setLoading(false);
         });
@@ -196,31 +202,24 @@ export default function HomePage() {
           </div>
         </div>
 
-        {loading && (
-          <div className="d-flex flex-column align-items-center py-5 gap-3">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Cargando...</span>
-            </div>
-            <p className="text-muted">Cargando universos...</p>
-          </div>
-        )}
+        {loading && <Spinner message="Cargando universos..." />}
 
         {error && (
-          <div className="alert alert-danger d-flex align-items-center gap-2">
-            <i className="bi bi-exclamation-triangle-fill fs-5" />
-            <div>
-              <strong>Error de conexión:</strong> {error}
-              <br />
-              <small>Comprueba que la API esté activa en <code>https://backend-wikiapi.vercel.app/api/v1</code></small>
-            </div>
-          </div>
+          <Alert 
+            type="danger" 
+            title="Error de conexión:" 
+            message={error}
+          >
+            <br />
+            <small>Comprueba que la API esté activa en <code>{API_BASE_URL}</code></small>
+          </Alert>
         )}
 
         {!loading && !error && universos.length === 0 && (
-          <div className="alert alert-info d-flex align-items-center gap-2">
-            <i className="bi bi-info-circle-fill fs-5" />
-            No se encontraron universos{searchTerm ? ` para "${searchTerm}"` : ''}.
-          </div>
+          <Alert 
+            type="info" 
+            message={`No se encontraron universos${searchTerm ? ` para "${searchTerm}"` : ''}.`}
+          />
         )}
 
         {!loading && !error && universos.length > 0 && (

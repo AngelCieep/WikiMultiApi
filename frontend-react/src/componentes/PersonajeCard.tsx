@@ -1,14 +1,10 @@
-export default function PersonajeCard({ personaje }: {
-  personaje: {
-    _id: string;
-    name: string;
-    title?: string;
-    image?: string;
-    booleanField: boolean;
-    universeId?: string;
-    views?: number;
-  }
-}) {
+import type { PersonajeCard } from '../types';
+
+interface PersonajeCardProps {
+  personaje: PersonajeCard;
+}
+
+export default function PersonajeCard({ personaje }: PersonajeCardProps) {
   const placeholder = 'https://placehold.co/300x200?text=Sin+imagen';
 
   return (

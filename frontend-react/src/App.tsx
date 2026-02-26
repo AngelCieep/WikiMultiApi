@@ -9,6 +9,9 @@ import PersonajeDetail from './componentes/PersonajeDetail';
 import UniversoDetail from './componentes/UniversoDetail';
 import FetchingBase from './componentes/FetchingBase';
 
+// Configuración global de la API
+export const API_BASE_URL = 'https://backend-wikiapi.vercel.app/api/v1';
+
 function App() {
   return (
     <BrowserRouter>
