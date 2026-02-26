@@ -11,6 +11,8 @@ export default function UniversoDetail() {
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingPersonajes, setLoadingPersonajes] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<string>('createdAt');
+  const [order, setOrder] = useState<string>('desc');
 
   useEffect(() => {
     if (!id) return;
@@ -39,11 +41,30 @@ export default function UniversoDetail() {
         return res.json();
       })
       .then((data) => {
-        if (data && Array.isArray(data.status)) setPersonajes(data.status);
+        if (data && Array.isArray(data.status)) {
+          // Ordenar personajes según sortBy y order
+          const sorted = [...data.status].sort((a, b) => {
+            let comparison = 0;
+            
+            if (sortBy === 'name') {
+              comparison = a.name.localeCompare(b.name);
+            } else if (sortBy === 'views') {
+              comparison = (a.views || 0) - (b.views || 0);
+            } else if (sortBy === 'createdAt' || sortBy === 'updatedAt') {
+              const dateA = new Date(a[sortBy] || 0).getTime();
+              const dateB = new Date(b[sortBy] || 0).getTime();
+              comparison = dateA - dateB;
+            }
+            
+            return order === 'asc' ? comparison : -comparison;
+          });
+          
+          setPersonajes(sorted);
+        }
         setLoadingPersonajes(false);
       })
       .catch(() => setLoadingPersonajes(false));
-  }, [id]);
+  }, [id, sortBy, order]);
 
   if (loading)
     return (
@@ -150,6 +171,39 @@ export default function UniversoDetail() {
             <span className="badge bg-primary rounded-pill px-3 py-2">{personajes.length}</span>
           )}
         </div>
+
+        {!loadingPersonajes && personajes.length > 0 && (
+          <div className="row g-2 mb-3">
+            <div className="col-md-6">
+              <label className="form-label small text-muted mb-1">
+                <i className="bi bi-sort-down me-1" />Ordenar por
+              </label>
+              <select 
+                className="form-select form-select-sm" 
+                value={sortBy} 
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="createdAt">Fecha de creación</option>
+                <option value="updatedAt">Última actualización</option>
+                <option value="views">Vistas</option>
+                <option value="name">Nombre</option>
+              </select>
+            </div>
+            <div className="col-md-6">
+              <label className="form-label small text-muted mb-1">
+                <i className="bi bi-arrow-down-up me-1" />Orden
+              </label>
+              <select 
+                className="form-select form-select-sm" 
+                value={order} 
+                onChange={(e) => setOrder(e.target.value)}
+              >
+                <option value="desc">Descendente</option>
+                <option value="asc">Ascendente</option>
+              </select>
+            </div>
+          </div>
+        )}
 
         {loadingPersonajes && (
           <div className="d-flex align-items-center gap-2 text-muted py-3">

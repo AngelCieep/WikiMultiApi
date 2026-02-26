@@ -7,41 +7,99 @@ export default function HomePage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [paginaActual, setPaginaActual] = useState<number>(1);
+  const [sortBy, setSortBy] = useState<string>('createdAt');
+  const [order, setOrder] = useState<string>('desc');
 
   const ITEMS_POR_PAGINA = 24;
 
+  // Efecto para cargar universos (GET filtered o POST search)
   useEffect(() => {
-    fetch('https://backend-wikiapi.vercel.app/api/v1/universes')
-      .then((res) => {
-        if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
-        return res.json();
+    const searchTrimmed = searchTerm.trim();
+    
+    // Si no hay búsqueda, usar GET filtered con ordenamiento
+    if (searchTrimmed === '') {
+      setLoading(true);
+      fetch(`https://backend-wikiapi.vercel.app/api/v1/universes/filtered?sortBy=${sortBy}&order=${order}&limit=100`)
+        .then((res) => {
+          if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
+          return res.json();
+        })
+        .then((data) => {
+          const list = Array.isArray(data.status) ? data.status : Array.isArray(data) ? data : [];
+          setUniversos(list);
+          setLoading(false);
+          setError(null);
+        })
+        .catch((err: Error) => {
+          setError(err.message);
+          setLoading(false);
+        });
+    } else {
+      // Si hay búsqueda, usar POST search
+      setLoading(true);
+      console.log('Enviando búsqueda:', searchTrimmed);
+      fetch('https://backend-wikiapi.vercel.app/api/v1/universes/search?limit=100', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: searchTrimmed }),
       })
-      .then((data) => {
-        const list = Array.isArray(data.status) ? data.status : Array.isArray(data) ? data : [];
-        setUniversos(list);
-        setLoading(false);
-      })
-      .catch((err: Error) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
+        .then(async (res) => {
+          console.log('Respuesta recibida:', res.status);
+          if (!res.ok) {
+            const errorData = await res.json().catch(() => ({ error: 'Error del servidor' }));
+            console.error('Error del backend:', errorData);
+            throw new Error(errorData.error || `Error del servidor: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log('Datos recibidos:', data);
+          const list = Array.isArray(data.status) ? data.status : [];
+          setUniversos(list);
+          setLoading(false);
+          setError(null);
+        })
+        .catch((err: Error) => {
+          console.error('Error completo:', err);
+          setError(err.message);
+          setLoading(false);
+        });
+    }
+  }, [searchTerm, sortBy, order]);
 
-  const universosFiltrados = universos.filter((u) =>
-    u.name.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  // Handler para enviar búsqueda
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedSearch = busqueda.trim();
+    // Si el campo está vacío después del trim, resetear a mostrar todos
+    if (trimmedSearch === '') {
+      setSearchTerm('');
+      setBusqueda('');
+    } else {
+      setSearchTerm(trimmedSearch);
+    }
+  };
+
+  // Limpiar búsqueda
+  const handleClearSearch = () => {
+    setBusqueda('');
+    setSearchTerm('');
+  };
 
   // Cálculos de paginación
-  const totalPaginas = Math.ceil(universosFiltrados.length / ITEMS_POR_PAGINA);
+  const totalPaginas = Math.ceil(universos.length / ITEMS_POR_PAGINA);
   const indiceInicio = (paginaActual - 1) * ITEMS_POR_PAGINA;
   const indiceFin = indiceInicio + ITEMS_POR_PAGINA;
-  const universosPaginados = universosFiltrados.slice(indiceInicio, indiceFin);
+  const universosPaginados = universos.slice(indiceInicio, indiceFin);
 
   // Resetear página al buscar
   useEffect(() => {
     setPaginaActual(1);
-  }, [busqueda]);
+  }, [searchTerm]);
 
   const apiOk = !error;
 
@@ -74,24 +132,67 @@ export default function HomePage() {
 
       <div className="container py-4">
         <div className="row justify-content-center mb-4">
-          <div className="col-md-6">
-            <div className="input-group input-group-lg shadow-sm">
-              <span className="input-group-text bg-white border-end-0">
-                <i className="bi bi-search text-muted" />
-              </span>
-              <input
-                type="search"
-                className="form-control border-start-0"
-                placeholder="Buscar universo..."
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
-              {busqueda && (
-                <button className="btn btn-outline-secondary" onClick={() => setBusqueda('')}>
-                  <i className="bi bi-x-lg" />
+          <div className="col-md-8">
+            <form onSubmit={handleSearch}>
+              <div className="input-group input-group-lg shadow-sm mb-3">
+                <span className="input-group-text bg-white border-end-0">
+                  <i className="bi bi-search text-muted" />
+                </span>
+                <input
+                  type="search"
+                  className="form-control border-start-0"
+                  placeholder="Buscar universo... (presiona Enter)"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                />
+                {busqueda && (
+                  <button 
+                    type="button" 
+                    className="btn btn-outline-secondary" 
+                    onClick={handleClearSearch}
+                  >
+                    <i className="bi bi-x-lg" />
+                  </button>
+                )}
+                <button type="submit" className="btn btn-primary">
+                  <i className="bi bi-search" />
                 </button>
-              )}
-            </div>
+              </div>
+            </form>
+            
+            {searchTerm === '' && (
+              <div className="row g-2">
+                <div className="col-md-6">
+                  <label className="form-label small text-muted mb-1">
+                    <i className="bi bi-sort-down me-1" />Ordenar por
+                  </label>
+                  <select 
+                    className="form-select" 
+                    value={sortBy} 
+                    onChange={(e) => setSortBy(e.target.value)}
+                  >
+                    <option value="createdAt">Fecha de creación</option>
+                    <option value="updatedAt">Última actualización</option>
+                    <option value="popularityScore">Popularidad</option>
+                    <option value="name">Nombre</option>
+                    <option value="releaseDate">Fecha de lanzamiento</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label small text-muted mb-1">
+                    <i className="bi bi-arrow-down-up me-1" />Orden
+                  </label>
+                  <select 
+                    className="form-select" 
+                    value={order} 
+                    onChange={(e) => setOrder(e.target.value)}
+                  >
+                    <option value="desc">Descendente</option>
+                    <option value="asc">Ascendente</option>
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -115,14 +216,14 @@ export default function HomePage() {
           </div>
         )}
 
-        {!loading && !error && universosFiltrados.length === 0 && (
+        {!loading && !error && universos.length === 0 && (
           <div className="alert alert-info d-flex align-items-center gap-2">
             <i className="bi bi-info-circle-fill fs-5" />
-            No se encontraron universos{busqueda ? ` para "${busqueda}"` : ''}.
+            No se encontraron universos{searchTerm ? ` para "${searchTerm}"` : ''}.
           </div>
         )}
 
-        {!loading && !error && universosFiltrados.length > 0 && (
+        {!loading && !error && universos.length > 0 && (
           <>
             <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3 mb-4">
               {universosPaginados.map((u) => (
