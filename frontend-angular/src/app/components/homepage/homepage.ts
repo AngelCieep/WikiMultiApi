@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, effect } from '@angular/core';
+import { Component, inject, signal, computed, effect, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../service/api.service';
@@ -39,42 +39,57 @@ export class Homepage {
   isSearchMode = computed(() => this.searchTerm().trim() !== '');
 
   constructor() {
-    // Watch for search term changes from navbar
+    // Watch for search term changes - reset to page 1
     effect(() => {
-      const term = this.searchTerm();
-      this.currentPage.set(1);
-      this.loadUniverses();
+      this.searchTerm(); // Track this
+      untracked(() => {
+        this.currentPage.set(1);
+      });
     });
     
-    // Watch for filter changes
+    // Watch for filter changes - reset to page 1 when not searching
     effect(() => {
-      const sort = this.sortBy();
-      const ord = this.order();
-      
-      if (!this.isSearchMode()) {
-        this.currentPage.set(1);
+      this.sortBy();
+      this.order();
+      untracked(() => {
+        const isSearch = this.searchTerm().trim() !== '';
+        if (!isSearch) {
+          this.currentPage.set(1);
+        }
+      });
+    });
+    
+    // Watch for page changes - load data
+    effect(() => {
+      this.currentPage(); // Track page changes
+      untracked(() => {
         this.loadUniverses();
-      }
-    }, { allowSignalWrites: true });
+      });
+    });
   }
 
   private loadUniverses(): void {
     this.loading.set(true);
     this.error.set(null);
     
-    const isSearch = this.isSearchMode();
+    // Read all signals in untracked context to avoid triggering effects
+    const isSearch = untracked(() => this.isSearchMode());
+    const searchTerm = untracked(() => this.searchTerm());
+    const currentPage = untracked(() => this.currentPage());
+    const sortBy = untracked(() => this.sortBy());
+    const order = untracked(() => this.order());
     
     const apiCall = isSearch
       ? this.apiService.searchUniverses(
-          this.searchTerm(),
-          this.currentPage(),
+          searchTerm,
+          currentPage,
           this.itemsPerPage
         )
       : this.apiService.getUniversesFiltered(
-          this.currentPage(),
+          currentPage,
           this.itemsPerPage,
-          this.sortBy(),
-          this.order()
+          sortBy,
+          order
         );
     
     apiCall.subscribe({
@@ -90,7 +105,7 @@ export class Homepage {
           this.totalPages.set(Math.ceil(response.total / this.itemsPerPage));
         } else {
           const itemsCount = response.status?.length || 0;
-          this.totalPages.set(itemsCount < this.itemsPerPage ? 1 : this.currentPage() + 1);
+          this.totalPages.set(itemsCount < this.itemsPerPage ? 1 : currentPage + 1);
         }
         
         this.loading.set(false);
@@ -121,7 +136,6 @@ export class Homepage {
   nextPage(): void {
     if (this.hasNextPage()) {
       this.currentPage.set(this.currentPage() + 1);
-      this.loadUniverses();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
@@ -129,7 +143,6 @@ export class Homepage {
   prevPage(): void {
     if (this.hasPrevPage()) {
       this.currentPage.set(this.currentPage() - 1);
-      this.loadUniverses();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
