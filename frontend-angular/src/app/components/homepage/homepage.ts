@@ -1,7 +1,8 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../service/api.service';
+import { SearchService } from '../../service/search.service';
 import { UniverseCard } from '../../common/interfaces';
 
 @Component({
@@ -12,15 +13,15 @@ import { UniverseCard } from '../../common/interfaces';
 })
 export class Homepage {
   private readonly apiService: ApiService = inject(ApiService);
+  private readonly searchService: SearchService = inject(SearchService);
   
   // Data signals
   universos = signal<UniverseCard[]>([]);
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
   
-  // Search signals
-  searchInput = signal<string>('');
-  searchTerm = signal<string>('');
+  // Search signal from service
+  searchTerm = this.searchService.searchTerm;
   
   // Filter signals
   sortBy = signal<string>('createdAt');
@@ -36,29 +37,25 @@ export class Homepage {
   hasPrevPage = computed(() => this.currentPage() > 1);
   hasNextPage = computed(() => this.currentPage() < this.totalPages());
   isSearchMode = computed(() => this.searchTerm().trim() !== '');
-  pageNumbers = computed(() => {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const pages: number[] = [];
-    
-    // Show max 5 page numbers
-    let start = Math.max(1, current - 2);
-    let end = Math.min(total, start + 4);
-    
-    // Adjust start if we're near the end
-    if (end - start < 4) {
-      start = Math.max(1, end - 4);
-    }
-    
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-    
-    return pages;
-  });
 
   constructor() {
-    this.loadUniverses();
+    // Watch for search term changes from navbar
+    effect(() => {
+      const term = this.searchTerm();
+      this.currentPage.set(1);
+      this.loadUniverses();
+    });
+    
+    // Watch for filter changes
+    effect(() => {
+      const sort = this.sortBy();
+      const ord = this.order();
+      
+      if (!this.isSearchMode()) {
+        this.currentPage.set(1);
+        this.loadUniverses();
+      }
+    }, { allowSignalWrites: true });
   }
 
   private loadUniverses(): void {
@@ -109,52 +106,31 @@ export class Homepage {
     });
   }
   
-  handleSearch(event: Event): void {
-    event.preventDefault();
-    const trimmed = this.searchInput().trim();
-    this.searchTerm.set(trimmed);
-    this.currentPage.set(1);
-    this.loadUniverses();
-  }
-  
   clearSearch(): void {
-    this.searchInput.set('');
-    this.searchTerm.set('');
-    this.currentPage.set(1);
-    this.loadUniverses();
+    this.searchService.clearSearch();
   }
   
   onSortChange(): void {
-    if (!this.isSearchMode()) {
-      this.currentPage.set(1);
-      this.loadUniverses();
-    }
+    // Effect will trigger reload
   }
   
   onOrderChange(): void {
-    if (!this.isSearchMode()) {
-      this.currentPage.set(1);
-      this.loadUniverses();
-    }
+    // Effect will trigger reload
   }
   
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages() && page !== this.currentPage()) {
-      this.currentPage.set(page);
+  nextPage(): void {
+    if (this.hasNextPage()) {
+      this.currentPage.set(this.currentPage() + 1);
       this.loadUniverses();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
   
-  nextPage(): void {
-    if (this.hasNextPage()) {
-      this.goToPage(this.currentPage() + 1);
-    }
-  }
-  
   prevPage(): void {
     if (this.hasPrevPage()) {
-      this.goToPage(this.currentPage() - 1);
+      this.currentPage.set(this.currentPage() - 1);
+      this.loadUniverses();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 }

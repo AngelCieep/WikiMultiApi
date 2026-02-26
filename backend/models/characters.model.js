@@ -30,7 +30,7 @@ const characterSchema = new Schema(
 		// Campos obligatorios proyecto
 		numericField: { type: Number,  required: true },
 		dateField:    { type: Date,    required: true },
-		booleanField: { type: Boolean, required: true },
+		isActive: { type: Boolean, required: true },
 
 		// Contador de visitas
 		views: { type: Number, default: 0 }

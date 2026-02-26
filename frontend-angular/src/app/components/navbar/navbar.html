@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-  <div class="container">
-    <a class="navbar-brand fw-bold fs-4" routerLink="/">
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: #7D2424;">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold fs-4" routerLink="/" style="font-family: 'Crimson Text', Georgia, serif;">
       <i class="bi bi-collection-fill me-2 text-warning"></i>
       WikiMultiApi
     </a>
@@ -16,18 +16,34 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto gap-1">
-        <li class="nav-item">
-          <a
-            class="nav-link px-3 rounded"
-            routerLink="/"
-            routerLinkActive="active bg-secondary"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <i class="bi bi-house-fill me-1"></i>Inicio
-          </a>
-        </li>
-      </ul>
+      <!-- Search Bar -->
+      <div class="row w-100 justify-content-center">
+        <div class="col-10 col-md-8 col-lg-6">
+          <form (ngSubmit)="handleSearch($event)">
+            <div class="input-group input-group-sm">
+              <input
+                type="search"
+                class="form-control border-end-0"
+                placeholder="Buscar universo..."
+                [value]="searchInput()"
+                (input)="searchInput.set($any($event.target).value)"
+              />
+              <button
+                *ngIf="searchInput()"
+                type="button"
+                class="btn btn-outline-light"
+                (click)="clearSearch()"
+                title="Limpiar"
+              >
+                <i class="bi bi-x-lg"></i>
+              </button>
+              <button type="submit" class="btn btn-outline-light">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </nav>

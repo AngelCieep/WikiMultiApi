@@ -1,53 +1,44 @@
+/* Card hover effect */
 .hover-card {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: transform 0.2s;
 }
 
 .hover-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-3px);
 }
 
-/* Pagination styles */
+/* Theme colors for pagination */
 .pagination .page-link {
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.pagination .page-item.disabled .page-link {
-  cursor: not-allowed;
-  opacity: 0.6;
+  color: #7D2424;
+  border-color: #E8D5B7;
 }
 
 .pagination .page-item.active .page-link {
-  font-weight: 600;
+  background-color: #7D2424;
+  border-color: #7D2424;
+  color: white;
 }
 
-.pagination .page-link:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.pagination .page-link:hover:not(.active) {
+  background-color: #F5EFE6;
+  border-color: #7D2424;
+  color: #7D2424;
 }
 
-/* Search bar styles */
-.input-group-lg .form-control:focus {
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-  border-color: #86b7fe;
+/* Button theme */
+.btn-primary {
+  background-color: #7D2424;
+  border-color: #7D2424;
 }
 
-.input-group-text {
-  transition: all 0.2s ease-in-out;
+.btn-primary:hover {
+  background-color: #6B1E1E;
+  border-color: #6B1E1E;
 }
 
-.form-control:focus + .input-group-text,
-.form-control:focus ~ .input-group-text {
-  border-color: #86b7fe;
-}
-
-/* Filter select styles */
-.form-select:focus {
-  border-color: #86b7fe;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-}
-
-.form-label {
-  font-weight: 500;
+/* Alert theme */
+.alert-info {
+  background-color: #F5EFE6;
+  border-color: #E8D5B7;
+  color: #5A4A42;
 }
