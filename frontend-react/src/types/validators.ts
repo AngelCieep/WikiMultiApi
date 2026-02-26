@@ -89,20 +89,26 @@ export function validatePersonajeDetail(data: unknown): PersonajeDetail {
     throw new Error('Las vistas deben ser un número');
   }
 
-  // Validar arrays de description
-  if (data.description !== undefined && data.description !== null) {
-    if (!isArray(data.description)) {
-      throw new Error('La descripción debe ser un array');
+  // Validar description como string
+  if (data.description !== undefined && data.description !== null && !isString(data.description)) {
+    throw new Error('La descripción debe ser una cadena de texto');
+  }
+
+  // Validar descriptionSections como array de objetos
+  if (data.descriptionSections !== undefined && data.descriptionSections !== null) {
+    if (!isArray(data.descriptionSections)) {
+      throw new Error('descriptionSections debe ser un array');
     }
-    data.description.forEach((section, index) => {
+    (data.descriptionSections as unknown[]).forEach((section, index) => {
       if (!isObject(section)) {
-        throw new Error(`La sección de descripción ${index} debe ser un objeto`);
+        throw new Error(`La sección ${index} de descriptionSections debe ser un objeto`);
       }
-      if (!isString(section.title)) {
-        throw new Error(`La sección ${index} debe tener un título válido`);
+      // Los campos sectionTitle y content son opcionales en DescriptionSection
+      if (section.sectionTitle !== undefined && !isString(section.sectionTitle)) {
+        throw new Error(`La sección ${index} debe tener un sectionTitle de tipo string`);
       }
-      if (!isString(section.content)) {
-        throw new Error(`La sección ${index} debe tener contenido válido`);
+      if (section.content !== undefined && !isString(section.content)) {
+        throw new Error(`La sección ${index} debe tener un content de tipo string`);
       }
     });
   }
