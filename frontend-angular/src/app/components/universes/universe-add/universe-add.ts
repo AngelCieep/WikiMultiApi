@@ -1,6 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray, FormControl } from '@angular/forms';
 import { ApiService } from '../../../service/api.service';
 
@@ -32,14 +32,17 @@ import { ApiService } from '../../../service/api.service';
     }
   `,
 })
-export class UniverseAdd {
+export class UniverseAdd implements OnInit {
   private readonly formBuilder: FormBuilder = inject(FormBuilder);
   private readonly apiService: ApiService = inject(ApiService);
   private readonly router: Router = inject(Router);
+  private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
   success = signal<boolean>(false);
+  isEditMode = signal<boolean>(false);
+  universeId = signal<string | null>(null);
   
   // Preview signals
   logoPreview = signal<string>('');
@@ -149,6 +152,79 @@ export class UniverseAdd {
     return this.universeForm.get('statLabels') as FormArray;
   }
 
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEditMode.set(true);
+      this.universeId.set(id);
+      this.loadUniverse(id);
+    }
+  }
+
+  private loadUniverse(id: string): void {
+    this.loading.set(true);
+    this.apiService.getUniverse(id).subscribe({
+      next: (response) => {
+        const universe = response.status;
+        
+        // Convert statLabels object to array
+        const statLabelsArray: { key: string; value: string }[] = [];
+        if (universe.statLabels && typeof universe.statLabels === 'object') {
+          Object.entries(universe.statLabels).forEach(([key, value]) => {
+            statLabelsArray.push({ key, value: value as string });
+          });
+        }
+
+        // Populate form
+        this.universeForm.patchValue({
+          name: universe.name,
+          slug: universe.slug,
+          description: universe.description,
+          logo: universe.logo,
+          backgroundImage: universe.backgroundImage,
+          imagenBoton: universe.imagenBoton || '',
+          fontFamily: universe.fontFamily || '',
+          primaryColor: universe.primaryColor,
+          secondaryColor: universe.secondaryColor,
+          tertiaryColor: universe.tertiaryColor || '#C9A96E',
+          textColor: universe.textColor || '#000000',
+          popularityScore: universe.popularityScore || 0,
+          releaseDate: universe.releaseDate ? universe.releaseDate.split('T')[0] : '',
+          isActive: universe.isActive,
+          hasType: universe.hasType,
+          hasAbilities: universe.hasAbilities,
+          hasStats: universe.hasStats,
+          labels: {
+            type: universe.labels?.type || 'Tipo',
+            abilities: universe.labels?.abilities || 'Habilidades',
+            stats: universe.labels?.stats || 'Estadísticas'
+          }
+        });
+
+        // Set previews
+        if (universe.logo) this.logoPreview.set(universe.logo);
+        if (universe.backgroundImage) this.backgroundPreview.set(universe.backgroundImage);
+        if (universe.imagenBoton) this.buttonImagePreview.set(universe.imagenBoton);
+
+        // Add stat labels
+        statLabelsArray.forEach(label => {
+          const statLabelGroup = this.formBuilder.group({
+            key: [label.key, Validators.required],
+            value: [label.value, Validators.required]
+          });
+          this.statLabelsArray.push(statLabelGroup);
+        });
+
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set('Error al cargar el universo');
+        this.loading.set(false);
+        console.error('Error al cargar universo:', err);
+      }
+    });
+  }
+
   addStatLabel(): void {
     const statLabelGroup = this.formBuilder.group({
       key: ['', Validators.required],
@@ -238,23 +314,27 @@ export class UniverseAdd {
       statLabels: statLabelsObject
     };
 
-    this.apiService.addUniverse(universeData).subscribe({
+    const apiCall = this.isEditMode() && this.universeId()
+      ? this.apiService.updateUniverse(this.universeId()!, universeData)
+      : this.apiService.addUniverse(universeData);
+
+    apiCall.subscribe({
       next: (response) => {
         this.success.set(true);
         this.loading.set(false);
-        console.log('Universo creado exitosamente', response);
+        console.log(`Universo ${this.isEditMode() ? 'actualizado' : 'creado'} exitosamente`, response);
         
         setTimeout(() => {
           this.router.navigate(['/']);
         }, 2000);
       },
       error: (err) => {
-        this.error.set(err.error?.error || 'Error al crear el universo');
+        this.error.set(err.error?.error || `Error al ${this.isEditMode() ? 'actualizar' : 'crear'} el universo`);
         this.loading.set(false);
-        console.error('Error al crear universo:', err);
+        console.error(`Error al ${this.isEditMode() ? 'actualizar' : 'crear'} universo:`, err);
       },
       complete: () => {
-        console.log('Petición de creación de universo completada');
+        console.log(`Petición de ${this.isEditMode() ? 'actualización' : 'creación'} de universo completada`);
       }
     });
   }

@@ -7,6 +7,7 @@ import { UniverseAdd } from './components/universes/universe-add/universe-add';
 export const routes: Routes = [
   { path: '', component: Homepage },
   { path: 'universo/agregar', component: UniverseAdd },
+  { path: 'universo/editar/:id', component: UniverseAdd },
   { path: 'universo/:id', component: UniverseDetail },
   { path: 'universo/:universeId/personaje/:id', component: PersonajeDetail },
   { path: '**', redirectTo: '/', pathMatch: 'full' }

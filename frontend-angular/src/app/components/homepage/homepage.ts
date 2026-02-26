@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, effect, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 import { SearchService } from '../../service/search.service';
 import { UniverseCard } from '../../common/interfaces';
@@ -14,6 +14,7 @@ import { UniverseCard } from '../../common/interfaces';
 export class Homepage {
   private readonly apiService: ApiService = inject(ApiService);
   private readonly searchService: SearchService = inject(SearchService);
+  private readonly router: Router = inject(Router);
   
   // Data signals
   universos = signal<UniverseCard[]>([]);
@@ -181,6 +182,12 @@ export class Homepage {
         console.error('Error al actualizar universo:', err);
       }
     });
+  }
+
+  editUniverse(event: Event, universo: UniverseCard): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.router.navigate(['/universo/editar', universo._id]);
   }
 
   deleteUniverse(event: Event, universo: UniverseCard): void {

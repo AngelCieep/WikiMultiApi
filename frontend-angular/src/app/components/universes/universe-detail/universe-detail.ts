@@ -167,6 +167,13 @@ export class UniverseDetail implements OnInit {
     });
   }
 
+  editUniverse(): void {
+    const universeId = this.universe()?._id;
+    if (universeId) {
+      this.router.navigate(['/universo/editar', universeId]);
+    }
+  }
+
   deleteUniverse(): void {
     const currentUniverse = this.universe();
     if (!currentUniverse) return;

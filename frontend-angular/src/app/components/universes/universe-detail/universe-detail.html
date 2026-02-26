@@ -106,6 +106,12 @@
         }
       </button>
       <button 
+        class="btn btn-warning" 
+        (click)="editUniverse()"
+      >
+        <i class="bi bi-pencil-fill me-2"></i>Editar Universo
+      </button>
+      <button 
         class="btn btn-danger" 
         (click)="deleteUniverse()"
         [disabled]="loadingDelete()"
