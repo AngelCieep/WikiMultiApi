@@ -28,16 +28,7 @@ export default function Navbar() {
                 <i className="bi bi-house-fill me-1" />Inicio
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) =>
-                  `nav-link px-3 rounded ${isActive ? 'active bg-secondary' : ''}`
-                }
-                to="/fetching"
-              >
-                <i className="bi bi-code-slash me-1" />Fetching Base
-              </NavLink>
-            </li>
+              {/* Botón Fetching eliminado */}
           </ul>
         </div>
       </div>
