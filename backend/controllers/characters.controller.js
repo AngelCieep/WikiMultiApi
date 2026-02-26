@@ -43,12 +43,6 @@ charsCtrl.getCharactersByUniverse = async (req, res) => {
     })
     .catch((err) => res.status(400).json({status: err}));
 }
-//Inserción masiva de personajes
-charsCtrl.addCharacters = async (req, res) => {
-    await chars.insertMany(req.body)
-    .then((data) => res.status(201).json({inserted: data.length, status: data}))
-    .catch((err) => res.status(400).json({status: err}));
-}
 //Actualizar un personaje por ID
 charsCtrl.updateCharacter = async (req, res) => {
     await chars.findByIdAndUpdate(req.params.id, req.body, {new: true})
@@ -68,19 +62,5 @@ charsCtrl.deleteCharacter = async (req, res) => {
     })
     .catch((err) => res.status(400).json({status: err})); 
 }
-
-//Obtener el personaje con más vistas
-charsCtrl.getMostViewedCharacter = async (req, res) => {
-    await chars.findOne({}).sort({ views: -1 })
-    .then((data) => {
-        if (data != null)
-            res.status(200).json({ status: data });
-        else
-            res.status(404).json({ status: "No hay personajes" });
-    })
-    .catch((err) => res.status(400).json({ status: err }));
-}
-
-
 
 module.exports = charsCtrl;
