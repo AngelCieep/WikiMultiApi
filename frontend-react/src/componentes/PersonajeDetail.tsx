@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import type { PersonajeDetail as IPersonajeDetail } from '../types';
-import { validateSingleAPIResponse, validatePersonajeDetail } from '../types/validators';
+import type { PersonajeDetail as IPersonajeDetail, UniversoDetail } from '../types';
+import { validateSingleAPIResponse, validatePersonajeDetail, validateUniversoDetail } from '../types/validators';
 import { Spinner, Alert } from './common';
 import { API_BASE_URL } from '../App';
 
@@ -9,6 +9,7 @@ export default function PersonajeDetail() {
   const { id, universeId } = useParams<{ id: string; universeId: string }>();
 
   const [personaje, setPersonaje] = useState<IPersonajeDetail | null>(null);
+  const [universeStyle, setUniverseStyle] = useState<{ primaryColor: string; fontFamily: string } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState<boolean>(false);
@@ -53,6 +54,42 @@ export default function PersonajeDetail() {
     return () => abortController.abort();
   }, [id, universeId]);
 
+  // Obtener estilos del universo
+  useEffect(() => {
+    if (!universeId) return;
+    
+    fetch(`${API_BASE_URL}/universes/${universeId}`)
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          try {
+            const validated = validateSingleAPIResponse(data, validateUniversoDetail);
+            const universe = validated.status as UniversoDetail;
+            setUniverseStyle({
+              primaryColor: universe.primaryColor || '#0d6efd',
+              fontFamily: universe.fontFamily || 'system-ui, -apple-system, sans-serif'
+            });
+          } catch {
+            // Si falla la validación, usar valores por defecto
+            setUniverseStyle({
+              primaryColor: '#0d6efd',
+              fontFamily: 'system-ui, -apple-system, sans-serif'
+            });
+          }
+        }
+      })
+      .catch(() => {
+        // En caso de error, usar valores por defecto
+        setUniverseStyle({
+          primaryColor: '#0d6efd',
+          fontFamily: 'system-ui, -apple-system, sans-serif'
+        });
+      });
+  }, [universeId]);
+
   if (loading) return <Spinner size="lg" message="Cargando personaje..." />;
 
   if (error)
@@ -77,9 +114,11 @@ export default function PersonajeDetail() {
   if (!personaje) return null;
 
   const placeholder = 'https://placehold.co/400x500?text=Sin+imagen';
+  const primaryColor = universeStyle?.primaryColor || '#0d6efd';
+  const fontFamily = universeStyle?.fontFamily || 'system-ui, -apple-system, sans-serif';
 
   return (
-    <div className="container my-4">
+    <div className="container my-4" style={{ fontFamily }}>
       <nav aria-label="breadcrumb" className="mb-3">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
@@ -91,7 +130,7 @@ export default function PersonajeDetail() {
         </ol>
       </nav>
 
-      <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
+      <div className="card shadow-sm rounded-4 overflow-hidden border-top border-4" style={{ borderTopColor: primaryColor }}>
         <div className="row g-0">
           <div className="col-md-4 d-flex align-items-center justify-content-center bg-light">
             <img
@@ -108,7 +147,7 @@ export default function PersonajeDetail() {
             <div className="card-body p-4">
               <div className="d-flex justify-content-between align-items-start mb-3">
                 <div>
-                  <h2 className="fw-bold mb-1">{personaje.name}</h2>
+                  <h2 className="fw-bold mb-1" style={{ color: primaryColor }}>{personaje.name}</h2>
                   {personaje.title && (
                     <p className="text-muted fs-6 mb-0">{personaje.title}</p>
                   )}
@@ -163,8 +202,8 @@ export default function PersonajeDetail() {
 
               {personaje.abilities && personaje.abilities.length > 0 && (
                 <div className="mb-3">
-                  <p className="fw-semibold mb-2">
-                    <i className="bi bi-lightning-charge-fill text-warning me-2" />Habilidades
+                  <p className="fw-semibold mb-2" style={{ color: primaryColor }}>
+                    <i className="bi bi-lightning-charge-fill me-2" />Habilidades
                   </p>
                   <div className="d-flex flex-wrap gap-1">
                     {personaje.abilities.map((ab, i) => (
@@ -178,8 +217,8 @@ export default function PersonajeDetail() {
 
               {personaje.stats && Object.keys(personaje.stats).length > 0 && (
                 <div>
-                  <p className="fw-semibold mb-2">
-                    <i className="bi bi-bar-chart-fill text-success me-2" />Estadisticas
+                  <p className="fw-semibold mb-2" style={{ color: primaryColor }}>
+                    <i className="bi bi-bar-chart-fill me-2" />Estadisticas
                   </p>
                   {Object.entries(personaje.stats).map(([key, val]) => (
                     <div key={key} className="mb-2">
@@ -200,13 +239,13 @@ export default function PersonajeDetail() {
 
         {personaje.descriptionSections && personaje.descriptionSections.length > 0 && (
           <div className="card-footer border-top p-4 bg-light">
-            <h5 className="mb-3"><i className="bi bi-journal-text me-2" />Mas informacion</h5>
+            <h5 className="mb-3" style={{ color: primaryColor }}><i className="bi bi-journal-text me-2" />Mas informacion</h5>
             <div className="row g-3">
               {personaje.descriptionSections.map((sec, i) => (
                 <div className="col-md-6" key={i}>
                   <div className="card border-0 bg-white shadow-sm h-100 p-3">
                     {sec.sectionTitle && (
-                      <h6 className="fw-bold text-primary mb-2">{sec.sectionTitle}</h6>
+                      <h6 className="fw-bold mb-2" style={{ color: primaryColor }}>{sec.sectionTitle}</h6>
                     )}
                     {sec.content && <p className="mb-0 small">{sec.content}</p>}
                   </div>

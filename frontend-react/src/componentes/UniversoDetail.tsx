@@ -102,8 +102,12 @@ export default function UniversoDetail() {
       </div>
     );
 
+  // Estilos dinámicos del universo
+  const primaryColor = universo.primaryColor || '#0d6efd';
+  const fontFamily = universo.fontFamily || 'system-ui, -apple-system, sans-serif';
+
   return (
-    <>
+    <div style={{ fontFamily }}>
       <div
         className="text-white py-5 mb-4"
         style={{
@@ -158,14 +162,17 @@ export default function UniversoDetail() {
 
       <div className="container mb-5">
         {universo.description && (
-          <div className="card border-0 shadow-sm rounded-4 mb-4 p-4">
+          <div 
+            className="card shadow-sm rounded-4 mb-4 p-4 border-start border-4"
+            style={{ borderLeftColor: primaryColor }}
+          >
             <p className="mb-0 text-secondary">{universo.description}</p>
           </div>
         )}
 
         <div className="d-flex align-items-center justify-content-between mb-3">
-          <h4 className="fw-bold mb-0">
-            <i className="bi bi-people-fill me-2 text-primary" />Personajes del universo
+          <h4 className="fw-bold mb-0" style={{ color: primaryColor }}>
+            <i className="bi bi-people-fill me-2" />Personajes del universo
           </h4>
           {!loadingPersonajes && (
             <span className="badge bg-primary rounded-pill px-3 py-2">{personajes.length}</span>
@@ -226,6 +233,6 @@ export default function UniversoDetail() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
