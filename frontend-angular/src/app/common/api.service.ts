@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UniverseCardResponse } from '../interfaces/universe-card.interface';
-import { UniverseDetailResponse } from '../interfaces/universe-detail.interface';
-import { UniverseStyleResponse } from '../interfaces/universe-style.interface';
-import { CharacterCardResponse } from '../interfaces/character-card.interface';
-import { CharacterDetailResponse } from '../interfaces/character-detail.interface';
+import {
+  UniverseCardResponse,
+  UniverseDetailResponse,
+  UniverseStyleResponse,
+  CharacterCardResponse,
+  CharacterDetailResponse
+} from './interfaces';
 
 @Injectable({
   providedIn: 'root'
