@@ -93,12 +93,12 @@ export default function PersonajeDetail() {
 
       <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div className="row g-0">
-          <div className="col-md-4 bg-dark">
+          <div className="col-md-4 d-flex align-items-center justify-content-center bg-light">
             <img
               src={personaje.image || placeholder}
-              className="img-fluid w-100 object-fit-cover"
+              className="img-fluid rounded-3 shadow-sm"
               alt={personaje.name}
-              style={{ minHeight: '320px', maxHeight: '480px' }}
+              style={{ minHeight: '320px', maxHeight: '480px', objectFit: 'cover', background: '#f8f9fa' }}
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = placeholder;
               }}
