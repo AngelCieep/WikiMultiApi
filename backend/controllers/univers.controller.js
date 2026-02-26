@@ -300,6 +300,64 @@ universCtrl.deleteUniverse = async (req, res) => {
     }
 };
 
+//Buscar universos por término de búsqueda
+universCtrl.searchUniverses = async (req, res) => {
+    try {
+        const { query } = req.body;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        if (!query || query.trim() === '') {
+            return res.status(400).json({ 
+                error: 'El campo query es requerido y no puede estar vacío' 
+            });
+        }
+
+        if (page < 1 || limit < 1 || limit > 100) {
+            return res.status(400).json({ 
+                error: 'Parámetros inválidos. Page debe ser >= 1, limit entre 1 y 100' 
+            });
+        }
+
+        // Crear expresión regular para búsqueda insensible a mayúsculas
+        const searchRegex = new RegExp(query.trim(), 'i');
+
+        // Buscar en campos: name, slug, description
+        const searchFilter = {
+            $or: [
+                { name: searchRegex },
+                { slug: searchRegex },
+                { description: searchRegex }
+            ]
+        };
+
+        const [data, total] = await Promise.all([
+            Universe.find(
+                searchFilter,
+                '_id name slug logo backgroundImage imagenBoton primaryColor secondaryColor fontFamily isActive popularityScore releaseDate hasType hasAbilities hasStats description'
+            )
+                .skip(skip)
+                .limit(limit),
+            Universe.countDocuments(searchFilter)
+        ]);
+
+        res.status(200).json({
+            status: data,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit)
+            },
+            query: query.trim()
+        });
+    } catch (err) {
+        console.error('Error en searchUniverses:', err);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 //Obtener universos filtrados y ordenados con paginación
 universCtrl.getUniversesFiltered = async (req, res) => {
     try {

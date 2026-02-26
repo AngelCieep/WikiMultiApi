@@ -4,6 +4,7 @@ const charsCtrl = require('../controllers/characters.controller');
 const router = express.Router();
 
 //Rutas
+router.post('/search', charsCtrl.searchCharacters);
 router.post('/', charsCtrl.addCharacter);
 router.get('/all', charsCtrl.getCharacters);
 router.get('/filtered', charsCtrl.getCharactersFiltered);

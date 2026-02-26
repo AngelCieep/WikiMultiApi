@@ -186,6 +186,67 @@ charsCtrl.deleteCharacter = async (req, res) => {
     }
 };
 
+//Buscar personajes por término de búsqueda
+charsCtrl.searchCharacters = async (req, res) => {
+    try {
+        const { query } = req.body;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        if (!query || query.trim() === '') {
+            return res.status(400).json({ 
+                error: 'El campo query es requerido y no puede estar vacío' 
+            });
+        }
+
+        if (page < 1 || limit < 1 || limit > 100) {
+            return res.status(400).json({ 
+                error: 'Parámetros inválidos. Page debe ser >= 1, limit entre 1 y 100' 
+            });
+        }
+
+        // Crear expresión regular para búsqueda insensible a mayúsculas
+        const searchRegex = new RegExp(query.trim(), 'i');
+
+        // Buscar en campos: name, title, description, type, affiliation, location
+        const searchFilter = {
+            $or: [
+                { name: searchRegex },
+                { title: searchRegex },
+                { description: searchRegex },
+                { type: searchRegex },
+                { affiliation: searchRegex },
+                { location: searchRegex }
+            ]
+        };
+
+        const [data, total] = await Promise.all([
+            chars.find(
+                searchFilter,
+                '_id name title image booleanField universeId views description type affiliation location'
+            )
+                .skip(skip)
+                .limit(limit),
+            chars.countDocuments(searchFilter)
+        ]);
+
+        res.status(200).json({
+            status: data,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit)
+            },
+            query: query.trim()
+        });
+    } catch (err) {
+        console.error('Error en searchCharacters:', err);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
 //Obtener personajes filtrados y ordenados con paginación
 charsCtrl.getCharactersFiltered = async (req, res) => {
     try {
