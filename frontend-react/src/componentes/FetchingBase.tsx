@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import type { PersonajeCard } from '../types';
-import { API_BASE } from '../constants';
 
 export default function FetchingBase() {
   const [personajes, setPersonajes] = useState<PersonajeCard[]>([]);
@@ -8,7 +7,7 @@ export default function FetchingBase() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${API_BASE}/characters/all`)
+    fetch('https://backend-wikiapi.vercel.app/api/v1/characters/all')
       .then((res) => {
         if (!res.ok) throw new Error(`Error ${res.status}`);
         return res.json();

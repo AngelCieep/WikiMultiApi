@@ -1,19 +1,20 @@
-import { useNavigate } from 'react-router-dom';
-import type { PersonajeCard as IPersonajeCard } from '../types';
-
-interface Props {
-  personaje: IPersonajeCard;
-}
-
-export default function PersonajeCard({ personaje }: Props) {
-  const navigate = useNavigate();
+export default function PersonajeCard({ personaje }: {
+  personaje: {
+    _id: string;
+    name: string;
+    title?: string;
+    image?: string;
+    booleanField: boolean;
+    universeId?: string;
+    views?: number;
+  }
+}) {
   const placeholder = 'https://placehold.co/300x200?text=Sin+imagen';
 
   return (
-    <div
-      className="card h-100 border-0 shadow rounded-3 overflow-hidden"
-      role="button"
-      onClick={() => navigate(`/personaje/${personaje._id}`)}
+    <a
+      href={`/universo/${personaje.universeId}/personaje/${personaje._id}`}
+      className="card h-100 border-0 shadow rounded-3 overflow-hidden text-decoration-none"
     >
       <div className="ratio ratio-4x3">
         <img
@@ -41,6 +42,6 @@ export default function PersonajeCard({ personaje }: Props) {
           )}
         </div>
       </div>
-    </div>
+    </a>
   );
 }

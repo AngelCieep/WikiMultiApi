@@ -1,12 +1,10 @@
 ﻿import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import type { UniversoDetail as IUniversoDetail, PersonajeCard } from '../types';
 import PersonajeCardComponent from './PersonajeCard';
-import { API_BASE } from '../constants';
 
 export default function UniversoDetail() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
 
   const [universo, setUniverso] = useState<IUniversoDetail | null>(null);
   const [personajes, setPersonajes] = useState<PersonajeCard[]>([]);
@@ -17,7 +15,7 @@ export default function UniversoDetail() {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetch(`${API_BASE}/universes/${id}`)
+    fetch(`https://backend-wikiapi.vercel.app/api/v1/universes/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
         return res.json();
@@ -35,7 +33,7 @@ export default function UniversoDetail() {
   useEffect(() => {
     if (!id) return;
     setLoadingPersonajes(true);
-    fetch(`${API_BASE}/characters/universe/${id}`, { method: 'POST' })
+    fetch(`https://backend-wikiapi.vercel.app/api/v1/characters/universe/${id}`, { method: 'POST' })
       .then((res) => {
         if (!res.ok) return null;
         return res.json();
@@ -64,9 +62,9 @@ export default function UniversoDetail() {
           <i className="bi bi-exclamation-triangle-fill fs-4" />
           <div><strong>Error:</strong> {error}</div>
         </div>
-        <button className="btn btn-outline-dark" onClick={() => navigate(-1)}>
-          <i className="bi bi-arrow-left me-2" />Volver
-        </button>
+        <a href="/" className="btn btn-outline-dark">
+          <i className="bi bi-house me-2" />Inicio
+        </a>
       </div>
     );
 
@@ -77,9 +75,9 @@ export default function UniversoDetail() {
           <i className="bi bi-question-circle-fill fs-4" />
           Universo no encontrado.
         </div>
-        <button className="btn btn-outline-dark" onClick={() => navigate('/')}>
+        <a href="/" className="btn btn-outline-dark">
           <i className="bi bi-house me-2" />Inicio
-        </button>
+        </a>
       </div>
     );
 
@@ -100,9 +98,9 @@ export default function UniversoDetail() {
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <button className="btn btn-link p-0 text-white text-opacity-75 text-decoration-none" onClick={() => navigate('/')}>
+                <a href="/" className="text-white text-opacity-75 text-decoration-none">
                   <i className="bi bi-house me-1" />Inicio
-                </button>
+                </a>
               </li>
               <li className="breadcrumb-item active text-white">{universo.name}</li>
             </ol>

@@ -1,11 +1,9 @@
 ﻿import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import type { PersonajeDetail as IPersonajeDetail } from '../types';
-import { API_BASE } from '../constants';
 
 export default function PersonajeDetail() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const { id, universeId } = useParams<{ id: string; universeId: string }>();
 
   const [personaje, setPersonaje] = useState<IPersonajeDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -13,9 +11,14 @@ export default function PersonajeDetail() {
   const [notFound, setNotFound] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !universeId) return;
+    
+    const abortController = new AbortController();
     setLoading(true);
-    fetch(`${API_BASE}/characters/character/${id}`)
+    
+    fetch(`https://backend-wikiapi.vercel.app/api/v1/characters/universe/${universeId}/character/${id}`, {
+      signal: abortController.signal
+    })
       .then((res) => {
         if (res.status === 404) {
           setNotFound(true);
@@ -31,10 +34,14 @@ export default function PersonajeDetail() {
         setLoading(false);
       })
       .catch((err: Error) => {
-        setError(err.message);
-        setLoading(false);
+        if (err.name !== 'AbortError') {
+          setError(err.message);
+          setLoading(false);
+        }
       });
-  }, [id]);
+    
+    return () => abortController.abort();
+  }, [id, universeId]);
 
   if (loading)
     return (
@@ -53,9 +60,9 @@ export default function PersonajeDetail() {
           <i className="bi bi-exclamation-triangle-fill fs-4" />
           <div><strong>Error:</strong> {error}</div>
         </div>
-        <button className="btn btn-outline-dark" onClick={() => navigate(-1)}>
-          <i className="bi bi-arrow-left me-2" />Volver
-        </button>
+        <a href="/" className="btn btn-outline-dark">
+          <i className="bi bi-house me-2" />Inicio
+        </a>
       </div>
     );
 
@@ -66,9 +73,9 @@ export default function PersonajeDetail() {
           <i className="bi bi-question-circle-fill fs-4" />
           Personaje no encontrado.
         </div>
-        <button className="btn btn-outline-dark" onClick={() => navigate('/')}> 
+        <a href="/" className="btn btn-outline-dark">
           <i className="bi bi-house me-2" />Inicio
-        </button>
+        </a>
       </div>
     );
   if (!personaje) return null;
@@ -80,9 +87,9 @@ export default function PersonajeDetail() {
       <nav aria-label="breadcrumb" className="mb-3">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
-            <button className="btn btn-link p-0 text-decoration-none" onClick={() => navigate('/')}>
+            <a href="/" className="text-decoration-none">
               <i className="bi bi-house me-1" />Inicio
-            </button>
+            </a>
           </li>
           <li className="breadcrumb-item active">{personaje.name}</li>
         </ol>
