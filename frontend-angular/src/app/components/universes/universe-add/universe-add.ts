@@ -1,7 +1,7 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray, FormControl } from '@angular/forms';
 import { ApiService } from '../../../service/api.service';
 
 @Component({
@@ -32,12 +32,11 @@ import { ApiService } from '../../../service/api.service';
     }
   `,
 })
-export class UniverseAdd implements OnInit {
-  private fb = inject(FormBuilder);
-  private apiService = inject(ApiService);
-  private router = inject(Router);
+export class UniverseAdd {
+  private readonly formBuilder: FormBuilder = inject(FormBuilder);
+  private readonly apiService: ApiService = inject(ApiService);
+  private readonly router: Router = inject(Router);
 
-  universeForm!: FormGroup;
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
   success = signal<boolean>(false);
@@ -47,36 +46,103 @@ export class UniverseAdd implements OnInit {
   backgroundPreview = signal<string>('');
   buttonImagePreview = signal<string>('');
 
-  ngOnInit(): void {
-    this.initializeForm();
-  }
+  universeForm: FormGroup = this.formBuilder.group({
+    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+    slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9-]+$/), Validators.maxLength(100)]],
+    description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]],
+    logo: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
+    backgroundImage: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
+    imagenBoton: ['', Validators.pattern(/^https?:\/\/.+/)],
+    fontFamily: ['', Validators.maxLength(100)],
+    primaryColor: ['#7D2424', [Validators.required, Validators.pattern(/^#[0-9A-Fa-f]{6}$/)]],
+    secondaryColor: ['#5A4A42', [Validators.required, Validators.pattern(/^#[0-9A-Fa-f]{6}$/)]],
+    tertiaryColor: ['#C9A96E', Validators.pattern(/^#[0-9A-Fa-f]{6}$/)],
+    textColor: ['#000000', Validators.pattern(/^#[0-9A-Fa-f]{6}$/)],
+    popularityScore: [0, [Validators.required, Validators.min(0), Validators.max(10000)]],
+    releaseDate: ['', Validators.required],
+    isActive: [true],
+    hasType: [false],
+    hasAbilities: [false],
+    hasStats: [false],
+    labels: this.formBuilder.group({
+      type: ['Tipo'],
+      abilities: ['Habilidades'],
+      stats: ['Estadísticas']
+    }),
+    statLabels: this.formBuilder.array([])
+  });
 
-  private initializeForm(): void {
-    this.universeForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
-      slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9-]+$/), Validators.maxLength(100)]],
-      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]],
-      logo: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
-      backgroundImage: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
-      imagenBoton: ['', Validators.pattern(/^https?:\/\/.+/)],
-      fontFamily: ['', Validators.maxLength(100)],
-      primaryColor: ['#7D2424', [Validators.required, Validators.pattern(/^#[0-9A-Fa-f]{6}$/)]],
-      secondaryColor: ['#5A4A42', [Validators.required, Validators.pattern(/^#[0-9A-Fa-f]{6}$/)]],
-      tertiaryColor: ['#C9A96E', Validators.pattern(/^#[0-9A-Fa-f]{6}$/)],
-      textColor: ['#000000', Validators.pattern(/^#[0-9A-Fa-f]{6}$/)],
-      popularityScore: [0, [Validators.required, Validators.min(0), Validators.max(10000)]],
-      releaseDate: ['', Validators.required],
-      isActive: [true],
-      hasType: [false],
-      hasAbilities: [false],
-      hasStats: [false],
-      labels: this.fb.group({
-        type: ['Tipo'],
-        abilities: ['Habilidades'],
-        stats: ['Estadísticas']
-      }),
-      statLabels: this.fb.array([])
-    });
+  // Getters para los campos del formulario
+  get name(): any {
+    return this.universeForm.get('name');
+  }
+  
+  get slug(): any {
+    return this.universeForm.get('slug');
+  }
+  
+  get description(): any {
+    return this.universeForm.get('description');
+  }
+  
+  get logo(): any {
+    return this.universeForm.get('logo');
+  }
+  
+  get backgroundImage(): any {
+    return this.universeForm.get('backgroundImage');
+  }
+  
+  get imagenBoton(): any {
+    return this.universeForm.get('imagenBoton');
+  }
+  
+  get fontFamily(): any {
+    return this.universeForm.get('fontFamily');
+  }
+  
+  get primaryColor(): any {
+    return this.universeForm.get('primaryColor');
+  }
+  
+  get secondaryColor(): any {
+    return this.universeForm.get('secondaryColor');
+  }
+  
+  get tertiaryColor(): any {
+    return this.universeForm.get('tertiaryColor');
+  }
+  
+  get textColor(): any {
+    return this.universeForm.get('textColor');
+  }
+  
+  get popularityScore(): any {
+    return this.universeForm.get('popularityScore');
+  }
+  
+  get releaseDate(): any {
+    return this.universeForm.get('releaseDate');
+  }
+  
+  get isActive(): any {
+    return this.universeForm.get('isActive');
+  }
+  
+  get hasType(): any {
+    return this.universeForm.get('hasType');
+  }
+  
+  get hasAbilities(): any {
+    return this.universeForm.get('hasAbilities');
+  }
+  
+  get hasStats(): any {
+    return this.universeForm.get('hasStats');
+  }
+  
+  get labels(): any {
+    return this.universeForm.get('labels');
   }
 
   get statLabelsArray(): FormArray {
@@ -84,7 +150,7 @@ export class UniverseAdd implements OnInit {
   }
 
   addStatLabel(): void {
-    const statLabelGroup = this.fb.group({
+    const statLabelGroup = this.formBuilder.group({
       key: ['', Validators.required],
       value: ['', Validators.required]
     });
@@ -126,7 +192,7 @@ export class UniverseAdd implements OnInit {
   }
 
   generateSlug(): void {
-    const name = this.universeForm.get('name')?.value || '';
+    const name = this.name.value || '';
     const slug = name
       .toLowerCase()
       .normalize('NFD')
@@ -137,16 +203,27 @@ export class UniverseAdd implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.universeForm.invalid) {
+    if (!this.universeForm.valid) {
       this.universeForm.markAllAsTouched();
-      this.error.set('Por favor, completa todos los campos requeridos correctamente.');
+      
+      // Count invalid fields
+      let invalidCount = 0;
+      Object.keys(this.universeForm.controls).forEach(key => {
+        const control = this.universeForm.get(key);
+        if (control && control.invalid) {
+          invalidCount++;
+        }
+      });
+      
+      this.error.set(`Por favor, completa todos los campos requeridos correctamente. ${invalidCount} campo(s) con errores.`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
     this.loading.set(true);
     this.error.set(null);
 
-    const formValue = this.universeForm.value;
+    const formValue = this.universeForm.getRawValue();
     
     // Convert statLabels array to object
     const statLabelsObject: { [key: string]: string } = {};
@@ -165,6 +242,7 @@ export class UniverseAdd implements OnInit {
       next: (response) => {
         this.success.set(true);
         this.loading.set(false);
+        console.log('Universo creado exitosamente', response);
         
         setTimeout(() => {
           this.router.navigate(['/']);
@@ -174,27 +252,11 @@ export class UniverseAdd implements OnInit {
         this.error.set(err.error?.error || 'Error al crear el universo');
         this.loading.set(false);
         console.error('Error al crear universo:', err);
+      },
+      complete: () => {
+        console.log('Petición de creación de universo completada');
       }
     });
-  }
-
-  isFieldInvalid(fieldName: string): boolean {
-    const field = this.universeForm.get(fieldName);
-    return !!(field && field.invalid && (field.dirty || field.touched));
-  }
-
-  getFieldError(fieldName: string): string {
-    const field = this.universeForm.get(fieldName);
-    if (!field) return '';
-
-    if (field.hasError('required')) return 'Este campo es requerido';
-    if (field.hasError('minlength')) return `Mínimo ${field.errors?.['minlength'].requiredLength} caracteres`;
-    if (field.hasError('maxlength')) return `Máximo ${field.errors?.['maxlength'].requiredLength} caracteres`;
-    if (field.hasError('pattern')) return 'Formato inválido';
-    if (field.hasError('min')) return `Valor mínimo: ${field.errors?.['min'].min}`;
-    if (field.hasError('max')) return `Valor máximo: ${field.errors?.['max'].max}`;
-
-    return '';
   }
 }
 
