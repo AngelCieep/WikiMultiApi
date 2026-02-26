@@ -32,7 +32,8 @@ export default function HomePage() {
         .then((data) => {
           try {
             const validated = validateAPIResponse(data, validateUniversoCard);
-            setUniversos(validated.status);
+            // Filtrar solo universos activos
+            setUniversos(validated.status.filter((u) => u.isActive));
             setLoading(false);
             setError(null);
           } catch (validationError) {
@@ -63,7 +64,8 @@ export default function HomePage() {
         .then((data) => {
           try {
             const validated = validateAPIResponse(data, validateUniversoCard);
-            setUniversos(validated.status);
+            // Filtrar solo universos activos
+            setUniversos(validated.status.filter((u) => u.isActive));
             setLoading(false);
             setError(null);
           } catch (validationError) {
