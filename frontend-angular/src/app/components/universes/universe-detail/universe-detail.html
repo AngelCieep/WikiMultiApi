@@ -91,6 +91,16 @@
     <!-- Action Buttons -->
     <div class="mb-4 d-flex justify-content-end gap-3">
       <button 
+        class="btn d-flex align-items-center gap-2" 
+        [routerLink]="['/universo', universe()?._id, 'personaje', 'agregar']"
+        [style.background-color]="universe()?.primaryColor || '#7D2424'"
+        [style.border-color]="universe()?.primaryColor || '#7D2424'"
+        style="color: white;"
+      >
+        <i class="bi bi-person-plus-fill"></i>
+        <span>Agregar Personaje</span>
+      </button>
+      <button 
         class="btn btn-outline-secondary d-flex align-items-center gap-2" 
         (click)="toggleUniverseStatus()"
         [disabled]="loadingToggle()"
@@ -184,18 +194,18 @@
                 <p class="card-text text-muted small mb-2">
                   <i class="bi bi-award me-1"></i>{{ character.title }}
                 </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span 
-                    class="badge rounded-pill" 
-                    [style.background-color]="character.booleanField ? '#28a745' : '#6c757d'"
-                  >
-                    <i [class]="character.booleanField ? 'bi bi-check-circle-fill' : 'bi bi-circle'" class="me-1"></i>
-                    {{ character.booleanField ? 'Disponible' : 'Bloqueado' }}
-                  </span>
+                <div class="d-flex justify-content-between align-items-center mb-3">
                   <small class="text-muted">
                     <i class="bi bi-eye-fill me-1"></i>{{ character.views || 0 }}
                   </small>
                 </div>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-warning w-100"
+                  (click)="editCharacter($event, character._id)"
+                >
+                  <i class="bi bi-pencil-fill me-1"></i>Editar
+                </button>
               </div>
             </div>
           </div>

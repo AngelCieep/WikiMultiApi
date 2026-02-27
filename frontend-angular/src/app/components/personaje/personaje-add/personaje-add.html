@@ -1,1 +1,408 @@
-<p>personaje-add works!</p>
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center mb-4">{{ isEditMode() ? 'Editar' : 'Agregar' }} Personaje</h1>
+      
+      <!-- Success Alert -->
+      @if (success()) {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>¡Éxito!</strong> El personaje ha sido {{ isEditMode() ? 'actualizado' : 'creado' }} correctamente. Redirigiendo...
+        </div>
+      }
+      
+      <!-- Error Alert -->
+      @if (error()) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error:</strong> {{ error() }}
+          <button type="button" class="btn-close" (click)="error.set(null)"></button>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Formulario (Columna Izquierda) -->
+    <div class="col-lg-4">
+      <form [formGroup]="characterForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Información Principal -->
+        <div class="card mb-3">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Información Principal</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nombre *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="name" 
+                formControlName="name"
+                [class.is-invalid]="name?.invalid && name?.touched">
+              @if (name?.invalid && name?.touched) {
+                <div class="invalid-feedback">
+                  @if (name?.errors?.['required']) {
+                    El nombre es requerido
+                  }
+                  @if (name?.errors?.['minlength']) {
+                    Mínimo 2 caracteres
+                  }
+                  @if (name?.errors?.['maxlength']) {
+                    Máximo 100 caracteres
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="title" class="form-label">Título / Apodo</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="title" 
+                formControlName="title">
+            </div>
+
+            <div class="mb-3">
+              <label for="description" class="form-label">Descripción *</label>
+              <textarea 
+                class="form-control" 
+                id="description" 
+                rows="4"
+                formControlName="description"
+                [class.is-invalid]="description?.invalid && description?.touched"></textarea>
+              @if (description?.invalid && description?.touched) {
+                <div class="invalid-feedback">
+                  @if (description?.errors?.['required']) {
+                    La descripción es requerida
+                  }
+                  @if (description?.errors?.['minlength']) {
+                    Mínimo 10 caracteres
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="image" class="form-label">URL de Imagen *</label>
+              <input 
+                type="url" 
+                class="form-control" 
+                id="image" 
+                formControlName="image"
+                (input)="onImageChange($event)"
+                [class.is-invalid]="image?.invalid && image?.touched">
+              @if (image?.invalid && image?.touched) {
+                <div class="invalid-feedback">
+                  Ingresa una URL válida (http:// o https://)
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Información Adicional -->
+        <div class="card mb-3">
+          <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Información Adicional</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="location" class="form-label">Ubicación</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="location" 
+                formControlName="location">
+            </div>
+
+            <div class="mb-3">
+              <label for="affiliation" class="form-label">Afiliación</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="affiliation" 
+                formControlName="affiliation">
+            </div>
+
+            <div class="mb-3">
+              <label for="type" class="form-label">Tipo</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="type" 
+                formControlName="type">
+            </div>
+          </div>
+        </div>
+
+        <!-- Secciones de Descripción -->
+        <div class="card mb-3">
+          <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Secciones de Descripción</h5>
+            <button type="button" class="btn btn-sm btn-light" (click)="addDescriptionSection()">
+              + Agregar Sección
+            </button>
+          </div>
+          <div class="card-body">
+            @if (descriptionSectionsArray.length === 0) {
+              <p class="text-muted">No hay secciones. Haz clic en "Agregar Sección" para añadir una.</p>
+            }
+            @for (section of descriptionSectionsArray.controls; track $index) {
+              <div class="border p-3 mb-3 rounded" [formGroup]="$any(section)">
+                <div class="mb-2">
+                  <label class="form-label">Título de Sección</label>
+                  <input 
+                    type="text" 
+                    class="form-control form-control-sm" 
+                    formControlName="sectionTitle">
+                </div>
+                <div class="mb-2">
+                  <label class="form-label">Contenido</label>
+                  <textarea 
+                    class="form-control form-control-sm" 
+                    rows="3"
+                    formControlName="content"></textarea>
+                </div>
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-danger" 
+                  (click)="removeDescriptionSection($index)">
+                  Eliminar
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Habilidades -->
+        <div class="card mb-3">
+          <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Habilidades</h5>
+            <button type="button" class="btn btn-sm btn-light" (click)="addAbility()">
+              + Agregar Habilidad
+            </button>
+          </div>
+          <div class="card-body">
+            @if (abilitiesArray.length === 0) {
+              <p class="text-muted">No hay habilidades. Haz clic en "Agregar Habilidad".</p>
+            }
+            @for (ability of abilitiesArray.controls; track $index) {
+              <div class="input-group mb-2">
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [formControl]="$any(ability)"
+                  placeholder="Nombre de la habilidad">
+                <button 
+                  type="button" 
+                  class="btn btn-danger" 
+                  (click)="removeAbility($index)">
+                  ×
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="card mb-3">
+          <div class="card-header bg-warning d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Estadísticas</h5>
+            <button type="button" class="btn btn-sm btn-dark" (click)="addStat()">
+              + Agregar Estadística
+            </button>
+          </div>
+          <div class="card-body">
+            @if (statsArray.length === 0) {
+              <p class="text-muted">No hay estadísticas. Haz clic en "Agregar Estadística".</p>
+            }
+            @for (stat of statsArray.controls; track $index) {
+              <div class="border p-2 mb-2 rounded" [formGroup]="$any(stat)">
+                <div class="row g-2">
+                  <div class="col-6">
+                    <input 
+                      type="text" 
+                      class="form-control form-control-sm" 
+                      formControlName="key"
+                      placeholder="Nombre (ej: HP)">
+                  </div>
+                  <div class="col-4">
+                    <input 
+                      type="number" 
+                      class="form-control form-control-sm" 
+                      formControlName="value"
+                      placeholder="Valor">
+                  </div>
+                  <div class="col-2">
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-danger w-100" 
+                      (click)="removeStat($index)">
+                      ×
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Campos Obligatorios -->
+        <div class="card mb-3">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Campos Obligatorios</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="numericField" class="form-label">Campo Numérico *</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                id="numericField" 
+                formControlName="numericField"
+                [class.is-invalid]="numericField?.invalid && numericField?.touched">
+              @if (numericField?.invalid && numericField?.touched) {
+                <div class="invalid-feedback">
+                  El campo numérico es requerido (mínimo 0)
+                </div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="dateField" class="form-label">Campo de Fecha *</label>
+              <input 
+                type="date" 
+                class="form-control" 
+                id="dateField" 
+                formControlName="dateField"
+                [class.is-invalid]="dateField?.invalid && dateField?.touched">
+              @if (dateField?.invalid && dateField?.touched) {
+                <div class="invalid-feedback">
+                  La fecha es requerida
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-grid gap-2">
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-lg"
+            [disabled]="loading()">
+            @if (loading()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Guardando...
+            } @else {
+              {{ isEditMode() ? 'Actualizar' : 'Crear' }} Personaje
+            }
+          </button>
+          <a [routerLink]="['/universo', universeId()]" class="btn btn-secondary">
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Preview (Columna Derecha) -->
+    <div class="col-lg-8">
+      <div class="card sticky-top" style="top: 20px;">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Vista Previa del Personaje</h5>
+        </div>
+        <div class="card-body">
+          <!-- Imagen -->
+          @if (imagePreview()) {
+            <div class="text-center mb-4">
+              <img [src]="imagePreview()" [alt]="characterForm.get('name')?.value || 'Preview'" class="preview-image">
+            </div>
+          } @else {
+            <div class="text-center mb-4 p-5 bg-light rounded">
+              <p class="text-muted">La imagen aparecerá aquí</p>
+            </div>
+          }
+
+          <!-- Nombre y Título -->
+          <h2 class="mb-2">{{ characterForm.get('name')?.value || 'Nombre del personaje' }}</h2>
+          @if (characterForm.get('title')?.value) {
+            <h5 class="text-muted mb-3">{{ characterForm.get('title')?.value }}</h5>
+          }
+
+          <!-- Descripción -->
+          @if (characterForm.get('description')?.value) {
+            <div class="mb-4">
+              <h6 class="fw-bold">Descripción:</h6>
+              <p>{{ characterForm.get('description')?.value }}</p>
+            </div>
+          }
+
+          <!-- Información Adicional -->
+          @if (characterForm.get('location')?.value || characterForm.get('affiliation')?.value || characterForm.get('type')?.value) {
+            <div class="mb-4">
+              <h6 class="fw-bold">Información:</h6>
+              <ul class="list-unstyled">
+                @if (characterForm.get('location')?.value) {
+                  <li><strong>Ubicación:</strong> {{ characterForm.get('location')?.value }}</li>
+                }
+                @if (characterForm.get('affiliation')?.value) {
+                  <li><strong>Afiliación:</strong> {{ characterForm.get('affiliation')?.value }}</li>
+                }
+                @if (characterForm.get('type')?.value) {
+                  <li><strong>Tipo:</strong> {{ characterForm.get('type')?.value }}</li>
+                }
+              </ul>
+            </div>
+          }
+
+          <!-- Secciones de Descripción -->
+          @if (descriptionSectionsArray.length > 0) {
+            <div class="mb-4">
+              <h6 class="fw-bold">Secciones:</h6>
+              @for (section of descriptionSectionsArray.controls; track $index) {
+                <div class="mb-3">
+                  <h6 class="text-primary">{{ $any(section).get('sectionTitle')?.value || 'Título de sección' }}</h6>
+                  <p>{{ $any(section).get('content')?.value || 'Contenido de la sección' }}</p>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Habilidades -->
+          @if (abilitiesArray.length > 0) {
+            <div class="mb-4">
+              <h6 class="fw-bold">Habilidades:</h6>
+              <div class="d-flex flex-wrap gap-2">
+                @for (ability of abilitiesArray.controls; track $index) {
+                  @if ($any(ability).value) {
+                    <span class="badge bg-success">{{ $any(ability).value }}</span>
+                  }
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Estadísticas -->
+          @if (statsArray.length > 0) {
+            <div class="mb-4">
+              <h6 class="fw-bold">Estadísticas:</h6>
+              <div class="row">
+                @for (stat of statsArray.controls; track $index) {
+                  @if ($any(stat).get('key')?.value) {
+                    <div class="col-6 col-md-4 mb-2">
+                      <div class="border rounded p-2 text-center">
+                        <small class="text-muted">{{ $any(stat).get('key')?.value }}</small>
+                        <div class="fs-5 fw-bold">{{ $any(stat).get('value')?.value || 0 }}</div>
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

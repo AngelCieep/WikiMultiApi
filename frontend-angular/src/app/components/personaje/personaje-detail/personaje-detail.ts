@@ -39,7 +39,9 @@ export class PersonajeDetail implements OnInit {
   character = signal<CharacterDetail | null>(null);
   universeStyle = signal<UniverseStyle | null>(null);
   loading = signal<boolean>(true);
+  loadingToggle = signal<boolean>(false);
   error = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
 
   ngOnInit(): void {
     const universeId = this.route.snapshot.paramMap.get('universeId');
@@ -101,6 +103,45 @@ export class PersonajeDetail implements OnInit {
     const universeId = this.character()?.universeId;
     if (universeId) {
       this.router.navigate(['/universo', universeId]);
+    }
+  }
+
+  toggleCharacterStatus(): void {
+    const currentCharacter = this.character();
+    if (!currentCharacter) return;
+
+    this.loadingToggle.set(true);
+    this.error.set(null);
+    this.successMessage.set(null);
+
+    const action = currentCharacter.booleanField ? 'desactivar' : 'activar';
+    const updateData = {
+      isActive: !currentCharacter.booleanField
+    };
+
+    this.apiService.updateCharacter(currentCharacter._id, updateData).subscribe({
+      next: (response) => {
+        const updatedCharacter = { ...currentCharacter, booleanField: !currentCharacter.booleanField };
+        this.character.set(updatedCharacter);
+        
+        this.successMessage.set(`Personaje ${action}do correctamente`);
+        this.loadingToggle.set(false);
+        
+        setTimeout(() => this.successMessage.set(null), 3000);
+      },
+      error: (err) => {
+        this.error.set(err.error?.error || `Error al ${action} el personaje`);
+        this.loadingToggle.set(false);
+        console.error('Error al actualizar personaje:', err);
+      }
+    });
+  }
+
+  editCharacter(): void {
+    const universeId = this.character()?.universeId;
+    const characterId = this.character()?._id;
+    if (universeId && characterId) {
+      this.router.navigate(['/universo', universeId, 'personaje', 'editar', characterId]);
     }
   }
 

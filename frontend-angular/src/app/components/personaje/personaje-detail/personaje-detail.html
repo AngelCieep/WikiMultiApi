@@ -42,6 +42,13 @@
   </nav>
 
   <div class="container my-5">
+    <!-- Success Alert -->
+    <div *ngIf="successMessage()" class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      {{ successMessage() }}
+      <button type="button" class="btn-close" (click)="successMessage.set(null)"></button>
+    </div>
+
     <!-- Character Header -->
     <div class="row mb-4">
       <div class="col-lg-4 mb-4 mb-lg-0">
@@ -126,14 +133,13 @@
               </div>
             </div>
             
-            <div class="d-flex gap-2 flex-wrap">
-              <span 
-                class="badge rounded-pill fs-6 px-3 py-2" 
-                [style.background-color]="character()?.booleanField ? '#28a745' : '#6c757d'"
+            <div class="d-flex gap-2 flex-wrap align-items-center">
+              <button 
+                class="btn btn-sm btn-warning"
+                (click)="editCharacter()"
               >
-                <i [class]="character()?.booleanField ? 'bi bi-check-circle-fill' : 'bi bi-circle'" class="me-1"></i>
-                {{ character()?.booleanField ? 'Disponible' : 'Bloqueado' }}
-              </span>
+                <i class="bi bi-pencil-fill me-1"></i>Editar
+              </button>
               <button 
                 class="btn btn-sm"
                 [style.background-color]="universeStyle()?.primaryColor || '#7D2424'"

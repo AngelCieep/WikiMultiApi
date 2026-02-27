@@ -39,6 +39,7 @@ export class UniverseDetail implements OnInit {
   loadingCharacters = signal<boolean>(true);
   loadingToggle = signal<boolean>(false);
   loadingDelete = signal<boolean>(false);
+  loadingCharacterToggle = signal<string | null>(null);
   error = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   
@@ -133,6 +134,14 @@ export class UniverseDetail implements OnInit {
     }
   }
 
+  editCharacter(event: Event, characterId: string): void {
+    event.stopPropagation();
+    const universeId = this.universe()?._id;
+    if (universeId) {
+      this.router.navigate(['/universo', universeId, 'personaje', 'editar', characterId]);
+    }
+  }
+
   toggleUniverseStatus(): void {
     const currentUniverse = this.universe();
     if (!currentUniverse) return;
@@ -199,6 +208,41 @@ export class UniverseDetail implements OnInit {
         this.error.set(err.error?.error || 'Error al eliminar el universo');
         this.loadingDelete.set(false);
         console.error('Error al eliminar universo:', err);
+      }
+    });
+  }
+
+  toggleCharacterStatus(event: Event, characterId: string): void {
+    event.stopPropagation();
+    
+    const character = this.characters().find(c => c._id === characterId);
+    if (!character) return;
+
+    this.loadingCharacterToggle.set(characterId);
+    this.error.set(null);
+    this.successMessage.set(null);
+
+    const updateData = {
+      isActive: !character.booleanField
+    };
+
+    this.apiService.updateCharacter(characterId, updateData).subscribe({
+      next: (response) => {
+        // Update character in the list
+        const updatedCharacters = this.characters().map(c => 
+          c._id === characterId ? { ...c, booleanField: !c.booleanField } : c
+        );
+        this.characters.set(updatedCharacters);
+        
+        this.successMessage.set(`Personaje ${updateData.isActive ? 'activado' : 'desactivado'} correctamente`);
+        this.loadingCharacterToggle.set(null);
+        
+        setTimeout(() => this.successMessage.set(null), 3000);
+      },
+      error: (err) => {
+        this.error.set(err.error?.error || 'Error al actualizar el personaje');
+        this.loadingCharacterToggle.set(null);
+        console.error('Error al actualizar personaje:', err);
       }
     });
   }
