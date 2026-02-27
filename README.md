@@ -94,10 +94,18 @@ WikiMultiApi/
         ├── componentes/          # Componentes funcionales
         │   ├── HomePage.tsx
         │   ├── Navbar.tsx
-        │   ├── PersonajeCard.tsx
+        │   ├── Footer.tsx
+        │   ├── FetchingBase.tsx
         │   ├── PersonajeDetail.tsx
         │   ├── UniversoCard.tsx
-        │   └── UniversoDetail.tsx
+        │   ├── UniversoDetail/   # Componente padre
+        │   │   ├── UniversoDetail.tsx     # Padre
+        │   │   ├── PersonajeCard.tsx      # Hijo
+        │   │   └── index.ts
+        │   └── common/           # Componentes comunes
+        │       ├── Alert.tsx
+        │       ├── Spinner.tsx
+        │       └── index.ts
         └── types/                # TypeScript interfaces
 ```
 

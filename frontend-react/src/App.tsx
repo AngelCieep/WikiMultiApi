@@ -6,7 +6,7 @@ import Navbar from './componentes/Navbar';
 import Footer from './componentes/Footer';
 import HomePage from './componentes/HomePage';
 import PersonajeDetail from './componentes/PersonajeDetail';
-import UniversoDetail from './componentes/UniversoDetail';
+import UniversoDetail from './componentes/UniversoDetail/UniversoDetail';
 import FetchingBase from './componentes/FetchingBase';
 
 // Configuración global de la API

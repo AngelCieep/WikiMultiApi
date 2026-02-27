@@ -1,10 +1,10 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import type { UniversoDetail as IUniversoDetail, PersonajeCard } from '../types';
-import { validateSingleAPIResponse, validateAPIResponse, validateUniversoDetail, validatePersonajeCard } from '../types/validators';
+import type { UniversoDetail as IUniversoDetail, PersonajeCard } from '../../types';
+import { validateSingleAPIResponse, validateAPIResponse, validateUniversoDetail, validatePersonajeCard } from '../../types/validators';
 import PersonajeCardComponent from './PersonajeCard';
-import { Spinner, Alert } from './common';
-import { API_BASE_URL } from '../App';
+import { Spinner, Alert } from '../common';
+import { API_BASE_URL } from '../../App';
 
 export default function UniversoDetail() {
   const { id } = useParams<{ id: string }>();

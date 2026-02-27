@@ -1,4 +1,4 @@
-import type { PersonajeCard } from '../types';
+import type { PersonajeCard } from '../../types';
 
 interface PersonajeCardProps {
   personaje: PersonajeCard;
