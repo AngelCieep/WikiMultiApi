@@ -1,0 +1,1562 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center mb-4">
+        <i class="bi bi-book-fill me-2 text-primary"></i>
+        Documentación de la API
+      </h1>
+      
+      <!-- Tabs Navigation -->
+      <ul class="nav nav-tabs nav-fill mb-4" id="apiTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button 
+            class="nav-link active" 
+            id="universes-tab" 
+            data-bs-toggle="tab" 
+            data-bs-target="#universes" 
+            type="button" 
+            role="tab">
+            <i class="bi bi-globe me-2"></i>
+            Endpoints de Universos
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button 
+            class="nav-link" 
+            id="characters-tab" 
+            data-bs-toggle="tab" 
+            data-bs-target="#characters" 
+            type="button" 
+            role="tab">
+            <i class="bi bi-people-fill me-2"></i>
+            Endpoints de Personajes
+          </button>
+        </li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content" id="apiTabsContent">
+        
+        <!-- ============================================ -->
+        <!-- UNIVERSES TAB -->
+        <!-- ============================================ -->
+        <div class="tab-pane fade show active" id="universes" role="tabpanel">
+          <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-9">
+              
+              <div class="card mb-4 shadow-sm" id="get-universes">
+                <div class="card-header bg-success text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-success me-2">GET</span>
+                    Obtener Todos los Universos
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Obtiene una lista paginada de todos los universos.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>GET /api/universes</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-success">GET</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes?page=1&limit=10</code>
+                  </div>
+                  
+                  <h5 class="mt-3">Query Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Requerido</th>
+                        <th>Descripción</th>
+                        <th>Valor por Defecto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>page</code></td>
+                        <td>Number</td>
+                        <td>No</td>
+                        <td>Número de página a obtener</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td><code>limit</code></td>
+                        <td>Number</td>
+                        <td>No</td>
+                        <td>Cantidad de resultados por página</td>
+                        <td>10</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": [
+    &#123;
+      "_id": "507f1f77bcf86cd799439011",
+      "name": "Pokemon",
+      "slug": "pokemon",
+      "description": "Mundo de criaturas...",
+      "logo": "https://...",
+      "backgroundImage": "https://...",
+      "primaryColor": "#FF0000",
+      "secondaryColor": "#FFCC00",
+      "popularityScore": 100,
+      "releaseDate": "1996-02-27",
+      "isActive": true
+    &#125;
+  ],
+  "pagination": &#123;
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50,
+    "itemsPerPage": 10
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Respuestas de Error
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error interno del servidor"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="get-universes-filtered">
+                <div class="card-header bg-success text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-success me-2">GET</span>
+                    Obtener Universos Filtrados
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Obtiene universos con opciones de ordenamiento y filtrado.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>GET /api/universes/filtered</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-success">GET</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes/filtered?page=1&limit=10&sortBy=popularityScore&order=desc</code>
+                  </div>
+                  
+                  <h5 class="mt-3">Query Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Valor por Defecto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>page</code></td>
+                        <td>Number</td>
+                        <td>Número de página</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td><code>limit</code></td>
+                        <td>Number</td>
+                        <td>Resultados por página</td>
+                        <td>10</td>
+                      </tr>
+                      <tr>
+                        <td><code>sortBy</code></td>
+                        <td>String</td>
+                        <td>Campo para ordenar (name, releaseDate, popularityScore, createdAt)</td>
+                        <td>createdAt</td>
+                      </tr>
+                      <tr>
+                        <td><code>order</code></td>
+                        <td>String</td>
+                        <td>Orden (asc o desc)</td>
+                        <td>desc</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": [
+    &#123;
+      "_id": "507f1f77bcf86cd799439011",
+      "name": "Pokemon",
+      "slug": "pokemon",
+      "popularityScore": 100,
+      "releaseDate": "1996-02-27",
+      "isActive": true
+    &#125;
+  ],
+  "pagination": &#123;
+    "currentPage": 1,
+    "totalPages": 3,
+    "totalItems": 30
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Respuestas de Error
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al obtener universos filtrados"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="get-universe">
+                <div class="card-header bg-success text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-success me-2">GET</span>
+                    Obtener Universo por ID
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Obtiene la información completa de un universo específico.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>GET /api/universes/:id</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-success">GET</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes/507f1f77bcf86cd799439011</code>
+                  </div>
+                  
+                  <h5 class="mt-3">URL Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>id</code></td>
+                        <td>String</td>
+                        <td>ObjectId de MongoDB del universo</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": &#123;
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Pokemon",
+    "slug": "pokemon",
+    "description": "Descripción completa...",
+    "logo": "https://...",
+    "backgroundImage": "https://...",
+    "imagenBoton": "https://...",
+    "fontFamily": "Arial",
+    "primaryColor": "#FF0000",
+    "secondaryColor": "#FFCC00",
+    "tertiaryColor": "#0000FF",
+    "textColor": "#000000",
+    "popularityScore": 100,
+    "releaseDate": "1996-02-27T00:00:00.000Z",
+    "isActive": true,
+    "hasType": true,
+    "hasAbilities": true,
+    "hasStats": true,
+    "statLabels": &#123;
+      "HP": "Puntos de Salud",
+      "ATK": "Ataque"
+    &#125;,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Universo no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al obtener el universo"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="get-universe-style">
+                <div class="card-header bg-success text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-success me-2">GET</span>
+                    Obtener Estilos del Universo
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Obtiene información de estilo y configuración de un universo por su slug.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>GET /api/universes/style/:slug</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-success">GET</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes/style/pokemon</code>
+                  </div>
+                  
+                  <h5 class="mt-3">URL Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>slug</code></td>
+                        <td>String</td>
+                        <td>Slug único del universo</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": &#123;
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Pokemon",
+    "slug": "pokemon",
+    "logo": "https://...",
+    "backgroundImage": "https://...",
+    "primaryColor": "#FF0000",
+    "secondaryColor": "#FFCC00",
+    "fontFamily": "Arial",
+    "hasType": true,
+    "hasAbilities": true,
+    "hasStats": true
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Universo no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al obtener estilos del universo"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="search-universes">
+                <div class="card-header bg-primary text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-primary me-2">POST</span>
+                    Buscar Universos
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Busca universos por nombre.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>POST /api/universes/search</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-primary">POST</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes/search?page=1&limit=10</code><br>
+                    <strong>Body (JSON):</strong> Ver Request Body abajo
+                  </div>
+                  
+                  <h5 class="mt-3">Request Body</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "query": "pokemon"
+&#125;</code></pre>
+                  
+                  <h5 class="mt-3">Query Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Por Defecto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>page</code></td>
+                        <td>Number</td>
+                        <td>Número de página</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td><code>limit</code></td>
+                        <td>Number</td>
+                        <td>Resultados por página</td>
+                        <td>10</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": [
+    &#123;
+      "_id": "507f1f77bcf86cd799439011",
+      "name": "Pokemon",
+      "slug": "pokemon",
+      "description": "Mundo de criaturas...",
+      "popularityScore": 100
+    &#125;
+  ],
+  "pagination": &#123;
+    "currentPage": 1,
+    "totalPages": 1,
+    "totalItems": 1
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">400</span> Petición Incorrecta
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Query de búsqueda requerida"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al buscar universos"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="add-universe">
+                <div class="card-header bg-primary text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-primary me-2">POST</span>
+                    Crear Nuevo Universo
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Crea un nuevo universo en la base de datos.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>POST /api/universes</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-primary">POST</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes</code><br>
+                    <strong>Body (JSON):</strong> Ver ejemplo completo abajo
+                  </div>
+                  
+                  <h5 class="mt-3">Request Body (Campos Requeridos)</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "name": "Pokemon",
+  "slug": "pokemon",
+  "description": "Un mundo lleno de criaturas...",
+  "logo": "https://ejemplo.com/logo.png",
+  "backgroundImage": "https://ejemplo.com/bg.jpg",
+  "primaryColor": "#FF0000",
+  "secondaryColor": "#FFCC00",
+  "popularityScore": 100,
+  "releaseDate": "1996-02-27",
+  "isActive": true
+&#125;</code></pre>
+
+                  <h5 class="mt-3">Campos Opcionales</h5>
+                  <ul>
+                    <li><code>imagenBoton</code> (String): URL de imagen para botón</li>
+                    <li><code>fontFamily</code> (String): Fuente tipográfica</li>
+                    <li><code>tertiaryColor</code> (String): Color terciario</li>
+                    <li><code>textColor</code> (String): Color de texto</li>
+                    <li><code>hasType</code> (Boolean): Si tiene campo tipo</li>
+                    <li><code>hasAbilities</code> (Boolean): Si tiene campo habilidades</li>
+                    <li><code>hasStats</code> (Boolean): Si tiene campo estadísticas</li>
+                    <li><code>statLabels</code> (Object): Etiquetas personalizadas para estadísticas</li>
+                  </ul>
+                  
+
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "name": "Pokemon",
+  "slug": "pokemon",
+  "description": "Un mundo lleno de criaturas mágicas llamadas Pokémon",
+  "logo": "https://ejemplo.com/pokemon-logo.png",
+  "backgroundImage": "https://ejemplo.com/pokemon-bg.jpg",
+  "imagenBoton": "https://ejemplo.com/pokemon-btn.png",
+  "fontFamily": "Pokemon Solid",
+  "primaryColor": "#FF0000",
+  "secondaryColor": "#FFCC00",
+  "tertiaryColor": "#3B4CCA",
+  "textColor": "#000000",
+  "popularityScore": 100,
+  "releaseDate": "1996-02-27",
+  "isActive": true,
+  "hasType": true,
+  "hasAbilities": true,
+  "hasStats": true,
+  "statLabels": &#123;
+    "HP": "Puntos de Salud",
+    "ATK": "Ataque",
+    "DEF": "Defensa",
+    "SPATK": "Ataque Especial",
+    "SPDEF": "Defensa Especial",
+    "SPD": "Velocidad"
+  &#125;
+&#125;</code></pre>
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">201 Created</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": &#123;
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Pokemon",
+    "slug": "pokemon",
+    "description": "Un mundo lleno de criaturas mágicas llamadas Pokémon",
+    "logo": "https://ejemplo.com/pokemon-logo.png",
+    "backgroundImage": "https://ejemplo.com/pokemon-bg.jpg",
+    "primaryColor": "#FF0000",
+    "secondaryColor": "#FFCC00",
+    "popularityScore": 100,
+    "releaseDate": "1996-02-27T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">400</span> Petición Incorrecta
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Faltan campos requeridos: name, slug, description..."
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">409</span> Conflicto (Slug Duplicado)
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "El slug 'pokemon' ya existe"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al crear el universo"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="update-universe">
+                <div class="card-header bg-warning">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-warning me-2">PUT</span>
+                    Actualizar Universo
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Actualiza la información de un universo existente.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>PUT /api/universes/:id</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-warning">PUT</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes/507f1f77bcf86cd799439011</code><br>
+                    <strong>Body (JSON):</strong> Ver Request Body abajo
+                  </div>
+                  
+                  <h5 class="mt-3">URL Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>id</code></td>
+                        <td>String</td>
+                        <td>ObjectId del universo a actualizar</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                  <h5 class="mt-3">Request Body</h5>
+                  <p>Incluye solo los campos que deseas actualizar. Puedes actualizar cualquier campo del modelo.</p>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "name": "Pokemon Actualizado",
+  "popularityScore": 150,
+  "isActive": false
+&#125;</code></pre>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": &#123;
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Pokemon Actualizado",
+    "slug": "pokemon",
+    "popularityScore": 150,
+    "isActive": false,
+    "updatedAt": "2024-02-27T00:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Universo no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">400</span> Petición Incorrecta
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Datos de actualización inválidos"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al actualizar el universo"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="update-popularity">
+                <div class="card-header bg-warning">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-warning me-2">PUT</span>
+                    Actualizar Popularidad
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Actualiza únicamente el score de popularidad de un universo.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>PUT /api/universes/:id/popularity</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-warning">PUT</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes/507f1f77bcf86cd799439011/popularity</code><br>
+                    <strong>Body (JSON):</strong> Ver Request Body abajo
+                  </div>
+                  
+                  <h5 class="mt-3">Request Body</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "popularityScore": 200
+&#125;</code></pre>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": &#123;
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Pokemon",
+    "popularityScore": 200,
+    "updatedAt": "2024-02-27T00:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Universo no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">400</span> Petición Incorrecta
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "popularityScore debe ser un número"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al actualizar popularidad"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="delete-universe">
+                <div class="card-header bg-danger text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-danger me-2">DELETE</span>
+                    Eliminar Universo
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Elimina un universo de la base de datos.</p>
+                  <div class="alert alert-danger">
+                    <strong>¡Advertencia!</strong> Esta acción es irreversible y eliminará todos los personajes asociados al universo.
+                  </div>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>DELETE /api/universes/:id</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-danger">DELETE</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/universes/507f1f77bcf86cd799439011</code>
+                  </div>
+                  
+                  <h5 class="mt-3">URL Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>id</code></td>
+                        <td>String</td>
+                        <td>ObjectId del universo a eliminar</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": "Universo eliminado exitosamente"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Universo no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al eliminar el universo"
+&#125;</code></pre>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Sidebar Index -->
+            <div class="col-lg-3">
+              <div class="card sticky-top" style="top: 20px;">
+                <div class="card-header bg-primary text-white">
+                  <h5 class="mb-0">
+                    <i class="bi bi-list-ul me-2"></i>
+                    Índice
+                  </h5>
+                </div>
+                <div class="list-group list-group-flush">
+                  <a href="#" (click)="scrollToSection('get-universes', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-success"></i>
+                    GET Todos los Universos
+                  </a>
+                  <a href="#" (click)="scrollToSection('get-universes-filtered', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-success"></i>
+                    GET Universos Filtrados
+                  </a>
+                  <a href="#" (click)="scrollToSection('get-universe', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-success"></i>
+                    GET Universo por ID
+                  </a>
+                  <a href="#" (click)="scrollToSection('get-universe-style', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-success"></i>
+                    GET Estilos del Universo
+                  </a>
+                  <a href="#" (click)="scrollToSection('search-universes', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-primary"></i>
+                    POST Buscar Universos
+                  </a>
+                  <a href="#" (click)="scrollToSection('add-universe', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-primary"></i>
+                    POST Crear Universo
+                  </a>
+                  <a href="#" (click)="scrollToSection('update-universe', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-warning"></i>
+                    PUT Actualizar Universo
+                  </a>
+                  <a href="#" (click)="scrollToSection('update-popularity', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-warning"></i>
+                    PUT Actualizar Popularidad
+                  </a>
+                  <a href="#" (click)="scrollToSection('delete-universe', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-danger"></i>
+                    DELETE Eliminar Universo
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- CHARACTERS TAB -->
+        <!-- ============================================ -->
+        <div class="tab-pane fade" id="characters" role="tabpanel">
+          <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-9">
+              
+              <div class="card mb-4 shadow-sm" id="get-all-characters">
+                <div class="card-header bg-success text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-success me-2">GET</span>
+                    Obtener Todos los Personajes
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Obtiene una lista paginada de todos los personajes.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>GET /api/characters/all</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-success">GET</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/characters/all?page=1&limit=10</code>
+                  </div>
+                  
+                  <h5 class="mt-3">Query Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Por Defecto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>page</code></td>
+                        <td>Number</td>
+                        <td>Número de página</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td><code>limit</code></td>
+                        <td>Number</td>
+                        <td>Resultados por página</td>
+                        <td>10</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": [
+    &#123;
+      "_id": "507f1f77bcf86cd799439011",
+      "name": "Pikachu",
+      "title": "Ratón Eléctrico",
+      "universeId": "507f1f77bcf86cd799439012",
+      "image": "https://...",
+      "isActive": true,
+      "views": 100
+    &#125;
+  ],
+  "pagination": &#123;
+    "currentPage": 1,
+    "totalPages": 10,
+    "totalItems": 100
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al obtener personajes"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="get-characters-filtered">
+                <div class="card-header bg-success text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-success me-2">GET</span>
+                    Obtener Personajes Filtrados
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Obtiene personajes con opciones de ordenamiento.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>GET /api/characters/filtered</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-success">GET</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/characters/filtered?page=1&limit=10&sortBy=views&order=desc</code>
+                  </div>
+                  
+                  <h5 class="mt-3">Query Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Por Defecto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>page</code></td>
+                        <td>Number</td>
+                        <td>Número de página</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td><code>limit</code></td>
+                        <td>Number</td>
+                        <td>Resultados por página</td>
+                        <td>10</td>
+                      </tr>
+                      <tr>
+                        <td><code>sortBy</code></td>
+                        <td>String</td>
+                        <td>Campo para ordenar (name, views, createdAt)</td>
+                        <td>createdAt</td>
+                      </tr>
+                      <tr>
+                        <td><code>order</code></td>
+                        <td>String</td>
+                        <td>Orden (asc o desc)</td>
+                        <td>desc</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": [
+    &#123;
+      "_id": "507f1f77bcf86cd799439011",
+      "name": "Pikachu",
+      "title": "Ratón Eléctrico",
+      "views": 1500,
+      "universeId": "507f1f77bcf86cd799439012"
+    &#125;
+  ],
+  "pagination": &#123;
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 50
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al obtener personajes filtrados"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="get-character">
+                <div class="card-header bg-success text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-success me-2">GET</span>
+                    Obtener Personaje por ID
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Obtiene información completa de un personaje específico.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>GET /api/characters/universe/:iduniverse/character/:idcharacter</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-success">GET</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/characters/universe/507f1f77bcf86cd799439012/character/507f1f77bcf86cd799439011</code>
+                  </div>
+                  
+                  <h5 class="mt-3">URL Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>iduniverse</code></td>
+                        <td>String</td>
+                        <td>ObjectId del universo al que pertenece</td>
+                      </tr>
+                      <tr>
+                        <td><code>idcharacter</code></td>
+                        <td>String</td>
+                        <td>ObjectId del personaje</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": &#123;
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Pikachu",
+    "title": "Ratón Eléctrico",
+    "description": "Un Pokémon tipo eléctrico...",
+    "descriptionSections": [
+      &#123;
+        "sectionTitle": "Biología",
+        "content": "Pikachu es un pequeño roedor..."
+      &#125;
+    ],
+    "universeId": "507f1f77bcf86cd799439012",
+    "image": "https://...",
+    "location": "Ciudad Paleta",
+    "affiliation": "Equipo de Ash",
+    "type": "Eléctrico",
+    "abilities": ["Electricidad Estática", "Pararrayos"],
+    "stats": &#123;
+      "HP": 35,
+      "ATK": 55,
+      "DEF": 40
+    &#125;,
+    "numericField": 25,
+    "dateField": "1996-02-27T00:00:00.000Z",
+    "isActive": true,
+    "views": 1542,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Personaje no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al obtener el personaje"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="get-characters-by-universe">
+                <div class="card-header bg-primary text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-primary me-2">POST</span>
+                    Obtener Personajes por Universo
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Obtiene todos los personajes de un universo específico.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>POST /api/characters/universe/:id</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-primary">POST</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/characters/universe/pokemon?page=1&limit=20</code>
+                  </div>
+                  
+                  <h5 class="mt-3">URL Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>id</code></td>
+                        <td>String</td>
+                        <td>ObjectId o Slug del universo</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                  <h5 class="mt-3">Query Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Por Defecto</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>page</code></td>
+                        <td>Number</td>
+                        <td>Número de página</td>
+                        <td>1</td>
+                      </tr>
+                      <tr>
+                        <td><code>limit</code></td>
+                        <td>Number</td>
+                        <td>Resultados por página</td>
+                        <td>100</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": [
+    &#123;
+      "_id": "507f1f77bcf86cd799439011",
+      "name": "Pikachu",
+      "title": "Ratón Eléctrico",
+      "universeId": "507f1f77bcf86cd799439012",
+      "type": "Eléctrico",
+      "views": 1500
+    &#125;
+  ],
+  "pagination": &#123;
+    "currentPage": 1,
+    "totalPages": 5,
+    "totalItems": 100
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Universo no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al obtener personajes del universo"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="add-character">
+                <div class="card-header bg-primary text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-primary me-2">POST</span>
+                    Crear Nuevo Personaje
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Crea un nuevo personaje en la base de datos.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>POST /api/characters</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-primary">POST</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/characters</code><br>
+                    <strong>Body (JSON):</strong> Ver ejemplo completo abajo
+                  </div>
+                  
+                  <h5 class="mt-3">Request Body (Campos Requeridos)</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "name": "Pikachu",
+  "description": "Un Pokémon tipo eléctrico muy popular",
+  "universeId": "507f1f77bcf86cd799439012",
+  "image": "https://ejemplo.com/pikachu.png",
+  "numericField": 25,
+  "dateField": "1996-02-27",
+  "isActive": true
+&#125;</code></pre>
+
+                  <h5 class="mt-3">Campos Opcionales</h5>
+                  <ul>
+                    <li><code>title</code> (String): Título o apodo del personaje</li>
+                    <li><code>descriptionSections</code> (Array): Secciones adicionales de descripción
+                      <pre class="bg-light p-2 rounded mt-2"><code>[
+  &#123;
+    "sectionTitle": "Biología",
+    "content": "Descripción de la sección..."
+  &#125;
+]</code></pre>
+                    </li>
+                    <li><code>location</code> (String): Ubicación del personaje</li>
+                    <li><code>affiliation</code> (String): Afiliación o grupo</li>
+                    <li><code>type</code> (String): Tipo del personaje</li>
+                    <li><code>abilities</code> (Array): Lista de habilidades
+                      <pre class="bg-light p-2 rounded mt-2"><code>["Habilidad 1", "Habilidad 2"]</code></pre>
+                    </li>
+                    <li><code>stats</code> (Object): Estadísticas del personaje
+                      <pre class="bg-light p-2 rounded mt-2"><code>&#123;
+  "HP": 35,
+  "ATK": 55,
+  "DEF": 40
+&#125;</code></pre>
+                    </li>
+                  </ul>
+                  
+
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "name": "Pikachu",
+  "title": "Ratón Eléctrico",
+  "description": "Un Pokémon tipo eléctrico muy popular y poderoso",
+  "descriptionSections": [
+    &#123;
+      "sectionTitle": "Biología",
+      "content": "Pikachu es un pequeño roedor de color amarillo con mejillas rojas que almacenan electricidad"
+    &#125;,
+    &#123;
+      "sectionTitle": "Historia",
+      "content": "Pikachu es el compañero inicial de Ash Ketchum"
+    &#125;
+  ],
+  "universeId": "507f1f77bcf86cd799439012",
+  "image": "https://ejemplo.com/pikachu.png",
+  "location": "Ciudad Paleta",
+  "affiliation": "Equipo de Ash Ketchum",
+  "type": "Eléctrico",
+  "abilities": ["Electricidad Estática", "Pararrayos"],
+  "stats": &#123;
+    "HP": 35,
+    "ATK": 55,
+    "DEF": 40,
+    "SPATK": 50,
+    "SPDEF": 50,
+    "SPD": 90
+  &#125;,
+  "numericField": 25,
+  "dateField": "1996-02-27",
+  "isActive": true
+&#125;</code></pre>
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">201 Created</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": &#123;
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Pikachu",
+    "title": "Ratón Eléctrico",
+    "description": "Un Pokémon tipo eléctrico muy popular y poderoso",
+    "universeId": "507f1f77bcf86cd799439012",
+    "image": "https://ejemplo.com/pikachu.png",
+    "type": "Eléctrico",
+    "views": 0,
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">400</span> Petición Incorrecta
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Faltan campos requeridos: name, description, universeId..."
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> Universo No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "El universo especificado no existe"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al crear el personaje"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="update-character">
+                <div class="card-header bg-warning">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-warning me-2">PUT</span>
+                    Actualizar Personaje
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Actualiza la información de un personaje existente.</p>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>PUT /api/characters/:id</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-warning">PUT</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/characters/507f1f77bcf86cd799439011</code><br>
+                    <strong>Body (JSON):</strong> Ver Request Body abajo
+                  </div>
+                  
+                  <h5 class="mt-3">URL Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>id</code></td>
+                        <td>String</td>
+                        <td>ObjectId del personaje a actualizar</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                  <h5 class="mt-3">Request Body</h5>
+                  <p>Incluye solo los campos que deseas actualizar.</p>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "name": "Pikachu Actualizado",
+  "title": "El Pokémon Más Popular",
+  "isActive": true
+&#125;</code></pre>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": &#123;
+    "_id": "507f1f77bcf86cd799439011",
+    "name": "Pikachu Actualizado",
+    "title": "El Pokémon Más Popular",
+    "isActive": true,
+    "updatedAt": "2024-02-27T00:00:00.000Z"
+  &#125;
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Personaje no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">400</span> Petición Incorrecta
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Datos de actualización inválidos"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al actualizar el personaje"
+&#125;</code></pre>
+                </div>
+              </div>
+
+              <div class="card mb-4 shadow-sm" id="delete-character">
+                <div class="card-header bg-danger text-white">
+                  <h4 class="mb-0">
+                    <span class="badge bg-light text-danger me-2">DELETE</span>
+                    Eliminar Personaje
+                  </h4>
+                </div>
+                <div class="card-body">
+                  <p class="lead">Elimina un personaje de la base de datos.</p>
+                  <div class="alert alert-danger">
+                    <strong>¡Advertencia!</strong> Esta acción es irreversible.
+                  </div>
+                  
+                  <h5 class="mt-3">Endpoint</h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>DELETE /api/characters/:id</code></pre>
+                  
+                  <div class="alert alert-primary mt-3" role="alert">
+                    <h6 class="alert-heading"><i class="bi bi-hammer me-2"></i>URL de Prueba para Postman</h6>
+                    <strong>Método:</strong> <code class="text-danger">DELETE</code><br>
+                    <strong>URL:</strong> <code>http://localhost:3000/api/characters/507f1f77bcf86cd799439011</code>
+                  </div>
+                  
+                  <h5 class="mt-3">URL Parameters</h5>
+                  <table class="table table-bordered">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Parámetro</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>id</code></td>
+                        <td>String</td>
+                        <td>ObjectId del personaje a eliminar</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+
+                  
+                  <h5 class="mt-3">
+                    <span class="badge bg-success">200 OK</span> Respuesta Exitosa
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "status": "Personaje eliminado exitosamente"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-warning">404</span> No Encontrado
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Personaje no encontrado"
+&#125;</code></pre>
+
+                  <h5 class="mt-3">
+                    <span class="badge bg-danger">500</span> Error del Servidor
+                  </h5>
+                  <pre class="bg-light p-3 rounded" ngNonBindable><code ngNonBindable>&#123;
+  "error": "Error al eliminar el personaje"
+&#125;</code></pre>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Sidebar Index -->
+            <div class="col-lg-3">
+              <div class="card sticky-top" style="top: 20px;">
+                <div class="card-header bg-primary text-white">
+                  <h5 class="mb-0">
+                    <i class="bi bi-list-ul me-2"></i>
+                    Índice
+                  </h5>
+                </div>
+                <div class="list-group list-group-flush">
+                  <a href="#" (click)="scrollToSection('get-all-characters', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-success"></i>
+                    GET Todos los Personajes
+                  </a>
+                  <a href="#" (click)="scrollToSection('get-characters-filtered', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-success"></i>
+                    GET Personajes Filtrados
+                  </a>
+                  <a href="#" (click)="scrollToSection('get-character', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-success"></i>
+                    GET Personaje por ID
+                  </a>
+                  <a href="#" (click)="scrollToSection('get-characters-by-universe', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-primary"></i>
+                    POST Personajes por Universo
+                  </a>
+                  <a href="#" (click)="scrollToSection('add-character', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-primary"></i>
+                    POST Crear Personaje
+                  </a>
+                  <a href="#" (click)="scrollToSection('update-character', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-warning"></i>
+                    PUT Actualizar Personaje
+                  </a>
+                  <a href="#" (click)="scrollToSection('delete-character', $event)" class="list-group-item list-group-item-action">
+                    <i class="bi bi-arrow-right-circle me-2 text-danger"></i>
+                    DELETE Eliminar Personaje
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

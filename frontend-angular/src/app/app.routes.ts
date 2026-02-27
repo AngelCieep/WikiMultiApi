@@ -4,9 +4,11 @@ import { UniverseDetail } from './components/universes/universe-detail/universe-
 import { PersonajeDetail } from './components/personaje/personaje-detail/personaje-detail';
 import { PersonajeAdd } from './components/personaje/personaje-add/personaje-add';
 import { UniverseAdd } from './components/universes/universe-add/universe-add';
+import { Doc } from './components/doc/doc';
 
 export const routes: Routes = [
   { path: '', component: Homepage },
+  { path: 'doc', component: Doc },
   { path: 'universo/agregar', component: UniverseAdd },
   { path: 'universo/editar/:id', component: UniverseAdd },
   { path: 'universo/:id', component: UniverseDetail },
