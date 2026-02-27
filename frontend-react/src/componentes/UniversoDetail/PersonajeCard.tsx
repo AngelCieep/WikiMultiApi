@@ -1,6 +1,6 @@
 import type { PersonajeCard } from '../../types';
 
-interface PersonajeCardProps {
+type PersonajeCardProps = {
   personaje: PersonajeCard;
 }
 

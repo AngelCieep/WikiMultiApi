@@ -1,6 +1,6 @@
 import type { UniversoCard } from '../types';
 
-interface UniversoCardProps {
+type UniversoCardProps = {
   universo: UniversoCard;
 }
 
