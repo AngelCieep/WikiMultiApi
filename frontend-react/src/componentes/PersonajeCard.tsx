@@ -28,9 +28,6 @@ export default function PersonajeCard({ personaje }: PersonajeCardProps) {
           <p className="card-text text-muted small mb-2 lh-sm">{personaje.title}</p>
         )}
         <div className="mt-auto d-flex justify-content-between align-items-center">
-          <span className={`badge rounded-pill ${personaje.booleanField ? 'bg-success' : 'bg-secondary'}`}>
-            {personaje.booleanField ? 'Activo' : 'Inactivo'}
-          </span>
           {personaje.views !== undefined && (
             <small className="text-muted">
               <i className="bi bi-eye me-1" />{personaje.views}
